@@ -3,7 +3,8 @@
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityFeature,
-    HVACMode
+    HVACMode,
+    PRESET_BOOST, PRESET_COMFORT, PRESET_ECO,
 )
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.config_entries import ConfigEntry
@@ -13,9 +14,9 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 
-PRESET_LOW = "ECO"
-PRESET_BOOST = "BOOST"
-PRESET_HIGH = "COMFORT"
+PRESET_LOW = PRESET_ECO
+PRESET_BOOST = PRESET_BOOST
+PRESET_HIGH = PRESET_COMFORT
 
 async def async_setup_entry(
     hass: HomeAssistant,
