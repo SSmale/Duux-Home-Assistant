@@ -33,7 +33,7 @@ class DuuxAPI:
             self.token = data.get("token")
             if self.token:
                 self.session.headers.update({
-                    "Authorization": f"Bearer {self.token}"
+                    "Authorization": f"{self.token}"
                 })
                 _LOGGER.warning("Successfully logged in to Duux API")
                 return True
