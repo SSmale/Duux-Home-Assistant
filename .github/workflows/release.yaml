@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: Prepare release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Create zip
+        run: |
+          cd custom_components/duux
+          zip -r ../../duux.zip .
+
+      - name: Upload zip to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: duux.zip
+          asset_name: duux.zip
+          tag: ${{ github.ref }}

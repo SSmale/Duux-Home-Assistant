@@ -1,0 +1,9 @@
+{
+  "name": "Duux Heater",
+  "render_readme": true,
+  "domains": [
+    "climate"
+  ],
+  "iot_class": "cloud_polling",
+  "homeassistant": "2023.1.0"
+}

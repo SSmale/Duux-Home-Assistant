@@ -1,0 +1,15 @@
+{
+  "domain": "duux",
+  "name": "Duux Heater",
+  "codeowners": [
+    "@ssmale"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/ssmale/duux-homeassistant",
+  "iot_class": "cloud_polling",
+  "requirements": [
+    "requests>=2.31.0"
+  ],
+  "version": "1.0.0"
+}
