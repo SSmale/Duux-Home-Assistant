@@ -52,7 +52,7 @@ class DuuxAPI:
             response.raise_for_status()
             devices = response.json()
             _LOGGER.info(f"Found {len(devices)} Duux device(s)")
-            return devices
+            return devices.get('data')
         except Exception as e:
             _LOGGER.error(f"Failed to get devices: {e}")
             return []

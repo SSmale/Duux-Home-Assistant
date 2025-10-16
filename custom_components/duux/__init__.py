@@ -39,7 +39,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         coordinator = DuuxDataUpdateCoordinator(
             hass,
             api=api,
-            device_id=device["deviceId"],
+            device_id=device.get("deviceId"),
             device_name=device.get("displayName", "Duux Heater")
         )
         
