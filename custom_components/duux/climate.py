@@ -13,9 +13,9 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 
-PRESET_LOW = "low"
-PRESET_BOOST = "boost"
-PRESET_HIGH = "high"
+PRESET_LOW = "Low"
+PRESET_BOOST = "Boost"
+PRESET_HIGH = "High"
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -90,12 +90,14 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     def preset_mode(self):
         """Return the current preset mode."""
         mode = self.coordinator.data.get("heatin", 0)
-        if mode == 0:
+        if mode == 1:
             return PRESET_LOW
         elif mode == 2:
+            return PRESET_HIGH
+        elif mode == 3:
             return PRESET_BOOST
         else:
-            return PRESET_HIGH
+            return "UNKNOWN"
     
     async def async_set_hvac_mode(self, hvac_mode):
         """Set new target hvac mode."""
@@ -121,11 +123,11 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     async def async_set_preset_mode(self, preset_mode):
         """Set new preset mode."""
         mode_map = {
-            PRESET_LOW: 0,
-            PRESET_BOOST: 2,
-            PRESET_HIGH: 1,
+            PRESET_LOW: 1,
+            PRESET_HIGH: 2,
+            PRESET_BOOST: 3,
         }
-        mode = mode_map.get(preset_mode, 0)
+        mode = mode_map.get(preset_mode, 1)
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )

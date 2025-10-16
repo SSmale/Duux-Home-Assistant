@@ -2,7 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-bin
 
 # Distribution / packaging
 .Python
@@ -43,4 +42,9 @@ coverage.xml
 
 # macOS
 .DS_Store
+
+
+# Custom
+private_*
 pyvenv.cfg
+bin
