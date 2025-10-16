@@ -36,7 +36,7 @@ class DuuxAPI:
                 self.session.headers.update({
                     "Authorization": f"Bearer {self.token}"
                 })
-                _LOGGER.info("Successfully logged in to Duux API")
+                _LOGGER.warning("Successfully logged in to Duux API")
                 return True
             
             _LOGGER.error("No token received from Duux API")
