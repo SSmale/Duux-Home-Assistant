@@ -50,9 +50,9 @@ class DuuxAPI:
         try:
             response = self.session.get(f"{API_BASE_URL}{API_SENSORS}")
             response.raise_for_status()
-            devices = response.json()
+            devices = response.json().get('data')
             _LOGGER.info(f"Found {len(devices)} Duux device(s)")
-            return devices.get('data')
+            return devices
         except Exception as e:
             _LOGGER.error(f"Failed to get devices: {e}")
             return []
@@ -91,7 +91,7 @@ class DuuxAPI:
         return self.send_command(device_mac, f"tune set sp {temp}")
     
     def set_mode(self, device_mac, mode):
-        """Set heater mode (0=Low, 1=Boost, 2=High)."""
+        """Set heater mode (0=Low, 1=High, 2=Boost)."""
         mode_val = max(0, min(2, int(mode)))
         return self.send_command(device_mac, f"tune set heating {mode_val}")
     

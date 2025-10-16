@@ -42,7 +42,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     
     _attr_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_hvac_modes = [HVACMode.HEAT, HVACMode.OFF]
-    _attr_preset_modes = [PRESET_LOW, PRESET_BOOST, PRESET_HIGH]
+    _attr_preset_modes = [PRESET_LOW, PRESET_HIGH, PRESET_BOOST]
     _attr_supported_features = (
         ClimateEntityFeature.TARGET_TEMPERATURE
         | ClimateEntityFeature.PRESET_MODE
@@ -89,10 +89,10 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def preset_mode(self):
         """Return the current preset mode."""
-        mode = self.coordinator.data.get("mode", 0)
+        mode = self.coordinator.data.get("heatin", 0)
         if mode == 0:
             return PRESET_LOW
-        elif mode == 1:
+        elif mode == 2:
             return PRESET_BOOST
         else:
             return PRESET_HIGH
@@ -122,8 +122,8 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Set new preset mode."""
         mode_map = {
             PRESET_LOW: 0,
-            PRESET_BOOST: 1,
-            PRESET_HIGH: 2,
+            PRESET_BOOST: 2,
+            PRESET_HIGH: 1,
         }
         mode = mode_map.get(preset_mode, 0)
         await self.hass.async_add_executor_job(
