@@ -91,8 +91,8 @@ class DuuxAPI:
         return self.send_command(device_mac, f"tune set sp {temp}")
     
     def set_mode(self, device_mac, mode):
-        """Set heater mode (0=Low, 1=High, 2=Boost)."""
-        mode_val = max(0, min(2, int(mode)))
+        """Set heater mode (1=Low, 2=High, 3=Boost)."""
+        mode_val = max(1, min(3, int(mode)))
         return self.send_command(device_mac, f"tune set heating {mode_val}")
     
     def set_night_mode(self, device_mac, night_on):

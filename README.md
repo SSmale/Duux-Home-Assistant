@@ -1,5 +1,6 @@
 # Duux Heater Integration for Home Assistant
 
+[(https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=duux)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 [![GitHub release](https://img.shields.io/github/release/ssmale/Duux-Home-Assistant.svg)](https://github.com/ssmale/Duux-Home-Assistant/releases)
 [![License](https://img.shields.io/github/license/ssmale/Duux-Home-Assistant.svg)](LICENSE)
