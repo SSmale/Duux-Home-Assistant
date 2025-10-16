@@ -5,7 +5,7 @@ Thank you for your interest in contributing!
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/duux-homeassistant.git`
+2. Clone your fork: `git clone https://github.com/yourusername/Duux-Home-Assistant.git`
 3. Create a branch: `git checkout -b feature/your-feature-name`
 
 ## Development Setup
@@ -13,7 +13,7 @@ Thank you for your interest in contributing!
 1. Install Home Assistant in development mode
 2. Link your custom component:
    ```bash
-   ln -s /path/to/duux-homeassistant/custom_components/duux /path/to/homeassistant/config/custom_components/duux
+   ln -s /path/to/Duux-Home-Assistant/custom_components/duux /path/to/homeassistant/config/custom_components/duux
    ```
 3. Restart Home Assistant
 

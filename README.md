@@ -1,8 +1,8 @@
 # Duux Heater Integration for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
-[![GitHub release](https://img.shields.io/github/release/yourusername/duux-homeassistant.svg)](https://github.com/yourusername/duux-homeassistant/releases)
-[![License](https://img.shields.io/github/license/yourusername/duux-homeassistant.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/release/ssmale/Duux-Home-Assistant.svg)](https://github.com/ssmale/Duux-Home-Assistant/releases)
+[![License](https://img.shields.io/github/license/ssmale/Duux-Home-Assistant.svg)](LICENSE)
 
 A Home Assistant integration for Duux Edge heaters, allowing you to control your heater directly from Home Assistant.
 
@@ -28,7 +28,7 @@ A Home Assistant integration for Duux Edge heaters, allowing you to control your
 2. Click on "Integrations"
 3. Click the three dots in the top right corner
 4. Select "Custom repositories"
-5. Add this repository URL: `https://github.com/yourusername/duux-homeassistant`
+5. Add this repository URL: `https://github.com/ssmale/Duux-Home-Assistant`
 6. Select category: "Integration"
 7. Click "Add"
 8. Find "Duux Heater" in the integration list and click "Download"

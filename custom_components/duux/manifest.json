@@ -6,7 +6,7 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/ssmale/duux-homeassistant",
+  "documentation": "https://github.com/ssmale/Duux-Home-Assistant",
   "iot_class": "cloud_polling",
   "requirements": [
     "requests>=2.31.0"

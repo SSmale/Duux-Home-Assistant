@@ -30,7 +30,7 @@ class DuuxAPI:
             )
             response.raise_for_status()
             data = response.json()
-            
+            _LOGGER.debug(f"Login response: {data}")
             self.token = data.get("token")
             if self.token:
                 self.session.headers.update({

@@ -41,4 +41,4 @@ automation:
           preset_mode: "boost"
 ```
 
-[Full Documentation](https://github.com/ssmale/duux-homeassistant)
+[Full Documentation](https://github.com/ssmale/Duux-Home-Assistant)
