@@ -24,13 +24,12 @@ class DuuxAPI:
             response = self.session.post(
                 f"{API_BASE_URL}{API_LOGIN}",
                 json={
-                    "email": self.email,
+                    "username": self.email,
                     "password": self.password
                 }
             )
             response.raise_for_status()
             data = response.json()
-            _LOGGER.debug(f"Login response: {data}")
             self.token = data.get("token")
             if self.token:
                 self.session.headers.update({
