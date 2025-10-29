@@ -10,43 +10,58 @@ from homeassistant.components.climate.const import (
     PRESET_BOOST, PRESET_COMFORT, PRESET_ECO,
 )
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
-
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Set up Duux climate entities from a config entry."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up Duux climate entities."""
+    data = hass.data[DOMAIN][entry.entry_id]
+    api = data["api"]
+    coordinators = data["coordinators"]
+    devices = data["devices"]
     
     entities = []
-    for device in coordinator.data:
+    for device in devices:
         sensor_type_id = device.get("sensorTypeId")
-        
+        device_id = device["deviceId"]
+        coordinator = coordinators[device_id]
         # Create the appropriate climate entity based on heater type
         if sensor_type_id == 49:  # Threesixty 2023
-            entities.append(DuuxThreesixtyClimate(coordinator, device))
+            entities.append(DuuxThreesixtyClimate(coordinator, api, device))
         elif sensor_type_id == 50:  # Edge heater v2
-            entities.append(DuuxEdgeClimate(coordinator, device))
+            entities.append(DuuxEdgeClimate(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
-            entities.append(DuuxClimate(coordinator, device))
+            entities.append(DuuxClimate(coordinator, api, device))
             _LOGGER.warning(f"Unknown heater type {sensor_type_id}, using generic entity")
     
     async_add_entities(entities)
 
 
-class DuuxClimate(ClimateEntity):
+class DuuxClimate(CoordinatorEntity, ClimateEntity):
     """Representation of a Duux climate device."""
 
-    def __init__(self, coordinator, device):
+    def __init__(self, coordinator, api, device):
         """Initialize the climate device."""
+        super().__init__(coordinator)
+        self._api = api
         self._coordinator = coordinator
         self._device = device
         self._device_id = device["id"]
+        self._device_mac = device["deviceId"]  # MAC address
         self._attr_unique_id = f"duux_{self._device_id}"
         self._attr_name = device.get("displayName") or device.get("name")
+        self._attr_has_entity_name = True
         
         # Default temperature range (can be overridden by subclasses)
         self._attr_min_temp = 18
@@ -75,27 +90,18 @@ class DuuxClimate(ClimateEntity):
     @property
     def current_temperature(self):
         """Return the current temperature."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            return data["latestData"]["fullData"].get("temp")
-        return None
+        return self._coordinator.data.get("temp")
 
     @property
     def target_temperature(self):
         """Return the temperature we try to reach."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            return data["latestData"]["fullData"].get("sp")
-        return None
+        return self._coordinator.data.get("sp")
 
     @property
     def hvac_mode(self):
-        """Return current HVAC mode."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            power = data["latestData"]["fullData"].get("power")
-            return HVACMode.HEAT if power == 1 else HVACMode.OFF
-        return HVACMode.OFF
+        """Return current operation."""
+        power = self.coordinator.data.get("power", 0)
+        return HVACMode.HEAT if power == 1 else HVACMode.OFF
 
     @property
     def preset_mode(self):
@@ -114,30 +120,30 @@ class DuuxClimate(ClimateEntity):
         if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
             return
         
-        api = self._coordinator.api
-        await api.set_temperature(self._device_id, int(temperature))
-        await self._coordinator.async_request_refresh()
+
+        if temperature is not None:
+            await self.hass.async_add_executor_job(
+                self._api.set_temperature, self._device_mac, temperature
+            )
+            await self._coordinator.async_request_refresh()
 
     async def async_set_hvac_mode(self, hvac_mode):
         """Set new HVAC mode."""
-        api = self._coordinator.api
-        if hvac_mode == HVACMode.OFF:
-            await api.set_power(self._device_id, "0")
-        elif hvac_mode == HVACMode.HEAT:
-            await api.set_power(self._device_id, "1")
+
+        if hvac_mode == HVACMode.HEAT:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+        else:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, False
+            )
         await self._coordinator.async_request_refresh()
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
         # Base implementation - override in subclasses
         pass
-
-    def _get_device_data(self):
-        """Get the latest device data from coordinator."""
-        for device in self._coordinator.data:
-            if device["id"] == self._device_id:
-                return device
-        return None
 
     @property
     def should_poll(self):
@@ -167,9 +173,9 @@ class DuuxThreesixtyClimate(DuuxClimate):
     PRESET_HIGH = PRESET_BOOST
     PRESET_MID = PRESET_COMFORT
     
-    def __init__(self, coordinator, device):
+    def __init__(self, coordinator, api, device):
         """Initialize the Threesixty climate device."""
-        super().__init__(coordinator, device)
+        super().__init__(coordinator, api, device)
         # Temperature range for Threesixty
         self._attr_min_temp = 18
         self._attr_max_temp = 30
@@ -177,21 +183,18 @@ class DuuxThreesixtyClimate(DuuxClimate):
     @property
     def preset_modes(self):
         """Return available preset modes."""
-        return [self.self.PRESET_LOW, self.PRESET_MID, self.PRESET_HIGH]
+        return [self.PRESET_LOW, self.PRESET_MID, self.PRESET_HIGH]
     
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            mode = data["latestData"]["fullData"].get("mode")
-            mode_map = {
-                0: self.PRESET_LOW,
-                1: self.PRESET_MID,
-                2: self.PRESET_HIGH
-            }
-            return mode_map.get(mode, self.PRESET_LOW)
-        return self.PRESET_LOW
+        mode  = self._coordinator.data.get("mode")
+        mode_map = {
+            0: self.PRESET_LOW,
+            1: self.PRESET_MID,
+            2: self.PRESET_HIGH
+        }
+        return mode_map.get(mode, self.PRESET_LOW)
     
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
@@ -200,10 +203,13 @@ class DuuxThreesixtyClimate(DuuxClimate):
             self.PRESET_MID: "1",
             self.PRESET_HIGH: "2"
         }
-        if preset_mode in mode_map:
-            api = self._coordinator.api
-            await api.set_mode(self._device_id, mode_map[preset_mode])
-            await self._coordinator.async_request_refresh()
+
+        mode = mode_map.get(preset_mode, 1)
+
+        await self.hass.async_add_executor_job(
+            self._api.set_mode, self._device_mac, mode
+        )
+        await self._coordinator.async_request_refresh()
 
 
 class DuuxEdgeClimate(DuuxClimate):
@@ -212,9 +218,9 @@ class DuuxEdgeClimate(DuuxClimate):
     PRESET_BOOST = PRESET_BOOST
     PRESET_HIGH = PRESET_COMFORT
 
-    def __init__(self, coordinator, device):
+    def __init__(self, coordinator, api,device):
         """Initialize the Edge climate device."""
-        super().__init__(coordinator, device)
+        super().__init__(coordinator, api, device)
         # Temperature range for Edge heater
         self._attr_min_temp = 5
         self._attr_max_temp = 36
@@ -227,25 +233,25 @@ class DuuxEdgeClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            mode = data["latestData"]["fullData"].get("mode")
-            mode_map = {
-                0: self.PRESET_LOW,
-                1: self.PRESET_HIGH,
-                2: self.PRESET_BOOST
-            }
-            return mode_map.get(mode, self.PRESET_LOW)
-        return self.PRESET_LOW
+        mode = self._coordinator.data.get("heatin")
+        mode_map = {
+            1: self.PRESET_LOW,
+            2: self.PRESET_HIGH,
+            3: self.PRESET_BOOST
+        }
+        return mode_map.get(mode, self.PRESET_LOW)
     
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
         mode_map = {
-            self.PRESET_LOW: "0",
-            self.PRESET_HIGH: "1",
-            self.PRESET_BOOST: "2"
+            self.PRESET_LOW: "1",
+            self.PRESET_HIGH: "2",
+            self.PRESET_BOOST: "3"
         }
-        if preset_mode in mode_map:
-            api = self._coordinator.api
-            await api.set_mode(self._device_id, mode_map[preset_mode])
-            await self._coordinator.async_request_refresh()
+
+        mode = mode_map.get(preset_mode, 1)
+
+        await self.hass.async_add_executor_job(
+            self._api.set_mode, self._device_mac, mode
+        )
+        await self._coordinator.async_request_refresh()

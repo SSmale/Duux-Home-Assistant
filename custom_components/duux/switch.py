@@ -11,19 +11,21 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up Duux switch entities from a config entry."""
-    coordinator = hass.data[DOMAIN][config_entry.entry_id]
-    
+    data = hass.data[DOMAIN][config_entry.entry_id]
+    api = data["api"]
+    coordinators = data["coordinators"]
+    devices = data["devices"]
+
     entities = []
-    for device in coordinator.data:
+    for device in devices:
         sensor_type_id = device.get("sensorTypeId")
-        device_id = device["id"]
-        
-        # All heaters have child lock
-        entities.append(DuuxChildLockSwitch(coordinator, device))
-        
+        device_id = device["deviceId"]
+        coordinator = coordinators[device_id]
+
         # Only Edge heaters have night mode
         if sensor_type_id == 50:  # Edge heater v2
-            entities.append(DuuxNightModeSwitch(coordinator, device))
+            entities.append(DuuxChildLockSwitch(coordinator, api, device))
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
     
     async_add_entities(entities)
 
@@ -31,88 +33,84 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class DuuxSwitch(CoordinatorEntity, SwitchEntity):
     """Base class for Duux switches."""
 
-    def __init__(self, coordinator, device):
+    def __init__(self, coordinator, api, device):
         """Initialize the switch."""
         super().__init__(coordinator)
+        self._api = api
+        self._coordinator = coordinator
         self._device = device
         self._device_id = device["id"]
-        self._attr_name = device.get("displayName") or device.get("name")
+        self._device_mac = device["deviceId"]  # MAC address
+        self._attr_unique_id = f"duux_{self._device_id}"
+        self.device_name = device.get("displayName") or device.get("name")
+        self._attr_has_entity_name = True
 
     @property
     def device_info(self):
         """Return device information."""
         return {
             "identifiers": {(DOMAIN, str(self._device_id))},
-            "name": self._attr_name,
-            "manufacturer": "Duux",
+            "name": self.device_name,
+            "manufacturer":  self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
-
-    def _get_device_data(self):
-        """Get the latest device data from coordinator."""
-        for device in self.coordinator.data:
-            if device["id"] == self._device_id:
-                return device
-        return None
 
 
 class DuuxChildLockSwitch(DuuxSwitch):
     """Representation of a Duux child lock switch."""
 
-    def __init__(self, coordinator, device):
+    def __init__(self, coordinator, api, device):
         """Initialize the child lock switch."""
-        super().__init__(coordinator, device)
+        super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_child_lock"
-        self._attr_name = f"{self._attr_name} Child Lock"
+        self._attr_name = f"{self.device_name} Child Lock"
         self._attr_icon = "mdi:lock"
 
     @property
     def is_on(self):
         """Return true if child lock is on."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            return data["latestData"]["fullData"].get("lock") == 1
-        return False
+        return self.coordinator.data.get("lock") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on child lock."""
-        api = self.coordinator.api
-        await api.set_child_lock(self._device_id, "1")
-        await self.coordinator.async_request_refresh()
+        await self.hass.async_add_executor_job(
+            self._api.set_lock, self._device_mac, True
+        )
+        await self._coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs):
         """Turn off child lock."""
-        api = self.coordinator.api
-        await api.set_child_lock(self._device_id, "0")
-        await self.coordinator.async_request_refresh()
+        await self.hass.async_add_executor_job(
+              self._api.set_lock, self._device_mac, False
+          )
+        await self._coordinator.async_request_refresh()
 
 
 class DuuxNightModeSwitch(DuuxSwitch):
     """Representation of a Duux night mode switch."""
 
-    def __init__(self, coordinator, device):
+    def __init__(self, coordinator, api,device):
         """Initialize the night mode switch."""
-        super().__init__(coordinator, device)
+        super().__init__(coordinator,api, device)
         self._attr_unique_id = f"duux_{self._device_id}_night_mode"
-        self._attr_name = f"{self._attr_name} Night Mode"
+        self._attr_name = f"{self.device_name} Night Mode"
         self._attr_icon = "mdi:weather-night"
 
     @property
     def is_on(self):
         """Return true if night mode is on."""
-        data = self._get_device_data()
-        if data and "latestData" in data and "fullData" in data["latestData"]:
-            return data["latestData"]["fullData"].get("night") == 1
-        return False
+        return self.coordinator.data.get("night") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on night mode."""
-        api = self.coordinator.api
-        await api.set_night_mode(self._device_id, "1")
-        await self.coordinator.async_request_refresh()
+        await self.hass.async_add_executor_job(
+            self._api.set_night_mode, self._device_mac, True
+        )
+        await self._coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs):
         """Turn off night mode."""
-        api = self.coordinator.api
-        await api.set_night_mode(self._device_id, "0")
-        await self.coordinator.async_request_refresh()
+        await self.hass.async_add_executor_job(
+              self._api.set_night_mode, self._device_mac, False
+          )
+        await self._coordinator.async_request_refresh()
