@@ -1,27 +1,34 @@
-# Duux Heater Integration for Home Assistant
+# Duux Integration for Home Assistant
+
+![Duux Logo](https://pickitmedialive.blob.core.windows.net/6umyyz604ft4pmg-main/ZozxVBQI?sv=2025-01-05&st=2025-10-30T22%3A36%3A50Z&se=2025-10-31T04%3A36%3A50Z&sr=c&sp=r&sig=BR7YREsSajFblqlKsaXWk8OwVofdFMYyhsh5G7vfw0g%3D)
+
+A Home Assistant integration for Duux products, allowing you to control your devices directly from Home Assistant.
+
+## 
 
 [![Home Assistant](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=duux)
 
-
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/custom-components/hacs)
+![Install count](https://img.shields.io/badge/dynamic/json?color=41BDF5&logo=home-assistant&label=integration%20usage&suffix=%20installs&cacheSeconds=15600&url=https://analytics.home-assistant.io/custom_integrations.json&query=$.duux.total)
 [![GitHub release](https://img.shields.io/github/release/ssmale/Duux-Home-Assistant.svg)](https://github.com/ssmale/Duux-Home-Assistant/releases)
 [![License](https://img.shields.io/github/license/ssmale/Duux-Home-Assistant.svg)](LICENSE)
 
-A Home Assistant integration for Duux Edge heaters, allowing you to control your heater directly from Home Assistant.
-
 ## Features
 
-- 🌡️ **Temperature Control**: Set target temperature (5-36°C)
-- 🔥 **Three Heating Modes**: Low, Boost, and High
-- 🌙 **Night Mode**: Dim the display
-- 🔒 **Child Lock**: Prevent accidental changes
 - 📊 **Real-time Status**: Current temperature and heating state
 - 🔄 **Auto-discovery**: Automatically finds all your Duux devices
 
 ## Supported Devices
 
 - Duux Edge Heater (v2)
-- Other Duux smart heaters using the Duux app
+  - 🌡️ **Temperature Control**: Set target temperature (5-36°C)
+  - 🔥 **Three Heating Modes**: Low, High and Boost
+  - 🌙 **Night Mode**: Dim the display
+  - 🔒 **Child Lock**: Prevent accidental changes
+
+## Support the development of the integration 
+
+[![GitHub Sponsor Badge](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/ssmale)
 
 ## Installation
 
@@ -29,13 +36,8 @@ A Home Assistant integration for Duux Edge heaters, allowing you to control your
 
 1. Open HACS in Home Assistant
 2. Click on "Integrations"
-3. Click the three dots in the top right corner
-4. Select "Custom repositories"
-5. Add this repository URL: `https://github.com/ssmale/Duux-Home-Assistant`
-6. Select category: "Integration"
-7. Click "Add"
-8. Find "Duux Heater" in the integration list and click "Download"
-9. Restart Home Assistant
+3. Find "Duux" in the integration list and click "Download"
+4. Restart Home Assistant
 
 ### Manual Installation
 
@@ -47,7 +49,7 @@ A Home Assistant integration for Duux Edge heaters, allowing you to control your
 
 1. Go to **Settings → Devices & Services**
 2. Click **+ Add Integration**
-3. Search for "Duux Heater"
+3. Search for "Duux"
 4. Enter your credentials:
    - **Email**: Your Duux account email
    - **Password**: Your Duux account password
