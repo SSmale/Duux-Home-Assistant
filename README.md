@@ -26,7 +26,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
   - 🌙 **Night Mode**: Dim the display
   - 🔒 **Child Lock**: Prevent accidental changes
 
-- Duux Threesixty Tow Heater
+- Duux Threesixty Two Heater
   - 🌡️ **Temperature Control**: Set target temperature (18-30°C)
   - 🔥 **Three Heating Modes**: Low, High and Boost
 
