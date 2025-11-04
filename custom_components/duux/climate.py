@@ -1,5 +1,6 @@
 """Support for Duux climate devices."""
 import logging
+from typing import Any, Iterator
 
 from homeassistant.components.climate import (
     ClimateEntity
@@ -40,9 +41,11 @@ async def async_setup_entry(
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
         elif sensor_type_id == 50:  # Edge heater v2
             entities.append(DuuxEdgeClimate(coordinator, api, device))
+        elif sensor_type_id == 31:  # Threesixty Tow (2022)
+            entities.append(DuuxThreesixtyTowClimate(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
-            entities.append(DuuxClimate(coordinator, api, device))
+            entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
             _LOGGER.warning(f"Unknown heater type {sensor_type_id}, using generic entity")
     
     async_add_entities(entities)
@@ -119,7 +122,6 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Set new target temperature."""
         if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
             return
-        
 
         if temperature is not None:
             await self.hass.async_add_executor_job(
@@ -164,6 +166,131 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     async def async_update(self):
         """Update the entity."""
         await self._coordinator.async_request_refresh()
+
+
+class DuuxClimateAutoDiscovery(DuuxClimate):
+    """Duux climate autodiscovery."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the climate device."""
+        super().__init__(coordinator, api, device)
+        self._presets = self.presets_discovery()
+
+    def presets_discovery(self):
+        """Discover available presets."""
+
+        modes: Any = self._coordinator.data.get("availableModes")
+        if modes is None:
+            modes = next(
+                DuuxClimateAutoDiscovery._deep_find(self._device, "availableModes"),
+                None,
+            )
+
+        if isinstance(modes, list):
+            modes = next(
+                (
+                    candidate
+                    for candidate in modes
+                    if isinstance(candidate, dict) and candidate.get("settings")
+                ),
+                None,
+            )
+
+        if not isinstance(modes, dict):
+            _LOGGER.debug("No available modes found")
+            return []
+
+        settings = modes.get("settings")
+        if not isinstance(settings, list):
+            _LOGGER.debug("No settings found in available modes")
+            return []
+
+        command_prefix = (
+            modes.get("command_key") or modes.get("commandKey") or modes.get("key")
+        )
+
+        presets = []
+        for setting in settings:
+            if not isinstance(setting, dict):
+                continue
+
+            name = (
+                setting.get("setting_name")
+                or setting.get("settingName")
+                or setting.get("name")
+            )
+
+            value = (
+                setting.get("setting_value")
+                or setting.get("settingValue")
+                or setting.get("value")
+            )
+
+            name = self._normalize_mode_name(name, value)
+
+            command = setting.get("command")
+            if command is None and command_prefix and value is not None:
+                command = f"{command_prefix} {value}"
+            elif command is None:
+                command = value
+
+            if name and command is not None:
+                normalized_command = str(command)
+                normalized_value = None if value is None else str(value)
+                presets.append(
+                    {
+                        "name": str(name),
+                        "command": normalized_command,
+                        "value": normalized_value,
+                    }
+                )
+
+        _LOGGER.debug("Discovered presets: %s", presets)
+
+        return presets
+
+    def _normalize_mode_name(self, name, value: Any) -> Any:
+        """Return normalized mode value."""
+        return name
+
+    @property
+    def preset_mode(self):
+        """Return current preset mode."""
+        mode = self._coordinator.data.get("mode")
+        for preset in self._presets:
+            if preset["value"] == str(mode):
+                return preset["name"]
+        return None
+
+    @property
+    def preset_modes(self):
+        """Return available preset modes."""
+        # Base implementation - override in subclasses if needed
+        return [preset["name"] for preset in self._presets]
+
+    async def async_set_preset_mode(self, preset_mode):
+        """Set preset mode."""
+        for preset in self._presets:
+            if preset["name"] == preset_mode:
+                mode_command = preset["command"]
+                break
+
+        await self.hass.async_add_executor_job(
+            self._api.send_command, self._device_mac, f"tune set {mode_command}"
+        )
+        await self._coordinator.async_request_refresh()
+
+    @staticmethod
+    def _deep_find(obj: Any, key: str) -> Iterator[Any]:
+        """Yield every value for `key` inside a nested dict/list structure."""
+        if isinstance(obj, dict):
+            if key in obj:
+                yield obj[key]
+            for value in obj.values():
+                yield from DuuxClimateAutoDiscovery._deep_find(value, key)
+        elif isinstance(obj, list):
+            for item in obj:
+                yield from DuuxClimateAutoDiscovery._deep_find(item, key)
 
 
 class DuuxThreesixtyClimate(DuuxClimate):
@@ -211,6 +338,21 @@ class DuuxThreesixtyClimate(DuuxClimate):
         )
         await self._coordinator.async_request_refresh()
 
+class DuuxThreesixtyTowClimate(DuuxClimateAutoDiscovery):
+    """Duux Threesixty Tow 2022 heater."""
+
+    def _normalize_mode_name(self, name, value: Any) -> Any:
+        """Change the name for the HA presets."""
+        # On this model, the modes are reversed compared to the denominations given by the API
+        # Does any model have the same issue ?
+        if value is not None:
+            if value == "2":
+                return PRESET_ECO
+            if value == "1":
+                return PRESET_COMFORT
+            if value == "0":
+                return PRESET_BOOST
+        return name
 
 class DuuxEdgeClimate(DuuxClimate):
     """Duux Edge heater v2."""
