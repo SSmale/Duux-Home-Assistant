@@ -41,8 +41,8 @@ async def async_setup_entry(
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
         elif sensor_type_id == 50:  # Edge heater v2
             entities.append(DuuxEdgeClimate(coordinator, api, device))
-        elif sensor_type_id == 31:  # Threesixty Tow (2022)
-            entities.append(DuuxThreesixtyTowClimate(coordinator, api, device))
+        elif sensor_type_id == 31:  # Threesixty Two (2022)
+            entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
             entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
@@ -338,8 +338,8 @@ class DuuxThreesixtyClimate(DuuxClimate):
         )
         await self._coordinator.async_request_refresh()
 
-class DuuxThreesixtyTowClimate(DuuxClimateAutoDiscovery):
-    """Duux Threesixty Tow 2022 heater."""
+class DuuxThreesixtyTwoClimate(DuuxClimateAutoDiscovery):
+    """Duux Threesixty Two 2022 heater."""
 
     def _normalize_mode_name(self, name, value: Any) -> Any:
         """Change the name for the HA presets."""
