@@ -26,6 +26,13 @@ A Home Assistant integration for Duux products, allowing you to control your dev
   - 🌙 **Night Mode**: Dim the display
   - 🔒 **Child Lock**: Prevent accidental changes
 
+- Duux Threesixty Two Heater
+  - 🌡️ **Temperature Control**: Set target temperature (18-30°C)
+  - 🔥 **Three Heating Modes**: Low, High and Boost
+
+- Unknown Duux Heaters
+  - Basic functionality may be available; please report any issues.
+
 ## Support the development of the integration 
 
 [![GitHub Sponsor Badge](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/ssmale)
