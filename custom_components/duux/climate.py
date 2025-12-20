@@ -41,7 +41,7 @@ async def async_setup_entry(
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
         elif sensor_type_id == 50:  # Edge heater v2
             entities.append(DuuxEdgeTwoClimate(coordinator, api, device))
-        elif sensor_type_id == 51:  # Edge heater v1 (2023)
+        elif sensor_type_id == 51:  # Edge heater 2023 (v1)
             entities.append(DuuxEdgeClimate(coordinator, api, device))  
         elif sensor_type_id == 31:  # Threesixty Two (2022)
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
@@ -401,7 +401,7 @@ class DuuxEdgeTwoClimate(DuuxClimate):
         await self._coordinator.async_request_refresh()
 
 class DuuxEdgeClimate(DuuxClimate):
-    """Duux Edge heater v1."""
+    """Duux Edge heater 2023 (v1)."""
     PRESET_LOW = PRESET_ECO
     PRESET_HIGH = PRESET_COMFORT
 
@@ -424,7 +424,6 @@ class DuuxEdgeClimate(DuuxClimate):
         mode_map = {
             1: self.PRESET_LOW,
             2: self.PRESET_HIGH,
-
         }
         return mode_map.get(mode, self.PRESET_LOW)
     
