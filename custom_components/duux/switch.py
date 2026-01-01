@@ -22,10 +22,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
 
-        # Only Edge heaters have night mode
-        if sensor_type_id == 50:  # Edge heater v2
+        # Edge heater v2 & Bora have night mode & child mode
+        if sensor_type_id in [50, 62]:
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
+        
+        # Bora has 'cleaning' and 'laundry' modes..
+        if sensor_type_id == 62:
+        	entities.append(DuuxCleaningModeSwitch(coordinator, api, device))
+            entities.append(DuuxLaundryModeSwitch(coordinator, api, device))
     
     async_add_entities(entities)
 
@@ -112,5 +117,63 @@ class DuuxNightModeSwitch(DuuxSwitch):
         """Turn off night mode."""
         await self.hass.async_add_executor_job(
               self._api.set_night_mode, self._device_mac, False
+          )
+        await self._coordinator.async_request_refresh()
+
+class DuuxCleaningModeSwitch(DuuxSwitch):
+    """Representation of a Duux self-cleaning mode switch."""
+
+    def __init__(self, coordinator, api,device):
+        """Initialize the self-cleaning mode switch."""
+        super().__init__(coordinator,api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_cleaning_mode"
+        self._attr_name = f"{self.device_name} Cleaning Mode"
+        self._attr_icon = "mdi:air-filter"
+
+    @property
+    def is_on(self):
+        """Return true if self-cleaning mode is on."""
+        return self.coordinator.data.get("cleaning") == 1
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on cleaning mode."""
+        await self.hass.async_add_executor_job(
+            self._api.set_cleaning_mode, self._device_mac, True
+        )
+        await self._coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off cleaning mode."""
+        await self.hass.async_add_executor_job(
+              self._api.set_cleaning_mode, self._device_mac, False
+          )
+        await self._coordinator.async_request_refresh()
+
+class DuuxLaundryModeSwitch(DuuxSwitch):
+    """Representation of a Duux laundry mode switch."""
+
+    def __init__(self, coordinator, api,device):
+        """Initialize the laundry mode switch."""
+        super().__init__(coordinator,api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_Laundry_mode"
+        self._attr_name = f"{self.device_name} Laundry Mode"
+        self._attr_icon = "mdi:tshirt-crew"
+
+    @property
+    def is_on(self):
+        """Return true if laundry mode is on."""
+        return self.coordinator.data.get("laundry") == 1
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on laundry mode."""
+        await self.hass.async_add_executor_job(
+            self._api.set_Laundry_mode, self._device_mac, True
+        )
+        await self._coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off Laundry mode."""
+        await self.hass.async_add_executor_job(
+              self._api.set_Laundry_mode, self._device_mac, False
           )
         await self._coordinator.async_request_refresh()

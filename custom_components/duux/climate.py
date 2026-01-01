@@ -9,8 +9,9 @@ from homeassistant.components.climate.const import (
     ClimateEntityFeature,
     HVACMode,
     PRESET_BOOST, PRESET_COMFORT, PRESET_ECO,
+    ATTR_HUMIDITY,
 )
-from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
+from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature, PERCENTAGE
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -43,6 +44,8 @@ async def async_setup_entry(
             entities.append(DuuxEdgeClimate(coordinator, api, device))
         elif sensor_type_id == 31:  # Threesixty Two (2022)
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
+        elif sensor_type_id == 62:  # Bora De-humidifier
+        	entities.append(DuuxBoraClimate(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
             entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
@@ -397,3 +400,45 @@ class DuuxEdgeClimate(DuuxClimate):
             self._api.set_mode, self._device_mac, mode
         )
         await self._coordinator.async_request_refresh()
+
+class DuuxBoraClimate(DuuxClimateAutoDiscovery):
+    """Duux Bora Dehumidifier."""
+    
+    def __init__(self, coordinator, api, device):
+        """Initialize the Bora climate device."""
+        super().__init__(coordinator, api, device)
+        
+        # min/max humidity settings for Bora.
+        self._attr_min_humidity = 30
+        self._attr_max_humidity = 80
+        
+        # set hvac modes for a de-humidifier..
+        self._attr_humidity_unit = PERCENTAGE
+        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.DRY]
+        self._attr_supported_features = (
+            ClimateEntityFeature.TARGET_HUMIDITY | 
+            ClimateEntityFeature.PRESET_MODE |
+            ClimateEntityFeature.TURN_OFF |
+            ClimateEntityFeature.TURN_ON
+        )
+    
+    @property
+    def current_humidity(self):
+        """Return the current humidity."""
+        return self._coordinator.data.get("humidity")
+    
+    @property
+    def target_humidity(self):
+        """Return the humidity we try to reach."""
+        return self._coordinator.data.get("sp")
+    
+    async def async_set_humidity(self, **kwargs):
+        """Set new target humidity."""
+        if (humidity := kwargs.get(ATTR_HUMIDITY)) is None:
+            return
+
+        if humidity is not None:
+            await self.hass.async_add_executor_job(
+                self._api.set_humidity, self._device_mac, humidity
+            )
+            await self._coordinator.async_request_refresh()

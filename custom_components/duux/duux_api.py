@@ -88,7 +88,16 @@ class DuuxAPI:
     def set_temperature(self, device_mac, temperature):
         """Set target temperature (5-36°C)."""
         temp = max(5, min(36, int(temperature)))
+        # note: Both temperature for heaters and humidity for de-humidifiers
+        #       use 'set-point' (aka 'sp') to track a target value.
         return self.send_command(device_mac, f"tune set sp {temp}")
+    
+    def set_humidity(self, device_mac, humidity):
+        """Set target humidity (30-80%)."""
+        temp = max(30, min(80, int(humidity)))
+        # note: Both temperature for heaters and humidity for de-humidifiers
+        #       use 'set-point' (aka 'sp') to track a target value.
+        return self.send_command(device_mac, f"tune set sp {humidity}")
     
     def set_mode(self, device_mac, mode):
         """Set heater mode (1=Low, 2=High, 3=Boost)."""
@@ -104,3 +113,13 @@ class DuuxAPI:
         """Set child lock."""
         value = 1 if locked else 0
         return self.send_command(device_mac, f"tune set lock {value}")
+    
+    def set_cleaning_mode(self, device_mac, cleaning_on):
+        """Set self-cleaning mode."""
+        value = "01" if cleaning_on else "00"
+        return self.send_command(device_mac, f"tune set cleaning {value}")
+    
+    def set_laundry_mode(self, device_mac, laundry_on):
+        """Set laundry mode."""
+        value = "01" if laundry_on else "00"
+        return self.send_command(device_mac, f"tune set laundry {value}")
