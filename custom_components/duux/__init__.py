@@ -13,7 +13,7 @@ from .duux_api import DuuxAPI
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = [Platform.CLIMATE, Platform.SWITCH]
+PLATFORMS = [Platform.CLIMATE, Platform.HUMIDIFIER, Platform.SWITCH, Platform.SELECT, Platform.SENSOR]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Duux from a config entry."""
@@ -88,6 +88,8 @@ class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
             data = await self.hass.async_add_executor_job(
                 self.api.get_device_status, self.device_id
             )
+            #filtered_data = {key: value for key, value in data.items() if value != None}
+            #_LOGGER.warning(str(filtered_data))
             return data
         except Exception as err:
             raise UpdateFailed(f"Error communicating with API: {err}")
