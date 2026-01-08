@@ -58,7 +58,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
 
     def __init__(self, coordinator, api, device):
         """Initialize the climate device."""
-        super().__init__(coordinator, api, device)
+        super().__init__(coordinator)
         self._api = api
         self._device = device
         self._device_id = device["id"]
