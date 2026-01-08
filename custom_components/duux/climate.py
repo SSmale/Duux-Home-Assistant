@@ -9,7 +9,6 @@ from homeassistant.components.climate.const import (
     ClimateEntityFeature,
     HVACMode,
     PRESET_BOOST, PRESET_COMFORT, PRESET_ECO,
-    FAN_LOW, FAN_MEDIUM, FAN_HIGH,
 )
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature, PERCENTAGE
 from homeassistant.config_entries import ConfigEntry
@@ -54,13 +53,12 @@ async def async_setup_entry(
     
     async_add_entities(entities)
 
-
 class DuuxClimate(CoordinatorEntity, ClimateEntity):
     """Representation of a Duux climate device."""
 
     def __init__(self, coordinator, api, device):
         """Initialize the climate device."""
-        super().__init__(coordinator)
+        super().__init__(coordinator, api, device)
         self._api = api
         self._device = device
         self._device_id = device["id"]
@@ -68,7 +66,21 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         self._attr_unique_id = f"duux_{self._device_id}"
         self._attr_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
+        
+        # Default temperature range (can be overridden by subclasses)
+        self._attr_min_temp = 18
+        self._attr_max_temp = 30
+        self._attr_target_temperature_step = 1
 
+        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
+        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
+        self._attr_supported_features = (
+            ClimateEntityFeature.TARGET_TEMPERATURE | 
+            ClimateEntityFeature.PRESET_MODE |
+            ClimateEntityFeature.TURN_OFF |
+            ClimateEntityFeature.TURN_ON
+        )
+    
     @property
     def device_info(self):
         """Return device information."""
@@ -78,7 +90,23 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             "manufacturer":  self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
+    
+    @property
+    def current_temperature(self):
+        """Return the current temperature."""
+        return self.coordinator.data.get("temp")
 
+    @property
+    def target_temperature(self):
+        """Return the temperature we try to reach."""
+        return self.coordinator.data.get("sp")
+    
+    @property
+    def hvac_mode(self):
+        """Return current operation."""
+        power = self.coordinator.data.get("power", 0)
+        return HVACMode.HEAT if power == 1 else HVACMode.OFF
+    
     @property
     def preset_mode(self):
         """Return current preset mode."""
@@ -90,7 +118,31 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Return available preset modes."""
         # Base implementation - override in subclasses
         return []
+    
+    async def async_set_temperature(self, **kwargs):
+        """Set new target temperature."""
+        if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
+            return
 
+        if temperature is not None:
+            await self.hass.async_add_executor_job(
+                self._api.set_temperature, self._device_mac, temperature
+            )
+            await self.coordinator.async_request_refresh()
+
+    async def async_set_hvac_mode(self, hvac_mode):
+        """Set new HVAC mode."""
+
+        if hvac_mode == HVACMode.HEAT:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+        else:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, False
+            )
+        await self.coordinator.async_request_refresh()
+    
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
         # Base implementation - override in subclasses
@@ -116,68 +168,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Update the entity."""
         await self.coordinator.async_request_refresh()
 
-class DuuxClimateHeater(DuuxClimate):
-    """Base class for Duux heaters."""
-
-    def __init__(self, coordinator, api, device):
-        """Initialize the climate device."""
-        super().__init__(coordinator, api, device)
-        
-        # Default temperature range (can be overridden by subclasses)
-        self._attr_min_temp = 18
-        self._attr_max_temp = 30
-        self._attr_target_temperature_step = 1
-
-        self._attr_temperature_unit = UnitOfTemperature.CELSIUS
-        self._attr_hvac_modes = [HVACMode.OFF, HVACMode.HEAT]
-        self._attr_supported_features = (
-            ClimateEntityFeature.TARGET_TEMPERATURE | 
-            ClimateEntityFeature.PRESET_MODE |
-            ClimateEntityFeature.TURN_OFF |
-            ClimateEntityFeature.TURN_ON
-        )
-    
-    @property
-    def current_temperature(self):
-        """Return the current temperature."""
-        return self.coordinator.data.get("temp")
-
-    @property
-    def target_temperature(self):
-        """Return the temperature we try to reach."""
-        return self.coordinator.data.get("sp")
-    
-    @property
-    def hvac_mode(self):
-        """Return current operation."""
-        power = self.coordinator.data.get("power", 0)
-        return HVACMode.HEAT if power == 1 else HVACMode.OFF
-    
-    async def async_set_temperature(self, **kwargs):
-        """Set new target temperature."""
-        if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
-            return
-
-        if temperature is not None:
-            await self.hass.async_add_executor_job(
-                self._api.set_temperature, self._device_mac, temperature
-            )
-            await self.coordinator.async_request_refresh()
-
-    async def async_set_hvac_mode(self, hvac_mode):
-        """Set new HVAC mode."""
-
-        if hvac_mode == HVACMode.HEAT:
-            await self.hass.async_add_executor_job(
-                self._api.set_power, self._device_mac, True
-            )
-        else:
-            await self.hass.async_add_executor_job(
-                self._api.set_power, self._device_mac, False
-            )
-        await self.coordinator.async_request_refresh()
-
-class DuuxClimateAutoDiscovery(DuuxClimateHeater):
+class DuuxClimateAutoDiscovery(DuuxClimate):
     """Duux climate autodiscovery."""
 
     def __init__(self, coordinator, api, device):
@@ -302,7 +293,7 @@ class DuuxClimateAutoDiscovery(DuuxClimateHeater):
                 yield from DuuxClimateAutoDiscovery._deep_find(item, key)
 
 
-class DuuxThreesixtyClimate(DuuxClimateHeater):
+class DuuxThreesixtyClimate(DuuxClimate):
     """Duux Threesixty 2023 heater."""
     # Preset constants
     PRESET_LOW = PRESET_ECO
@@ -363,7 +354,7 @@ class DuuxThreesixtyTwoClimate(DuuxClimateAutoDiscovery):
                 return PRESET_BOOST
         return name
 
-class DuuxEdgeClimate(DuuxClimateHeater):
+class DuuxEdgeClimate(DuuxClimate):
     """Duux Edge heater v2."""
     PRESET_LOW = PRESET_ECO
     PRESET_BOOST = PRESET_BOOST
