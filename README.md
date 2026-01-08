@@ -34,7 +34,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
   - 💧 **Humidity Control**: Set target humidity (30-80%)
   - ✌ **Two drying modes**: Auto or Continuous
   - 🍃 **Two fan speeds**: Low or High
-  - 👕 **Laundry Mode**: Start a landry drying cycle
+  - 👕 **Laundry Mode**: Start a laundry drying cycle
   - 🧹 **Cleaning Mode**: Start a self-cleaning cycle
   - 🌙 **Sleep Mode**: Enable sleep mode to dim the lights and silence the beep
   - 💧 **Humidity Sensor**: Track current humidity levels
