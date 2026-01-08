@@ -30,6 +30,16 @@ A Home Assistant integration for Duux products, allowing you to control your dev
   - 🌡️ **Temperature Control**: Set target temperature (18-30°C)
   - 🔥 **Three Heating Modes**: Low, High and Boost
 
+- Duux Bora Dehumidifier
+  - 💧 **Humidity Control**: Set target humidity (30-80%)
+  - ✌ **Two drying modes**: Auto or Continuous
+  - 🍃 **Two fan speeds**: Low or High
+  - 👕 **Laundry Mode**: Start a landry drying cycle
+  - 🧹 **Cleaning Mode**: Start a self-cleaning cycle
+  - 🌙 **Sleep Mode**: Enable sleep mode to dim the lights and silence the beep
+  - 💧 **Humidity Sensor**: Track current humidity levels
+  - ⏲ **Timer Mode**: Set and track timers
+
 - Unknown Duux Heaters
   - Basic functionality may be available; please report any issues.
 
