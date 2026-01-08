@@ -140,7 +140,7 @@ class DuuxAPI:
         value = "01" if laundry_on else "00"
         return self.send_command(device_mac, f"tune set laundr {value}")
     
-    def set_timer_mode(self, device_mac, mode):
-        """Set timer mode in hours."""
-        mode_val = max(0, min(24, int(hours)))
+    def set_timer(self, device_mac, hours):
+        """Set timer in hours."""
+        value = max(0, min(24, int(hours)))
         return self.send_command(device_mac, f"tune set timer {value}")
