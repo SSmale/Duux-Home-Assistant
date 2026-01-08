@@ -4,6 +4,10 @@ import logging
 from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from homeassistant.const import (
+    UnitOfTime,
+)
+
 from .const import *
 
 _LOGGER = logging.getLogger(__name__)
@@ -25,6 +29,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         # Bora has two fan speeds..
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
+            entities.append(DuuxTimerSelector(coordinator, api, device))
     
     async_add_entities(entities)
 
@@ -93,5 +98,34 @@ class DuuxFanSpeedSelector(DuuxSelector):
 
         await self.hass.async_add_executor_job(
             self._api.set_fan, self._device_mac, mode
+        )
+        await self.coordinator.async_request_refresh()
+
+class DuuxTimerSelector(DuuxSelector):
+    """Representation of a Duux timer selector."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the timer selector."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_timer"
+        self._attr_name = "Timer"
+        self._attr_icon = "mdi:timer"
+        self._attr_unit_of_measurement = UnitOfTime.HOURS
+        self._attr_options = list(map(str, range(0, 24+1)))
+
+    @property
+    def current_option(self):
+        """Return current timer."""
+        return str(self.coordinator.data.get("timer"))
+
+    async def async_select_option(self, option):
+        """Set timer amount."""
+        try:
+        	amount = max(0, min(24, int(option)))
+        except:
+        	amount = 0
+
+        await self.hass.async_add_executor_job(
+            self._api.set_timer, self._device_mac, str(amount)
         )
         await self.coordinator.async_request_refresh()
