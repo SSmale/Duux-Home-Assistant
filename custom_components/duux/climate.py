@@ -10,7 +10,7 @@ from homeassistant.components.climate.const import (
     HVACMode,
     PRESET_BOOST, PRESET_COMFORT, PRESET_ECO,
 )
-from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature, PERCENTAGE
+from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
