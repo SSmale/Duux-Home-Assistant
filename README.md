@@ -20,6 +20,12 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 ## Supported Devices
 
+-- Duux Edge Heater 2023 (v1)
+  - 🌡️ **Temperature Control**: Set target temperature (5-36°C)
+  - 🔥 **Two Heating Modes**: Low and High
+  - 🌙 **Night Mode**: Dim the display
+  - 🔒 **Child Lock**: Prevent accidental changes
+
 - Duux Edge Heater (v2)
   - 🌡️ **Temperature Control**: Set target temperature (5-36°C)
   - 🔥 **Three Heating Modes**: Low, High and Boost
