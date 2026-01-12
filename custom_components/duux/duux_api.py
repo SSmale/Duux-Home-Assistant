@@ -2,6 +2,7 @@
 
 import requests
 import logging
+import json
 
 from .const import API_BASE_URL, API_LOGIN, API_SENSORS, API_COMMANDS
 
@@ -54,6 +55,7 @@ class DuuxAPI:
             _LOGGER.info(f"Found {len(devices)} Duux device(s)")
             return devices
         except Exception as e:
+        	# todo: refresh the login session and try again.
             _LOGGER.error(f"Failed to get devices: {e}")
             return []
     
@@ -88,19 +90,58 @@ class DuuxAPI:
     def set_temperature(self, device_mac, temperature):
         """Set target temperature (5-36°C)."""
         temp = max(5, min(36, int(temperature)))
+        # note: Both temperature for heaters and humidity for de-humidifiers
+        #       use 'set-point' (aka 'sp') to track a target value.
         return self.send_command(device_mac, f"tune set sp {temp}")
+    
+    def set_humidity(self, device_mac, humidity):
+        """Set target humidity (30-80%)."""
+        temp = max(30, min(80, int(humidity)))
+        # note: Both temperature for heaters and humidity for de-humidifiers
+        #       use 'set-point' (aka 'sp') to track a target value.
+        return self.send_command(device_mac, f"tune set sp {humidity}")
     
     def set_mode(self, device_mac, mode):
         """Set heater mode (1=Low, 2=High, 3=Boost)."""
         mode_val = max(1, min(3, int(mode)))
         return self.send_command(device_mac, f"tune set heating {mode_val}")
     
+    def set_dry_mode(self, device_mac, mode):
+        """Set dryer mode (0=Auto, 1=Continuous)."""
+        mode_val = max(0, min(1, int(mode)))
+        return self.send_command(device_mac, f"tune set mode {mode_val}")
+    
+    def set_fan(self, device_mac, mode):
+        """Set fan mode (1=Low, 0=High)."""
+        mode_val = max(0, min(1, int(mode)))
+        return self.send_command(device_mac, f"tune set fan {mode_val}")
+    
     def set_night_mode(self, device_mac, night_on):
         """Set night mode."""
         value = "01" if night_on else "00"
         return self.send_command(device_mac, f"tune set night {value}")
     
+    def set_sleep_mode(self, device_mac, sleep_on):
+        """Set sleep mode."""
+        value = "01" if sleep_on else "00"
+        return self.send_command(device_mac, f"tune set sleep {value}")
+    
     def set_lock(self, device_mac, locked):
         """Set child lock."""
         value = 1 if locked else 0
         return self.send_command(device_mac, f"tune set lock {value}")
+    
+    def set_cleaning_mode(self, device_mac, cleaning_on):
+        """Set self-cleaning mode."""
+        value = "01" if cleaning_on else "00"
+        return self.send_command(device_mac, f"tune set dry {value}")
+    
+    def set_laundry_mode(self, device_mac, laundry_on):
+        """Set laundry mode."""
+        value = "01" if laundry_on else "00"
+        return self.send_command(device_mac, f"tune set laundr {value}")
+    
+    def set_timer(self, device_mac, hours):
+        """Set timer in hours."""
+        value = max(0, min(24, int(hours)))
+        return self.send_command(device_mac, f"tune set timer {value}")
