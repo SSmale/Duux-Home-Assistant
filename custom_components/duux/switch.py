@@ -22,8 +22,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
 
-        # Edge heater v2 has night mode & child mode
-        if sensor_type_id == DUUX_STID_EDGEHEATER_V2:
+        # Only Edge heaters have night mode
+        if sensor_type_id == 50 or sensor_type_id == 51:  # Edge heater v1, v2
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
         

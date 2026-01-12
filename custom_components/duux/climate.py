@@ -39,9 +39,11 @@ async def async_setup_entry(
         # Create the appropriate climate entity based on heater type
         if sensor_type_id == DUUX_STID_THREESIXTY_2023:
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
-        elif sensor_type_id == DUUX_STID_EDGEHEATER_V2:
-            entities.append(DuuxEdgeClimate(coordinator, api, device))
-        elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
+        elif sensor_type_id == 50:  # Edge heater v2
+            entities.append(DuuxEdgeTwoClimate(coordinator, api, device))
+        elif sensor_type_id == 51:  # Edge heater 2023 (v1)
+            entities.append(DuuxEdgeClimate(coordinator, api, device))  
+        elif sensor_type_id == 31:  # Threesixty Two (2022)
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_BORA_2024:
         	# Implemented in humidifier.py
@@ -354,7 +356,7 @@ class DuuxThreesixtyTwoClimate(DuuxClimateAutoDiscovery):
                 return PRESET_BOOST
         return name
 
-class DuuxEdgeClimate(DuuxClimate):
+class DuuxEdgeTwoClimate(DuuxClimate):
     """Duux Edge heater v2."""
     PRESET_LOW = PRESET_ECO
     PRESET_BOOST = PRESET_BOOST
@@ -396,4 +398,45 @@ class DuuxEdgeClimate(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        await self._coordinator.async_request_refresh()
+
+class DuuxEdgeClimate(DuuxClimate):
+    """Duux Edge heater 2023 (v1)."""
+    PRESET_LOW = PRESET_ECO
+    PRESET_HIGH = PRESET_COMFORT
+
+    def __init__(self, coordinator, api,device):
+        """Initialize the Edge climate device."""
+        super().__init__(coordinator, api, device)
+        # Temperature range for Edge heater
+        self._attr_min_temp = 5
+        self._attr_max_temp = 36
+    
+    @property
+    def preset_modes(self):
+        """Return available preset modes."""
+        return [self.PRESET_LOW, self.PRESET_HIGH]
+    
+    @property
+    def preset_mode(self):
+        """Return current preset mode."""
+        mode = self._coordinator.data.get("heatin")
+        mode_map = {
+            1: self.PRESET_LOW,
+            2: self.PRESET_HIGH,
+        }
+        return mode_map.get(mode, self.PRESET_LOW)
+    
+    async def async_set_preset_mode(self, preset_mode):
+        """Set preset mode."""
+        mode_map = {
+            self.PRESET_LOW: "1",
+            self.PRESET_HIGH: "2",
+        }
+
+        mode = mode_map.get(preset_mode, 1)
+
+        await self.hass.async_add_executor_job(
+            self._api.set_mode, self._device_mac, mode
+        )
+        await self._coordinator.async_request_refresh()
