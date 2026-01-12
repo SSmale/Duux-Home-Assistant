@@ -2,6 +2,7 @@
 
 import requests
 import logging
+import json
 
 from .const import API_BASE_URL, API_LOGIN, API_SENSORS, API_COMMANDS
 

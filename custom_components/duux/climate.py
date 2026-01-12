@@ -33,6 +33,10 @@ async def async_setup_entry(
     
     entities = []
     for device in devices:
+        device_type_id = device.get("sensorType").get("type")
+        if device_type_id not in [DUUX_DTID_HEATER, DUUX_DTID_THERMOSTAT]:
+            continue
+        
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
@@ -45,9 +49,6 @@ async def async_setup_entry(
             entities.append(DuuxEdgeClimate(coordinator, api, device))  
         elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
-        elif sensor_type_id == DUUX_STID_BORA_2024:
-        	# Implemented in humidifier.py
-            pass
         else:
             # Fallback to generic entity for unknown types
             entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))

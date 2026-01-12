@@ -34,12 +34,18 @@ async def async_setup_entry(
     
     entities = []
     for device in devices:
+        device_type_id = device.get("sensorType").get("type")
+        if device_type_id != DUUX_DTID_HUMIDIFIER:
+            continue
+        
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
         # Create the appropriate de/humidifier entity based on sensor_type_id
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
+        else:
+            _LOGGER.warning(f"Unknown de/humidifier type {sensor_type_id}, skipping.")
     
     async_add_entities(entities)
 
