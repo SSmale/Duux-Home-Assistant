@@ -39,11 +39,11 @@ async def async_setup_entry(
         # Create the appropriate climate entity based on heater type
         if sensor_type_id == DUUX_STID_THREESIXTY_2023:
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
-        elif sensor_type_id == 50:  # Edge heater v2
+        elif sensor_type_id == DUUX_STID_EDGEHEATER_V2:
             entities.append(DuuxEdgeTwoClimate(coordinator, api, device))
-        elif sensor_type_id == 51:  # Edge heater 2023 (v1)
+        elif sensor_type_id == DUUX_STID_EDGEHEATER_2023_V1:
             entities.append(DuuxEdgeClimate(coordinator, api, device))  
-        elif sensor_type_id == 31:  # Threesixty Two (2022)
+        elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_BORA_2024:
         	# Implemented in humidifier.py
@@ -398,7 +398,7 @@ class DuuxEdgeTwoClimate(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )
-        await self._coordinator.async_request_refresh()
+        await self.coordinator.async_request_refresh()
 
 class DuuxEdgeClimate(DuuxClimate):
     """Duux Edge heater 2023 (v1)."""
@@ -420,7 +420,7 @@ class DuuxEdgeClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self._coordinator.data.get("heatin")
+        mode = self.coordinator.data.get("heatin")
         mode_map = {
             1: self.PRESET_LOW,
             2: self.PRESET_HIGH,
@@ -439,4 +439,4 @@ class DuuxEdgeClimate(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )
-        await self._coordinator.async_request_refresh()
+        await self.coordinator.async_request_refresh()
