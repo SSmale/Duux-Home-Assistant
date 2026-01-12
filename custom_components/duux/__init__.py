@@ -36,12 +36,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Create coordinator for each device
     coordinators = {}
     for device in devices:
-    	sensor_type_id = device.get("sensorTypeId")
-    	device_type_id = device.get("sensorType").get("type")
+        sensor_type_id = device.get("sensorTypeId")
+        device_type_id = device.get("sensorType").get("type")
         if device_type_id not in [DUUX_DTID_HEATER, DUUX_DTID_THERMOSTAT, DUUX_DTID_HUMIDIFIER]:
-        	_LOGGER.warning(f"Unknown device type {device_type_id}:{sensor_type_id}, skipping..")
+            _LOGGER.warning(f"Unknown device type {device_type_id}:{sensor_type_id}, skipping..")
             continue
-    	
+        
         coordinator = DuuxDataUpdateCoordinator(
             hass,
             api=api,
