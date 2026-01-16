@@ -1,9 +1,7 @@
 {
   "domain": "duux",
   "name": "Duux",
-  "codeowners": [
-    "@ssmale"
-  ],
+  "codeowners": ["@ssmale"],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/ssmale/Duux-Home-Assistant",
@@ -12,5 +10,5 @@
   "requirements": [
     "requests>=2.31.0"
   ],
-  "version": "1.2.0"
+  "version": "1.2.1"
 }

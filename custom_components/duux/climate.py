@@ -182,7 +182,8 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
     def presets_discovery(self):
         """Discover available presets."""
 
-        modes: Any = self.coordinator.data.get("availableModes")
+        # Guard against coordinator.data being None during initialization
+        modes: Any = (self.coordinator.data or {}).get("availableModes")
         if modes is None:
             modes = next(
                 DuuxClimateAutoDiscovery._deep_find(self._device, "availableModes"),
@@ -295,10 +296,8 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
             for item in obj:
                 yield from DuuxClimateAutoDiscovery._deep_find(item, key)
 
-
-class DuuxThreesixtyClimate(DuuxClimate):
-    """Duux Threesixty 2023 heater."""
-    # Preset constants
+class DuuxThreesixtyBase(DuuxClimateAutoDiscovery):
+    """Shared base for Threesixty devices."""
     PRESET_LOW = PRESET_ECO
     PRESET_HIGH = PRESET_BOOST
     PRESET_MID = PRESET_COMFORT
@@ -309,45 +308,9 @@ class DuuxThreesixtyClimate(DuuxClimate):
         # Temperature range for Threesixty
         self._attr_min_temp = 18
         self._attr_max_temp = 30
-    
-    @property
-    def preset_modes(self):
-        """Return available preset modes."""
-        return [self.PRESET_LOW, self.PRESET_MID, self.PRESET_HIGH]
-    
-    @property
-    def preset_mode(self):
-        """Return current preset mode."""
-        mode  = self.coordinator.data.get("mode")
-        mode_map = {
-            0: self.PRESET_LOW,
-            1: self.PRESET_MID,
-            2: self.PRESET_HIGH
-        }
-        return mode_map.get(mode, self.PRESET_LOW)
-    
-    async def async_set_preset_mode(self, preset_mode):
-        """Set preset mode."""
-        mode_map = {
-            self.PRESET_LOW: "0",
-            self.PRESET_MID: "1",
-            self.PRESET_HIGH: "2"
-        }
-
-        mode = mode_map.get(preset_mode, 1)
-
-        await self.hass.async_add_executor_job(
-            self._api.set_mode, self._device_mac, mode
-        )
-        await self.coordinator.async_request_refresh()
-
-class DuuxThreesixtyTwoClimate(DuuxClimateAutoDiscovery):
-    """Duux Threesixty Two 2022 heater."""
 
     def _normalize_mode_name(self, name, value: Any) -> Any:
-        """Change the name for the HA presets."""
-        # On this model, the modes are reversed compared to the denominations given by the API
-        # Does any model have the same issue ?
+        """Change the name for the HA presets for Threesixty models."""
         if value is not None:
             if value == "2":
                 return PRESET_ECO
@@ -356,6 +319,12 @@ class DuuxThreesixtyTwoClimate(DuuxClimateAutoDiscovery):
             if value == "0":
                 return PRESET_BOOST
         return name
+
+class DuuxThreesixtyClimate(DuuxThreesixtyBase):
+    """Duux Threesixty 2023 heater."""
+
+class DuuxThreesixtyTwoClimate(DuuxThreesixtyBase):
+    """Duux Threesixty Two 2022 heater."""
 
 class DuuxEdgeTwoClimate(DuuxClimate):
     """Duux Edge heater v2."""
