@@ -25,6 +25,7 @@ from .const import (
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_THREESIXTY_TWO,
+    DUUX_STID_EDGEHEATER,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -55,7 +56,7 @@ async def async_setup_entry(
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_EDGEHEATER_V2:
             entities.append(DuuxEdgeTwoClimate(coordinator, api, device))
-        elif sensor_type_id == DUUX_STID_EDGEHEATER_2023_V1:
+        elif sensor_type_id in [DUUX_STID_EDGEHEATER_2023_V1, DUUX_STID_EDGEHEATER]:
             entities.append(DuuxEdgeClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
