@@ -13,7 +13,7 @@ from .const import (
     DUUX_DTID_HEATER,
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HUMIDIFIER,
-    DUUX_DTID_OTHER,
+    DUUX_DTID_OTHER_HEATER,
 )
 from .duux_api import DuuxAPI
 
@@ -52,7 +52,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             *DUUX_DTID_HEATER,
             *DUUX_DTID_THERMOSTAT,
             *DUUX_DTID_HUMIDIFIER,
-            *DUUX_DTID_OTHER,
+            *DUUX_DTID_OTHER_HEATER,
         ]:
             _LOGGER.warning(
                 f"Unknown device type {device_type_id}:{sensor_type_id}, skipping.."
