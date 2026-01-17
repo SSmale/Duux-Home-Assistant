@@ -46,16 +46,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
-
-      - name: Create zip
-        run: |
-          cd custom_components/duux
-          zip -r ../../duux.zip .
-
-      - name: Upload zip to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: duux.zip
-          asset_name: duux.zip
-          tag: ${{ github.ref_name }}
