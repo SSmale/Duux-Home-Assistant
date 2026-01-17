@@ -19,6 +19,40 @@ DUUX_STID_EDGEHEATER_2023_V1 = 51
 DUUX_STID_BORA_2024 = 62
 
 # Device Type IDs
-DUUX_DTID_THERMOSTAT = 50
-DUUX_DTID_HEATER = 51
-DUUX_DTID_HUMIDIFIER = 56
+
+DUUX_DTID_THERMOSTAT = [50]
+DUUX_DTID_HEATER = [51]
+DUUX_DTID_HUMIDIFIER = [56]
+
+DUUX_DTID_OTHER_HEATER = [52, 21, 23]
+
+
+# {
+#     "data": [
+#         {
+#             "typeName": "DUUX Threesixty 2023",
+#             "typeId": 49,
+#             "typeNumber": 50,
+#         },
+#         {
+#             "typeName": "DUUX Edge heater 2023",
+#             "typeId": 51,
+#             "typeNumber": 52,
+#         },
+#         {
+#             "typeName": "DUUX Threesixty 2",
+#             "typeId": 31,
+#             "typeNumber": 21,
+#         },
+#         {
+#             "typeName": "DUUX Edge heater",
+#             "typeId": 33,
+#             "typeNumber": 23,
+#         },
+#         {
+#             "typeName": "DUUX Edge heater v2",
+#             "typeId": 50,
+#             "typeNumber": 51,
+#         },
+#     ],
+# }
