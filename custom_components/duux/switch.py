@@ -26,14 +26,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id in [DUUX_STID_EDGEHEATER_2023_V1, DUUX_STID_EDGEHEATER_V2]:
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
-        
+
         # Bora has sleep (similar to night), cleaning, laundry & child lock..
         elif sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxSleepModeSwitch(coordinator, api, device))
             entities.append(DuuxCleaningModeSwitch(coordinator, api, device))
             entities.append(DuuxLaundryModeSwitch(coordinator, api, device))
-    
+
     async_add_entities(entities)
 
 

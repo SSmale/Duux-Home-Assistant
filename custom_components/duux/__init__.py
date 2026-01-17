@@ -1,4 +1,4 @@
-# custom_components/duux/__init__.py
+"""Init file for the Duux integration."""
 
 import logging
 from datetime import timedelta
@@ -11,9 +11,9 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import (
     DOMAIN,
     DUUX_DTID_HEATER,
-    DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HUMIDIFIER,
     DUUX_DTID_OTHER_HEATER,
+    DUUX_DTID_THERMOSTAT,
 )
 from .duux_api import DuuxAPI
 
@@ -55,7 +55,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             *DUUX_DTID_OTHER_HEATER,
         ]:
             _LOGGER.warning(
-                f"Unknown device type {device_type_id}:{sensor_type_id}, skipping.."
+                "Unknown device type %s:%s, skipping..",
+                device_type_id,
+                sensor_type_id,
             )
             continue
 

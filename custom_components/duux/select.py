@@ -2,11 +2,10 @@
 import logging
 
 from homeassistant.components.select import SelectEntity
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-
 from homeassistant.const import (
     UnitOfTime,
 )
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import *
 
@@ -25,12 +24,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
-        
+
         # Bora has two fan speeds..
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
-    
+
     async_add_entities(entities)
 
 
@@ -61,7 +60,7 @@ class DuuxSelector(CoordinatorEntity, SelectEntity):
 
 class DuuxFanSpeedSelector(DuuxSelector):
     """Representation of a Duux fan speed selector."""
-    
+
     FAN_HIGH = "high"
     FAN_LOW = "low"
 
@@ -111,7 +110,7 @@ class DuuxTimerSelector(DuuxSelector):
         self._attr_name = "Timer"
         self._attr_icon = "mdi:timer"
         self._attr_unit_of_measurement = UnitOfTime.HOURS
-        self._attr_options = list(map(str, range(0, 24+1)))
+        self._attr_options = list(map(str, range(24+1)))
 
     @property
     def current_option(self):
