@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.0...v2.3.1) (2026-01-17)
+
+### Fixed
+
+* Threesixty heat modes ([#14](https://github.com/SSmale/Duux-Home-Assistant/issues/14)) ([3e9eac1](https://github.com/SSmale/Duux-Home-Assistant/commit/3e9eac1d41fe54e6d5a4e64205780bd18d48fa3c))
+
 ## [1.0.0] - 2025-10-15
 
 ### Added
