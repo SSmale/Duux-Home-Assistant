@@ -3,6 +3,7 @@ import fs from "fs";
 const notes = process.argv[2];
 
 const HEADER = `# Changelog
+
 All notable changes to this project will be documented in this file.
 `;
 
