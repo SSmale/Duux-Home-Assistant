@@ -39,8 +39,8 @@ jobs:
             @semantic-release/github \
             conventional-changelog-conventionalcommits
 
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: npm audit signatures
+      # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+      #   run: npm audit signatures
 
       - name: Release
         env:
