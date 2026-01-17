@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.1...v2.3.2) (2026-01-17)
+
+### Fixed
+
+* adds in the other currently know type ids for heaters ([d7dcf94](https://github.com/SSmale/Duux-Home-Assistant/commit/d7dcf944023ca8988e77c337080b274594f71e42))
+
 ## [2.3.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.0...v2.3.1) (2026-01-17)
 
 ### Fixed
@@ -30,3 +36,4 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
