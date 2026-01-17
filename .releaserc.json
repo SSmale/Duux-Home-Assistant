@@ -63,7 +63,7 @@
         "assets": [
           "CHANGELOG.md",
           "custom_components/duux/manifest.json"
-        ],
+        ]
       }
     ],
     "@semantic-release/github"
