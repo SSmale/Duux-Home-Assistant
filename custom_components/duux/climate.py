@@ -170,14 +170,15 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def preset_mode(self) -> str | None:
         """Return the current preset mode."""
-        device_data = self.coordinator.data.get(self._device_id, {})
-        current_mode_index = device_data.get("mode")  # This is 0, 1, or 2
+        current_mode_index = self.coordinator.data.get("heatin")  # This is 0, 1, or 2
+        _LOGGER.debug("Current mode index: %s", current_mode_index)
 
         if current_mode_index is None:
             return None
 
         # Convert mode index to preset using custom mapping
         mode_mapping = self._get_mode_mapping()
+        _LOGGER.debug("Current mode index: %s", current_mode_index)
         return mode_mapping.get(current_mode_index, PRESET_ECO)
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
@@ -207,7 +208,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
 
         # Add current mode mapping to attributes for debugging
         mode_mapping = self._get_mode_mapping()
-        attrs["mode_mapping"] = {f"mode_{k}": v for k, v in mode_mapping.items()}
+        attrs[CONF_MODE_MAPPING] = {f"mode_{k}": v for k, v in mode_mapping.items()}
 
         # Add raw mode index
         device_data = self.coordinator.data.get(self._device_id, {})

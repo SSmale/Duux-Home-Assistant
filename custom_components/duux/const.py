@@ -69,6 +69,6 @@ DUUX_DTID_OTHER_HEATER = [52, 21, 23]
 CONF_MODE_MAPPING = "mode_mapping"
 
 # Default mode mappings (mode index -> preset name)
-DEFAULT_MODE_MAPPING = {0: "low", 1: "high", 2: "boost"}
+DEFAULT_MODE_MAPPING = {0: PRESET_ECO, 1: PRESET_COMFORT, 2: PRESET_BOOST}
 
 AVAILABLE_PRESETS = [None, PRESET_ECO, PRESET_COMFORT, PRESET_BOOST]

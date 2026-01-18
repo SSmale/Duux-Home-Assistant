@@ -1,7 +1,9 @@
 # custom_components/duux/config_flow.py
+import datetime
+import logging
 
 import voluptuous as vol
-from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlow, OptionsFlowWithReload
 from homeassistant.components.climate.const import (
     PRESET_BOOST,
     PRESET_COMFORT,
@@ -18,8 +20,10 @@ from .const import (
 )
 from .duux_api import DuuxAPI
 
+_LOGGER = logging.getLogger(__name__)
 
-class DuuxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+
+class DuuxConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Duux."""
 
     VERSION = 1
@@ -61,7 +65,7 @@ class DuuxConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return DuuxOptionsFlow()
 
 
-class DuuxOptionsFlow(config_entries.OptionsFlow):
+class DuuxOptionsFlow(OptionsFlowWithReload):
     """Handle options flow for Duux."""
 
     def __init__(self):
@@ -92,8 +96,15 @@ class DuuxOptionsFlow(config_entries.OptionsFlow):
         if user_input is not None:
             if "device_id" in user_input:
                 self._selected_device = user_input["device_id"]
-                return await self.async_step_device_mode_mapping()
-            return self.async_create_entry(title="", data=user_input)
+                res = await self.async_step_device_mode_mapping()
+                _LOGGER.debug(
+                    "Navigating to device mode mapping step for device %s", res
+                )
+                return res
+            _LOGGER.debug("Saving options: %s", user_input)
+            return self.async_create_entry(
+                title="", data={"now": datetime.datetime.now()}
+            )
 
         # Build device selection schema
         device_schema = {
@@ -101,6 +112,7 @@ class DuuxOptionsFlow(config_entries.OptionsFlow):
         }
 
         return self.async_show_form(
+            last_step=False,
             step_id="init",
             data_schema=vol.Schema(device_schema),
             description_placeholders={
@@ -125,9 +137,13 @@ class DuuxOptionsFlow(config_entries.OptionsFlow):
                 "2": user_input["mode_2"],
                 "3": user_input["mode_3"],
             }
-
+            _LOGGER.debug(
+                "Updated mode mapping for device %s: %s",
+                self._selected_device,
+                options[CONF_MODE_MAPPING][self._selected_device],
+            )
             # Save and go back to device selection
-            return self.async_create_entry(title="", data=options)
+            return self.async_create_entry(data=options)
 
         # Get current mapping for this device or use defaults
         current_mapping = self.config_entry.options.get(CONF_MODE_MAPPING, {}).get(
@@ -169,6 +185,7 @@ class DuuxOptionsFlow(config_entries.OptionsFlow):
     async def async_step_global_options(self, user_input=None):
         """Show global options if no devices available."""
         if user_input is not None:
+            _LOGGER.debug("Saving global options: %s", user_input)
             return self.async_create_entry(title="", data=user_input)
 
         return self.async_show_form(
