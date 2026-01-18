@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.3...v2.4.0) (2026-01-18)
+
+### Added
+
+* adds device diagnostics and fixes humidifier  ([6541b03](https://github.com/SSmale/Duux-Home-Assistant/commit/6541b03968dead77dc29435cd91a93e479e6c316))
+
 ## [2.3.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.2...v2.3.3) (2026-01-17)
 
 ### Fixed
@@ -42,5 +48,6 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
