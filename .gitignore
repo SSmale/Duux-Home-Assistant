@@ -48,3 +48,6 @@ coverage.xml
 private_*
 pyvenv.cfg
 bin
+api-sensors-response.json
+config/*
+!config/configuration.yaml
