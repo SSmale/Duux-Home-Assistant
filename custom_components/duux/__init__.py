@@ -61,6 +61,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         coordinator = DuuxDataUpdateCoordinator(
             hass,
+            # config_entry=entry,
             api=api,
             device_id=device.get("deviceId"),
             device_name=device.get("displayName") or device.get("name"),
@@ -93,15 +94,22 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching Duux data."""
 
-    def __init__(self, hass, api, device_id, device_name):
+    def __init__(
+        self,
+        hass,
+        #  config_entry,
+        api,
+        device_id,
+        device_name,
+    ):
         """Initialize."""
         self.api = api
         self.device_id = device_id
         self.device_name = device_name
-
         super().__init__(
             hass,
             _LOGGER,
+            # config_entry=config_entry,
             name=f"Duux {device_name}",
             update_interval=timedelta(seconds=30),
         )

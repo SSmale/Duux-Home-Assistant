@@ -1,0 +1,48 @@
+{
+    "config": {
+        "error": {
+            "auth": "The auth token provided is not valid.",
+            "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name`."
+        },
+        "step": {
+            "repo": {
+                "data": {
+                    "add_another": "Add another repo?",
+                    "name": "Name of the sensor.",
+                    "path": "Path to the repository e.g. home-assistant/core"
+                },
+                "description": "Add a GitHub repo, check the box to add another.",
+                "title": "Add GitHub Repository"
+            },
+            "user": {
+                "data": {
+                    "access_token": "GitHub Access Token",
+                    "url": "GitHub Enterprise server URL"
+                },
+                "description": "Enter your GitHub credentials.",
+                "title": "Authentication"
+            }
+        }
+    },
+    "options": {
+        "error": {
+            "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name` and should be a valid github repository."
+        },
+        "step": {
+            "device_mode_mapping": {
+                "data": {
+                    "device_id": "Device Name:"
+                },
+                "description": "{info}",
+                "title": "Manage {device_name} Mode Mappings"
+            },
+            "init": {
+                "data": {
+                    "device_id": "Device Name:"
+                },
+                "description": "{info}",
+                "title": "Manage your Duux Devices"
+            }
+        }
+    }
+}

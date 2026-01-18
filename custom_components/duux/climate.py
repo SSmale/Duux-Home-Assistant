@@ -17,6 +17,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+
 from .const import (
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HEATER,
@@ -25,6 +26,9 @@ from .const import (
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_THREESIXTY_TWO,
+    AVAILABLE_PRESETS,
+    CONF_MODE_MAPPING,
+    DEFAULT_MODE_MAPPING,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -40,6 +44,12 @@ async def async_setup_entry(
     api = data["api"]
     coordinators = data["coordinators"]
     devices = data["devices"]
+    mode_mapping_options = entry.options[CONF_MODE_MAPPING]
+    # {
+    #     "mode_mapping": {
+    #         "c4:d8:d5:74:be:44": {"0": "boost", "1": "comfort", "2": "eco"}
+    #     }
+    # }
 
     entities = []
     for device in devices:
@@ -50,18 +60,29 @@ async def async_setup_entry(
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
+        device_mode_mapping = mode_mapping_options.get(device_id, DEFAULT_MODE_MAPPING)
         # Create the appropriate climate entity based on heater type
         if sensor_type_id == DUUX_STID_THREESIXTY_2023:
-            entities.append(DuuxThreesixtyClimate(coordinator, api, device))
+            entities.append(
+                DuuxThreesixtyClimate(coordinator, api, device, device_mode_mapping)
+            )
         elif sensor_type_id == DUUX_STID_EDGEHEATER_V2:
-            entities.append(DuuxEdgeTwoClimate(coordinator, api, device))
+            entities.append(
+                DuuxEdgeTwoClimate(coordinator, api, device, device_mode_mapping)
+            )
         elif sensor_type_id == DUUX_STID_EDGEHEATER_2023_V1:
-            entities.append(DuuxEdgeClimate(coordinator, api, device))
+            entities.append(
+                DuuxEdgeClimate(coordinator, api, device, device_mode_mapping)
+            )
         elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
-            entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
+            entities.append(
+                DuuxThreesixtyTwoClimate(coordinator, api, device, device_mode_mapping)
+            )
         else:
             # Fallback to generic entity for unknown types
-            entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
+            entities.append(
+                DuuxClimateAutoDiscovery(coordinator, api, device, device_mode_mapping)
+            )
             _LOGGER.warning(
                 f"Unknown heater type {sensor_type_id}, using generic entity"
             )
@@ -72,7 +93,7 @@ async def async_setup_entry(
 class DuuxClimate(CoordinatorEntity, ClimateEntity):
     """Representation of a Duux climate device."""
 
-    def __init__(self, coordinator, api, device):
+    def __init__(self, coordinator, api, device, device_mode_mapping):
         """Initialize the climate device."""
         super().__init__(coordinator)
         self._api = api
@@ -82,6 +103,8 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         self._attr_unique_id = f"duux_{self._device_id}"
         self._attr_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
+        self._device_mode_mapping = device_mode_mapping
+        self._attr_preset_modes = AVAILABLE_PRESETS
 
         # Default temperature range (can be overridden by subclasses)
         self._attr_min_temp = 18
@@ -124,16 +147,73 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         return HVACMode.HEAT if power == 1 else HVACMode.OFF
 
     @property
-    def preset_mode(self):
-        """Return current preset mode."""
-        # Base implementation - override in subclasses
-        return str()
-
-    @property
     def preset_modes(self):
         """Return available preset modes."""
         # Base implementation - override in subclasses
         return []
+
+    def _get_mode_mapping(self) -> dict:
+        """Get the mode mapping for this device."""
+        # Get device-specific mapping from options
+        device_mapping = self._device_mode_mapping
+
+        _LOGGER.info("Device mode mapping: %s", device_mapping)
+
+        # Ensure keys are integers
+        return {int(k): v for k, v in device_mapping.items()}
+
+    def _get_reverse_mode_mapping(self) -> dict:
+        """Get reverse mapping (preset -> mode index)."""
+        mode_mapping = self._get_mode_mapping()
+        return {v: k for k, v in mode_mapping.items()}
+
+    @property
+    def preset_mode(self) -> str | None:
+        """Return the current preset mode."""
+        device_data = self.coordinator.data.get(self._device_id, {})
+        current_mode_index = device_data.get("mode")  # This is 0, 1, or 2
+
+        if current_mode_index is None:
+            return None
+
+        # Convert mode index to preset using custom mapping
+        mode_mapping = self._get_mode_mapping()
+        return mode_mapping.get(current_mode_index, PRESET_ECO)
+
+    async def async_set_preset_mode(self, preset_mode: str) -> None:
+        """Set new preset mode."""
+        if preset_mode not in AVAILABLE_PRESETS:
+            raise ValueError(f"Invalid preset mode: {preset_mode}")
+
+        # Convert preset to mode index using reverse mapping
+        reverse_mapping = self._get_reverse_mode_mapping()
+        mode_index = reverse_mapping.get(preset_mode)
+
+        if mode_index is None:
+            raise ValueError(f"No mode index found for preset: {preset_mode}")
+
+        # Send the mode index to the device
+        await self.hass.async_add_executor_job(
+            self._api.set_mode, self._device_mac, mode_index
+        )
+
+        # Request refresh to update state
+        await self.coordinator.async_request_refresh()
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        """Return entity specific state attributes."""
+        attrs = super().extra_state_attributes or {}
+
+        # Add current mode mapping to attributes for debugging
+        mode_mapping = self._get_mode_mapping()
+        attrs["mode_mapping"] = {f"mode_{k}": v for k, v in mode_mapping.items()}
+
+        # Add raw mode index
+        device_data = self.coordinator.data.get(self._device_id, {})
+        attrs["raw_mode_index"] = device_data.get("mode")
+
+        return attrs
 
     async def async_set_temperature(self, **kwargs):
         """Set new target temperature."""
@@ -159,11 +239,6 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             )
         await self.coordinator.async_request_refresh()
 
-    async def async_set_preset_mode(self, preset_mode):
-        """Set preset mode."""
-        # Base implementation - override in subclasses
-        pass
-
     @property
     def should_poll(self):
         """No need to poll, coordinator handles it."""
@@ -188,9 +263,9 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
 class DuuxClimateAutoDiscovery(DuuxClimate):
     """Duux climate autodiscovery."""
 
-    def __init__(self, coordinator, api, device):
+    def __init__(self, coordinator, api, device, device_mode_mapping):
         """Initialize the climate device."""
-        super().__init__(coordinator, api, device)
+        super().__init__(coordinator, api, device, device_mode_mapping)
         self._presets = self.presets_discovery()
 
     def presets_discovery(self):
@@ -318,9 +393,9 @@ class DuuxThreesixtyBase(DuuxClimateAutoDiscovery):
     PRESET_HIGH = PRESET_BOOST
     PRESET_MID = PRESET_COMFORT
 
-    def __init__(self, coordinator, api, device):
+    def __init__(self, coordinator, api, device, device_mode_mapping):
         """Initialize the Threesixty climate device."""
-        super().__init__(coordinator, api, device)
+        super().__init__(coordinator, api, device, device_mode_mapping)
         # Temperature range for Threesixty
         self._attr_min_temp = 18
         self._attr_max_temp = 30
@@ -352,9 +427,9 @@ class DuuxEdgeTwoClimate(DuuxClimate):
     PRESET_BOOST = PRESET_BOOST
     PRESET_HIGH = PRESET_COMFORT
 
-    def __init__(self, coordinator, api, device):
+    def __init__(self, coordinator, api, device, device_mode_mapping):
         """Initialize the Edge climate device."""
-        super().__init__(coordinator, api, device)
+        super().__init__(coordinator, api, device, device_mode_mapping)
         # Temperature range for Edge heater
         self._attr_min_temp = 5
         self._attr_max_temp = 36
@@ -364,23 +439,23 @@ class DuuxEdgeTwoClimate(DuuxClimate):
         """Return available preset modes."""
         return [self.PRESET_LOW, self.PRESET_HIGH, self.PRESET_BOOST]
 
-    @property
-    def preset_mode(self):
-        """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
-        mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
-        return mode_map.get(mode, self.PRESET_LOW)
+    # @property
+    # def preset_mode(self):
+    #     """Return current preset mode."""
+    #     mode = self.coordinator.data.get("heatin")
+    #     mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
+    #     return mode_map.get(mode, self.PRESET_LOW)
 
-    async def async_set_preset_mode(self, preset_mode):
-        """Set preset mode."""
-        mode_map = {self.PRESET_LOW: "1", self.PRESET_HIGH: "2", self.PRESET_BOOST: "3"}
+    # async def async_set_preset_mode(self, preset_mode):
+    #     """Set preset mode."""
+    #     mode_map = {self.PRESET_LOW: "1", self.PRESET_HIGH: "2", self.PRESET_BOOST: "3"}
 
-        mode = mode_map.get(preset_mode, 1)
+    #     mode = mode_map.get(preset_mode, 1)
 
-        await self.hass.async_add_executor_job(
-            self._api.set_mode, self._device_mac, mode
-        )
-        await self.coordinator.async_request_refresh()
+    #     await self.hass.async_add_executor_job(
+    #         self._api.set_mode, self._device_mac, mode
+    #     )
+    #     await self.coordinator.async_request_refresh()
 
 
 class DuuxEdgeClimate(DuuxClimate):
@@ -389,9 +464,9 @@ class DuuxEdgeClimate(DuuxClimate):
     PRESET_LOW = PRESET_ECO
     PRESET_HIGH = PRESET_COMFORT
 
-    def __init__(self, coordinator, api, device):
+    def __init__(self, coordinator, api, device, device_mode_mapping):
         """Initialize the Edge climate device."""
-        super().__init__(coordinator, api, device)
+        super().__init__(coordinator, api, device, device_mode_mapping)
         # Temperature range for Edge heater
         self._attr_min_temp = 5
         self._attr_max_temp = 36

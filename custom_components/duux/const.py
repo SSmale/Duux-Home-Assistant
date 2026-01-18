@@ -1,4 +1,11 @@
 # custom_components/duux/const.py
+"""Constants for the Duux integration."""
+
+from homeassistant.components.climate.const import (
+    PRESET_BOOST,
+    PRESET_COMFORT,
+    PRESET_ECO,
+)
 
 DOMAIN = "duux"
 CONF_EMAIL = "email"
@@ -56,3 +63,12 @@ DUUX_DTID_OTHER_HEATER = [52, 21, 23]
 #         },
 #     ],
 # }
+
+
+# Mode mapping options
+CONF_MODE_MAPPING = "mode_mapping"
+
+# Default mode mappings (mode index -> preset name)
+DEFAULT_MODE_MAPPING = {0: "low", 1: "high", 2: "boost"}
+
+AVAILABLE_PRESETS = [None, PRESET_ECO, PRESET_COMFORT, PRESET_BOOST]
