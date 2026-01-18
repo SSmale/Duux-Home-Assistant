@@ -35,7 +35,7 @@ async def async_setup_entry(
     entities = []
     for device in devices:
         device_type_id = device.get("sensorType").get("type")
-        if device_type_id != DUUX_DTID_HUMIDIFIER:
+        if device_type_id not in DUUX_DTID_HUMIDIFIER:
             continue
         
         sensor_type_id = device.get("sensorTypeId")

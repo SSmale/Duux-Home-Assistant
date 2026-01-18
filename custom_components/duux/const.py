@@ -54,5 +54,10 @@ DUUX_DTID_OTHER_HEATER = [52, 21, 23]
 #             "typeId": 50,
 #             "typeNumber": 51,
 #         },
+#         {
+#             "typeName": "DUUX Bora 2024",
+#             "typeId": 62,
+#             "typeNumber": 56,
+#         },
 #     ],
 # }
