@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0-alpha.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.1...v2.5.0-alpha.1) (2026-01-21)
+
+### Added
+
+* adds support for the beam mini ([0d423fb](https://github.com/SSmale/Duux-Home-Assistant/commit/0d423fb6d03c57e6bd9c93055d0cca901397e4e7))
+
 ## [2.4.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.0...v2.4.1) (2026-01-21)
 
 ### Fixed
@@ -54,6 +60,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
