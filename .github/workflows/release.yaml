@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - beta
+      - alpha
 
 permissions:
   contents: write
