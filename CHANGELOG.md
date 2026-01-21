@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.0...v2.4.1) (2026-01-21)
+
+### Fixed
+
+* moves the v1 heater to the THERMOSTAT type array ([36b55fc](https://github.com/SSmale/Duux-Home-Assistant/commit/36b55fc284c059dfde31cf31573760d7a7a30583)), closes [#27](https://github.com/SSmale/Duux-Home-Assistant/issues/27)
+
 ## [2.4.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.3...v2.4.0) (2026-01-18)
 
 ### Added
@@ -48,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
