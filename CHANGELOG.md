@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0-alpha.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.2...v2.5.0-alpha.3) (2026-01-22)
+
+### Fixed
+
+* adds a new base class for dehumidifier and humidifier ([570a4c6](https://github.com/SSmale/Duux-Home-Assistant/commit/570a4c649d6ef062f319a68d10d0c46f64ab3764))
+
 ## [2.5.0-alpha.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.1...v2.5.0-alpha.2) (2026-01-22)
 
 ### Added
@@ -66,6 +72,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
