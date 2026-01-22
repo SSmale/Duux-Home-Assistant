@@ -6,6 +6,7 @@ from homeassistant.components.humidifier import HumidifierDeviceClass, Humidifie
 from homeassistant.components.humidifier.const import (
     MODE_AUTO,
     MODE_NORMAL,
+    MODE_BOOST,
     HumidifierAction,
     HumidifierEntityFeature,
 )
