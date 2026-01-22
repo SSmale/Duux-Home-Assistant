@@ -1,6 +1,7 @@
 """Support for Duux de/humidifier devices."""
 
 import logging
+from lzma import MODE_NORMAL
 
 from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.components.humidifier.const import (
@@ -123,8 +124,8 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
     @property
     def action(self):
         """Return current action."""
-        power = self.coordinator.data.get("power", 0)
-        return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
+        # Base implementation - override in subclasses
+        pass
 
     @property
     def current_humidity(self):
@@ -173,6 +174,13 @@ class DuuxDehumidifier(DuuxBase):
 
         self._attr_device_class = HumidifierDeviceClass.DEHUMIDIFIER
 
+    @property
+    def action(self):
+        """Return current action."""
+        power = self.coordinator.data.get("power", 0)
+        return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
+
+
 class DuuxHumidifier(DuuxBase):
     """Representation of a Duux humidifier device."""
 
@@ -181,6 +189,13 @@ class DuuxHumidifier(DuuxBase):
         super().__init__(coordinator, api, device)
 
         self._attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+
+    @property
+    def action(self):
+        """Return current action."""
+        power = self.coordinator.data.get("power", 0)
+        return HumidifierAction.HUMIDIFYING if power == 1 else HumidifierAction.OFF
+
 
 class DuuxBoraDehumidifier(DuuxDehumidifier):
     """Duux Bora Dehumidifier."""
@@ -221,11 +236,13 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
             self._api.set_dry_mode, self._device_mac, mode
         )
         await self.coordinator.async_request_refresh()
+
+
 class DuuxBeamMiniDehumidifier(DuuxHumidifier):
     """Duux Beam Mini Humidifier."""
 
     PRESET_AUTO = MODE_AUTO
-    PRESET_CONTINUOUS = MODE_BOOST
+    PRESET_MANUAL = MODE_NORMAL
 
     def __init__(self, coordinator, api, device):
         """Initialize the Beam Mini humidifier device."""
@@ -238,7 +255,7 @@ class DuuxBeamMiniDehumidifier(DuuxHumidifier):
     @property
     def available_modes(self):
         """Return available preset modes."""
-        return [self.PRESET_AUTO, self.PRESET_CONTINUOUS]
+        return [self.PRESET_AUTO, self.PRESET_MANUAL]
 
     @property
     def mode(self):
@@ -246,13 +263,13 @@ class DuuxBeamMiniDehumidifier(DuuxHumidifier):
         mode = self.coordinator.data.get("mode", self.PRESET_AUTO)
         mode_map = {
             0: self.PRESET_AUTO,
-            1: self.PRESET_CONTINUOUS,
+            1: self.PRESET_MANUAL,
         }
         return mode_map.get(mode, self.PRESET_AUTO)
 
     async def async_set_mode(self, mode):
         """Set preset mode."""
-        mode_map = {self.PRESET_AUTO: "0", self.PRESET_CONTINUOUS: "1"}
+        mode_map = {self.PRESET_AUTO: "0", self.PRESET_MANUAL: "1"}
 
         mode = mode_map.get(mode, "0")
 
