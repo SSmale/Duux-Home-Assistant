@@ -18,11 +18,11 @@ from homeassistant.const import (
     UnitOfTemperature,
     UnitOfTime,
 )
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import *
+from .const import ATTRIBUTION, DOMAIN, DUUX_STID_BORA_2024, DUUX_STID_BEAM_MINI
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -89,7 +89,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current fan mode."""
-        mode = self.coordinator.data.get("fan")
+        mode = self.coordinator.data.get("fan", self.FAN_LOW)
         mode_map = {
             1: self.FAN_LOW,
             0: self.FAN_HIGH,

@@ -1,22 +1,25 @@
 """Support for Duux de/humidifier devices."""
 
 import logging
-from typing import super, Iterator
 
-from homeassistant.components.humidifier import HumidifierEntity, HumidifierDeviceClass
+from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.components.humidifier.const import (
-    HumidifierEntityFeature,
-    HumidifierAction,
     MODE_AUTO,
     MODE_BOOST,
+    HumidifierAction,
+    HumidifierEntityFeature,
 )
-from homeassistant.const import PERCENTAGE
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import *
+from .const import (
+    DOMAIN,
+    DUUX_DTID_HUMIDIFIER,
+    DUUX_STID_BEAM_MINI,
+    DUUX_STID_BORA_2024,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -184,7 +187,7 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = self.coordinator.data.get("mode", self.PRESET_AUTO)
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,
@@ -225,7 +228,7 @@ class DuuxBeamMiniDehumidifier(DuuxDehumidifier):
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = self.coordinator.data.get("mode", self.PRESET_AUTO)
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,
