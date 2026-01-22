@@ -55,7 +55,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
+class DuuxBase(CoordinatorEntity, HumidifierEntity):
     """Representation of a Duux de/humidifier device."""
 
     def __init__(self, coordinator, api, device):
@@ -68,7 +68,6 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
         self._attr_unique_id = f"duux_{self._device_id}"
         self._attr_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
-        self._attr_device_class = HumidifierDeviceClass.DEHUMIDIFIER
 
         # Default humidity range (can be overridden by subclasses)
         self._attr_min_humidity = 30
@@ -165,6 +164,24 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
         await self.coordinator.async_request_refresh()
 
 
+class DuuxDehumidifier(DuuxBase):
+    """Representation of a Duux dehumidifier device."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the dehumidifier device."""
+        super().__init__(coordinator, api, device)
+
+        self._attr_device_class = HumidifierDeviceClass.DEHUMIDIFIER
+
+class DuuxHumidifier(DuuxBase):
+    """Representation of a Duux humidifier device."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the humidifier device."""
+        super().__init__(coordinator, api, device)
+
+        self._attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+
 class DuuxBoraDehumidifier(DuuxDehumidifier):
     """Duux Bora Dehumidifier."""
 
@@ -204,16 +221,14 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
             self._api.set_dry_mode, self._device_mac, mode
         )
         await self.coordinator.async_request_refresh()
-
-
-class DuuxBeamMiniDehumidifier(DuuxDehumidifier):
-    """Duux Beam Mini Dehumidifier."""
+class DuuxBeamMiniDehumidifier(DuuxHumidifier):
+    """Duux Beam Mini Humidifier."""
 
     PRESET_AUTO = MODE_AUTO
     PRESET_CONTINUOUS = MODE_BOOST
 
     def __init__(self, coordinator, api, device):
-        """Initialize the Beam Mini dehumidifier device."""
+        """Initialize the Beam Mini humidifier device."""
         super().__init__(coordinator, api, device)
 
         # min/max humidity settings for Beam Mini.
