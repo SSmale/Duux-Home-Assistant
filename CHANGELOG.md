@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0-alpha.6](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.5...v2.5.0-alpha.6) (2026-01-22)
+
+### Fixed
+
+* the import was needed for the Bora ([60ca64d](https://github.com/SSmale/Duux-Home-Assistant/commit/60ca64dfb25f0c1ab022ea16e27cf862c0223536))
+
+## [2.5.0-alpha.5](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.4...v2.5.0-alpha.5) (2026-01-22)
+
+### Fixed
+
+* used the HA import for the mode ([a974655](https://github.com/SSmale/Duux-Home-Assistant/commit/a974655f36a3e62b2158b9a0f9691fac2e812f66))
+
+## [2.5.0-alpha.4](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.3...v2.5.0-alpha.4) (2026-01-22)
+
+### Added
+
+* more features of the Beam implemented ([83fcab8](https://github.com/SSmale/Duux-Home-Assistant/commit/83fcab84256a4bfbaa7882416be1e5943ee87498))
+
+## [2.5.0-alpha.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.2...v2.5.0-alpha.3) (2026-01-22)
+
+### Fixed
+
+* adds a new base class for dehumidifier and humidifier ([570a4c6](https://github.com/SSmale/Duux-Home-Assistant/commit/570a4c649d6ef062f319a68d10d0c46f64ab3764))
+
+## [2.5.0-alpha.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.1...v2.5.0-alpha.2) (2026-01-22)
+
+### Added
+
+* code issue tidy up ([000cea9](https://github.com/SSmale/Duux-Home-Assistant/commit/000cea9058726ec77a334466c2e877f3bd1a6564))
+
+## [2.5.0-alpha.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.1...v2.5.0-alpha.1) (2026-01-21)
+
+### Added
+
+* adds support for the beam mini ([0d423fb](https://github.com/SSmale/Duux-Home-Assistant/commit/0d423fb6d03c57e6bd9c93055d0cca901397e4e7))
+
 ## [2.4.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.0...v2.4.1) (2026-01-21)
 
 ### Fixed
@@ -54,6 +90,12 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
+
+
+
+
+
 
 
 
