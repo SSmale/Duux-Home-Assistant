@@ -1,12 +1,11 @@
 """Support for Duux de/humidifier devices."""
 
 import logging
-from lzma import MODE_NORMAL
 
 from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.components.humidifier.const import (
     MODE_AUTO,
-    MODE_BOOST,
+    MODE_NORMAL,
     HumidifierAction,
     HumidifierEntityFeature,
 )
