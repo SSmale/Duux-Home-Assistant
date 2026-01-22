@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0-alpha.6](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.5...v2.5.0-alpha.6) (2026-01-22)
+
+### Fixed
+
+* the import was needed for the Bora ([60ca64d](https://github.com/SSmale/Duux-Home-Assistant/commit/60ca64dfb25f0c1ab022ea16e27cf862c0223536))
+
 ## [2.5.0-alpha.5](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0-alpha.4...v2.5.0-alpha.5) (2026-01-22)
 
 ### Fixed
@@ -84,6 +90,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
