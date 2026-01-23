@@ -69,7 +69,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 is_fixable=False,
                 severity=ir.IssueSeverity.WARNING,
                 translation_key="device_not_recognised",
-                learn_more_url=f"https://github.com/SSmale/Duux-Home-Assistant/issues/new?template=device_not_recognised.md&title=Device+not+recognised+-+{model}&device_name={model}&device_type_id={device_type_id}&sensor_type_id={sensor_type_id}&reported_type={google_type}",
+                learn_more_url=f"https://github.com/SSmale/Duux-Home-Assistant/issues/new?template=device_not_supported.yaml&title=Device+not+recognised+-+{model}&device_name={model}&device_type_id={device_type_id}&sensor_type_id={sensor_type_id}&reported_type={google_type}",
                 translation_placeholders={
                     "device_name": model,
                     "device_type_id": device_type_id,
