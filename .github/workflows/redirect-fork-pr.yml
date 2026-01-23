@@ -1,0 +1,43 @@
+name: Redirect fork PRs to pre- branches
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  redirect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is from a fork
+        id: check
+        run: |
+          echo "fork=${{ github.event.pull_request.head.repo.fork }}" >> $GITHUB_OUTPUT
+
+      - name: Stop if not a fork
+        if: steps.check.outputs.fork != 'true'
+        run: echo "Not a fork PR, skipping."
+
+      - name: Create pre- branch
+        if: steps.check.outputs.fork == 'true'
+        run: |
+          BRANCH_NAME="pre-${{ github.event.pull_request.number }}"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git clone https://github.com/${{ github.repository }} repo
+          cd repo
+          git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+        id: create_branch
+
+      - name: Update PR base branch
+        if: steps.check.outputs.fork == 'true'
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --base "${{ steps.create_branch.outputs.branch }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
