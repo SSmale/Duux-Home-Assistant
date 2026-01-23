@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1-beta.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0...v2.5.1-beta.1) (2026-01-23)
+
+### Fixed
+
+* adds the IDs in for edge heater from Issue ([0aed679](https://github.com/SSmale/Duux-Home-Assistant/commit/0aed6793fe410b10de93a51db16f8311377fdffe))
+
 ## [2.5.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.1...v2.5.0) (2026-01-23)
 
 ### Added
