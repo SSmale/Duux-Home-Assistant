@@ -1,9 +1,8 @@
 ---
 name: Device Not Supported
-about: This is to submit details of a device not being supported.
-title: ''
+description: This is to submit details of a device not being supported.
+title: 'Add support for'
 labels: User Reported
-assignees: ''
 body:
   - id: device_name
     type: input
@@ -37,5 +36,5 @@ body:
     attributes:
       label: Are you willing to help test?
       options:
-        - label: Yes
-        - label: No
+        - label: 'Yes'
+        - label: 'No'
