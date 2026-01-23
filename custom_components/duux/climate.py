@@ -18,6 +18,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
+    DUUX_CLIMATE_TYPES,
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HEATER,
     DOMAIN,
@@ -44,12 +45,32 @@ async def async_setup_entry(
     entities = []
     for device in devices:
         device_type_id = device.get("sensorType").get("type")
-        if device_type_id not in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
-            continue
-
+        google_type = device.get("sensorType").get("googleDeviceType")
+        last_word = google_type.split(".")[-1]  # "HEATER" OR ""THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
+
+        model = device.get("sensorType", {}).get("name", "Unknown")
+
+        if device_type_id not in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
+            if last_word in DUUX_CLIMATE_TYPES:
+                _LOGGER.warning(
+                    "Your device has not been officially catagorised as supporting the climate platform."
+                )
+                _LOGGER.warning(
+                    f"It is classified as type {last_word}, so attempting to set up as a climate device.",
+                )
+                _LOGGER.warning(
+                    "Please report this to the integration developer so they can update the supported device list.",
+                )
+                _LOGGER.warning(
+                    f"Required details: Device Name: {model}, Device Type ID: {device_type_id}, Sensor Type ID: {sensor_type_id}, Google Device Type: {google_type}",
+                )
+
+            else:
+                continue
+
         # Create the appropriate climate entity based on heater type
         if sensor_type_id == DUUX_STID_THREESIXTY_2023:
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
@@ -67,6 +88,7 @@ async def async_setup_entry(
             )
 
     async_add_entities(entities)
+
 
 class DuuxClimate(CoordinatorEntity, ClimateEntity):
     """Representation of a Duux climate device."""
@@ -95,7 +117,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             | ClimateEntityFeature.TURN_OFF
             | ClimateEntityFeature.TURN_ON
         )
-    
+
     @property
     def device_info(self):
         """Return device information."""
@@ -105,7 +127,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             "manufacturer": self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
-    
+
     @property
     def current_temperature(self):
         """Return the current temperature."""
@@ -121,7 +143,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Return current operation."""
         power = self.coordinator.data.get("power", 0)
         return HVACMode.HEAT if power == 1 else HVACMode.OFF
-    
+
     @property
     def preset_mode(self):
         """Return current preset mode."""
@@ -133,7 +155,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Return available preset modes."""
         # Base implementation - override in subclasses
         return []
-    
+
     async def async_set_temperature(self, **kwargs):
         """Set new target temperature."""
         if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
