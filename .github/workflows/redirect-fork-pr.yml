@@ -38,6 +38,7 @@ jobs:
         if: steps.check.outputs.fork == 'true'
         run: |
           gh pr edit ${{ github.event.pull_request.number }} \
-            --base "${{ steps.create_branch.outputs.branch }}"
+            --base "${{ steps.create_branch.outputs.branch }}" \
+            --repo ${{ github.repository }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
