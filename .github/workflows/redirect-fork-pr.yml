@@ -27,7 +27,7 @@ jobs:
           BRANCH_NAME="pre-${{ github.event.pull_request.number }}"
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git clone https://github.com/${{ github.repository }} repo
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} repo
           cd repo
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
