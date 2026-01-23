@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.1...v2.5.0) (2026-01-23)
+
+### Added
+
+* adds support for reporting unknown devices. ([772eba0](https://github.com/SSmale/Duux-Home-Assistant/commit/772eba0a7b26462c1be3b0febb0b56ff680930e2))
+
 ## [2.4.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.0...v2.4.1) (2026-01-21)
 
 ### Fixed
@@ -54,6 +60,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
