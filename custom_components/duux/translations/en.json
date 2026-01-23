@@ -1,0 +1,8 @@
+{
+    "issues": {
+        "device_not_recognised": {
+            "description": "Duux has detected a device that is not officially supported. \n\rPlease check the device type and report it to the integration developer. \n\rDetails needed are: \n\rDevice Name: {device_name}\n\rDevice Type ID: {device_type_id}\n\rSensor Type ID: {sensor_type_id}\n\rDevice Type: {reported_type}.",
+            "title": "Device not recognised"
+        }
+    }
+}

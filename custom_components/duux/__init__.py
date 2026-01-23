@@ -7,6 +7,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers import issue_registry as ir
+
 
 from .const import (
     DOMAIN,
@@ -14,6 +16,7 @@ from .const import (
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HUMIDIFIER,
     DUUX_DTID_OTHER_HEATER,
+    DUUX_SUPPORTED_TYPES,
 )
 from .duux_api import DuuxAPI
 
@@ -48,22 +51,55 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_type_id = device.get("sensorType").get("type")
+        google_type = device.get("sensorType").get("googleDeviceType")
+        last_word = google_type.split(".")[-1]  # "HEATER" OR ""THERMOSTAT"
+        device_name = device.get("displayName") or device.get("name")
+        model = device.get("sensorType", {}).get("name", "Unknown")
+
         if device_type_id not in [
             *DUUX_DTID_HEATER,
             *DUUX_DTID_THERMOSTAT,
             *DUUX_DTID_HUMIDIFIER,
             *DUUX_DTID_OTHER_HEATER,
         ]:
-            _LOGGER.warning(
-                f"Unknown device type {device_type_id}:{sensor_type_id}, skipping.."
+            ir.async_create_issue(
+                hass,
+                DOMAIN,
+                "device_not_recognised",
+                is_fixable=False,
+                severity=ir.IssueSeverity.WARNING,
+                translation_key="device_not_recognised",
+                learn_more_url=f"https://github.com/SSmale/Duux-Home-Assistant/issues/new?template=device_not_recognised.md&title=Device+not+recognised+-+{model}&device_name={model}&device_type_id={device_type_id}&sensor_type_id={sensor_type_id}&reported_type={google_type}",
+                translation_placeholders={
+                    "device_name": model,
+                    "device_type_id": device_type_id,
+                    "sensor_type_id": sensor_type_id,
+                    "reported_type": google_type,
+                },
             )
-            continue
+            _LOGGER.warning("Your device has not been recognised.")
+            _LOGGER.warning(
+                f"It is classified as type {last_word}, so maybe loaded as such.",
+            )
+            _LOGGER.warning(
+                "Please report this to the integration developer so they can update the supported device list.",
+            )
+            _LOGGER.warning(
+                f"Required details: Device Name: {model}, Device Type ID: {device_type_id}, Sensor Type ID: {sensor_type_id}, Google Device Type: {google_type}",
+            )
+            if last_word in DUUX_SUPPORTED_TYPES:
+                _LOGGER.warning(
+                    f"Attempting to load device as type {last_word}.",
+                )
+
+            else:
+                continue
 
         coordinator = DuuxDataUpdateCoordinator(
             hass,
             api=api,
             device_id=device.get("deviceId"),
-            device_name=device.get("displayName") or device.get("name"),
+            device_name=device_name,
         )
 
         await coordinator.async_config_entry_first_refresh()

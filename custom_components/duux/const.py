@@ -21,13 +21,16 @@ DUUX_STID_EDGEHEATER = 33
 DUUX_STID_BORA_2024 = 62
 
 # Device Type IDs
-
-DUUX_DTID_THERMOSTAT = [50]
-DUUX_DTID_HEATER = [51]
+DUUX_DTID_THERMOSTAT = [50, 52]
+DUUX_DTID_HEATER = [51, 21]
 DUUX_DTID_HUMIDIFIER = [56]
 
-DUUX_DTID_OTHER_HEATER = [52, 21, 23]
+DUUX_DTID_OTHER_HEATER = [23]
 
+DUUX_CLIMATE_TYPES = ["THERMOSTAT", "HEATER"]
+DUUX_HUMIDIFIER_TYPES = ["HUMIDIFIER"]
+
+DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES
 
 # {
 #     "data": [
@@ -55,6 +58,11 @@ DUUX_DTID_OTHER_HEATER = [52, 21, 23]
 #             "typeName": "DUUX Edge heater v2",
 #             "typeId": 50,
 #             "typeNumber": 51,
+#         },
+#         {
+#             "typeName": "DUUX Bora 2024",
+#             "typeId": 62,
+#             "typeNumber": 56,
 #         },
 #     ],
 # }
