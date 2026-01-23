@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0...v2.5.1) (2026-01-23)
+
+### Fixed
+
+* uses the yaml forms for auto population ([2b9b652](https://github.com/SSmale/Duux-Home-Assistant/commit/2b9b652499b8dc38394d2978bee54ea8a1a2eebe))
+
 ## [2.5.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.1...v2.5.0) (2026-01-23)
 
 ### Added
@@ -60,6 +66,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
