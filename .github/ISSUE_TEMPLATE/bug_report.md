@@ -31,7 +31,7 @@ assignees: ''
 3. Duux Device: <!-- Edge Heater V2 -->
 
 **Supported Commands**
-<!-- Following https://github.com/SSmale/Duux-Home-Assistant/wiki/Getting-Your-Sensor-Data-from-the-API#the-supported-commands please provide the details of the supported commands
+<!-- Please paste the output from following this guide: https://github.com/SSmale/Duux-Home-Assistant/wiki/Getting-the-sensor-data-from-Home-Assistant -->
 ```
 {}
 ```
