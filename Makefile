@@ -1,4 +1,4 @@
-.PHONY: devlop
+.PHONY: start
 
-devlop:
-    ./scripts/devlop
+start:
+	scripts/develop
