@@ -1,0 +1,265 @@
+{
+    "data": [
+        {
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "deviceId": "AA:00:00:00:00:01",
+            "displayName": "360 Humidifier",
+            "id": 100001,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": {
+                    "hum": 52,
+                    "mode": 0,
+                    "power": 1,
+                    "sp": 55
+                },
+                "labels": null,
+                "latest": "2026-01-28T07:10:00Z",
+                "pluginName": "mqtt",
+                "pluginUid": "mqtt-bridge",
+                "scores": null
+            },
+            "name": "DUUX.360.100001",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"HUMIDIFIER\"]",
+                "description": "DUUX 360 humidifier",
+                "fwVersion": "1.0.0",
+                "googleDeviceType": "action.devices.types.DEHUMIDIFIER",
+                "id": 31,
+                "name": "DUUX 360",
+                "type": 31
+            },
+            "sensorTypeId": 31,
+            "space": {
+                "name": "Bedroom"
+            },
+            "type": "31"
+        },
+        {
+            "connectionType": "tcp",
+            "connectionUpdateDate": "2026-01-28T07:11:00.000Z",
+            "deviceId": "AA:00:00:00:00:02",
+            "displayName": "360 2023",
+            "id": 100002,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": null,
+                "labels": null,
+                "latest": "0001-01-01T00:00:00",
+                "pluginName": null,
+                "pluginUid": null,
+                "scores": null
+            },
+            "name": "DUUX.360.2023.100002",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"HUMIDIFIER\"]",
+                "description": "DUUX 360 2023 edition",
+                "fwVersion": "2.3.4",
+                "googleDeviceType": "action.devices.types.DEHUMIDIFIER",
+                "id": 49,
+                "name": "DUUX 360 2023",
+                "type": 49
+            },
+            "sensorTypeId": 49,
+            "space": {
+                "name": "Guest Room"
+            },
+            "type": "49"
+        },
+        {
+            "connectionType": "tcp",
+            "connectionUpdateDate": "2026-01-28T07:13:18.000Z",
+            "deviceId": "AA:BB:CC:11:22:33",
+            "displayName": "Office Heater",
+            "id": 274364,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": null,
+                "labels": null,
+                "latest": "0001-01-01T00:00:00",
+                "pluginName": null,
+                "pluginUid": null,
+                "scores": null
+            },
+            "name": "DUUX.1.266641",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"THERMOSTAT\"]",
+                "description": "DUUX Edge heater v2",
+                "fwVersion": "14.3.10",
+                "googleDeviceType": "action.devices.types.HEATER",
+                "id": 50,
+                "name": "DUUX Edge heater v2",
+                "type": 51
+            },
+            "sensorTypeId": 50,
+            "space": {
+                "name": "Office"
+            },
+            "type": "51"
+        },
+        {
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:20:00.000Z",
+            "deviceId": "AA:BB:CC:44:55:66",
+            "displayName": "Livingroom Heater",
+            "id": 274365,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": {
+                    "heatin": 2,
+                    "night": 0,
+                    "power": 1,
+                    "sp": 22,
+                    "temp": 20
+                },
+                "labels": null,
+                "latest": "2026-01-28T07:20:00Z",
+                "pluginName": "mqtt",
+                "pluginUid": "mqtt-bridge",
+                "scores": null
+            },
+            "name": "DUUX.2.987654",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"THERMOSTAT\"]",
+                "description": "DUUX Edge heater v2 2023",
+                "fwVersion": "14.3.10",
+                "googleDeviceType": "action.devices.types.HEATER",
+                "id": 51,
+                "name": "DUUX Edge heater v2 (2023)",
+                "type": 50
+            },
+            "sensorTypeId": 51,
+            "space": {
+                "name": "Livingroom"
+            },
+            "type": "50"
+        },
+        {
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:22:00.000Z",
+            "deviceId": "BB:AA:00:00:00:01",
+            "displayName": "BORA 2024",
+            "id": 200100,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": {
+                    "heatin": 1,
+                    "night": 1,
+                    "power": 0,
+                    "sp": 18,
+                    "temp": 16
+                },
+                "labels": null,
+                "latest": "2026-01-28T07:22:00Z",
+                "pluginName": "mqtt",
+                "pluginUid": "mqtt-bridge",
+                "scores": null
+            },
+            "name": "DUUX.BORA.200100",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"THERMOSTAT\"]",
+                "description": "DUUX BORA 2024 heater",
+                "fwVersion": "1.2.0",
+                "googleDeviceType": "action.devices.types.HEATER",
+                "id": 62,
+                "name": "DUUX BORA 2024",
+                "type": 62
+            },
+            "sensorTypeId": 62,
+            "space": {
+                "name": "Kitchen"
+            },
+            "type": "62"
+        },
+        {
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:25:00.000Z",
+            "deviceId": "CC:DD:EE:01:02:03",
+            "displayName": "Basement Humidifier",
+            "id": 300300,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": {
+                    "fan": 1,
+                    "hum": 44,
+                    "power": 1,
+                    "sp": 45
+                },
+                "labels": null,
+                "latest": "2026-01-28T07:25:00Z",
+                "pluginName": "mqtt",
+                "pluginUid": "mqtt-bridge",
+                "scores": null
+            },
+            "name": "DUUX.HUM.300300",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"HUMIDIFIER\"]",
+                "description": "DUUX Tower Humidifier",
+                "fwVersion": "3.4.5",
+                "googleDeviceType": "action.devices.types.DEHUMIDIFIER",
+                "id": 56,
+                "name": "DUUX Humidifier",
+                "type": 56
+            },
+            "sensorTypeId": 56,
+            "space": {
+                "name": "Basement"
+            },
+            "type": "56"
+        },
+        {
+            "connectionType": "tcp",
+            "connectionUpdateDate": "2026-01-28T07:30:00.000Z",
+            "deviceId": "DD:EE:FF:04:05:06",
+            "displayName": "Smart Thermostat",
+            "id": 400400,
+            "latestData": {
+                "data": null,
+                "deviceId": null,
+                "fullData": null,
+                "labels": null,
+                "latest": "0001-01-01T00:00:00",
+                "pluginName": null,
+                "pluginUid": null,
+                "scores": null
+            },
+            "name": "DUUX.THERM.400400",
+            "online": true,
+            "owner": "storage",
+            "sensorType": {
+                "alexaDisplayCategories": "[\"THERMOSTAT\"]",
+                "description": "DUUX Thermostat",
+                "fwVersion": "5.6.7",
+                "googleDeviceType": "action.devices.types.THERMOSTAT",
+                "id": 52,
+                "name": "DUUX Thermostat 2024",
+                "type": 52
+            },
+            "sensorTypeId": 52,
+            "space": {
+                "name": "Hall"
+            },
+            "type": "52"
+        }
+    ],
+    "issues": []
+}

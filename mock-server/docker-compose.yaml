@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  mockduux:
+    build: .
+    image: mockduux:latest
+    container_name: mockduux
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+    volumes:
+      - ./fixtures:/app/fixtures:rw
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/smarthome/sensors']
+      interval: 30s
+      timeout: 5s
+      retries: 3
