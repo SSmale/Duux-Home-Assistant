@@ -6,16 +6,17 @@ from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers import issue_registry as ir
-
+from homeassistant.helpers.device_registry import DeviceEntry
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
     DOMAIN,
     DUUX_DTID_HEATER,
-    DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HUMIDIFIER,
     DUUX_DTID_OTHER_HEATER,
+    DUUX_DTID_THERMOSTAT,
     DUUX_SUPPORTED_TYPES,
 )
 from .duux_api import DuuxAPI
@@ -124,6 +125,37 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant, config_entry: ConfigEntry, device_entry: DeviceEntry
+) -> bool:
+    """Remove a config entry from a device."""
+    # Get the entity registry
+    entity_registry = er.async_get(hass)
+
+    # Get all entities for this config entry
+    entities = er.async_entries_for_config_entry(entity_registry, config_entry.entry_id)
+
+    # Filter entities for this specific device
+    device_entities = [
+        entity for entity in entities if entity.device_id == device_entry.id
+    ]
+
+    for entity in device_entities:
+        _LOGGER.debug(
+            f"Removing entity {entity.entity_id} for device {device_entry.id}"
+        )
+        entity_registry.async_remove(entity.entity_id)
+
+    entities = er.async_entries_for_config_entry(entity_registry, config_entry.entry_id)
+
+    # Filter entities for this specific device
+    device_entities = [
+        entity for entity in entities if entity.device_id == device_entry.id
+    ]
+    # Allow removal only if no entities remain for this device
+    return len(device_entities) == 0
 
 
 class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
