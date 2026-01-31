@@ -1,4 +1,5 @@
 # custom_components/duux/const.py
+from enum import IntEnum
 
 DOMAIN = "duux"
 CONF_EMAIL = "email"
@@ -64,3 +65,15 @@ DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES
 #         },
 #     ],
 # }
+
+# Error codes
+class DUUX_ERRID(IntEnum):
+    OK = 0
+    Ice_Detected = 4 # or was it 5? need to check.
+    Water_Tank_Full = 8
+    
+    Unknown_Error=9999999
+    
+    @classmethod
+    def _missing_(cls, value):
+        return cls.Unknown_Error
