@@ -69,7 +69,7 @@ DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES
 # Error codes
 class DUUX_ERRID(IntEnum):
     OK = 0
-    Ice_Detected = 4 # or was it 5? need to check.
+    Ice_Detected = 4
     Water_Tank_Full = 8
     
     Unknown_Error=9999999
