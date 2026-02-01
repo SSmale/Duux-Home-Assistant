@@ -1,5 +1,5 @@
 # custom_components/duux/const.py
-from enum import IntEnum
+from enum import Enum
 
 DOMAIN = "duux"
 CONF_EMAIL = "email"
@@ -67,7 +67,8 @@ DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES
 # }
 
 # Error codes
-class DUUX_ERRID(IntEnum):
+class DUUX_ERRID(Enum):
+	Unavailable = None
     OK = 0
     Ice_Detected = 4
     Water_Tank_Full = 8
