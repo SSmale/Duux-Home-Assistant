@@ -68,7 +68,7 @@ DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES
 
 # Error codes
 class DUUX_ERRID(Enum):
-	Unavailable = None
+    Unavailable = None
     OK = 0
     Ice_Detected = 4
     Water_Tank_Full = 8
