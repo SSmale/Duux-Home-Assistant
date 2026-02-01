@@ -65,14 +65,12 @@ class DuuxBinarySensor(CoordinatorEntity, BinarySensorEntity):
             manufacturer=self._device.get("manufacturer", "Duux"),
             name=self.device_name,
         )
-        self._attr_is_on = coordinator.data.get(description.key) not in self.ok_values
         self._attr_extra_state_attributes = description.attrs(coordinator.data)
         self.entity_description = description
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_is_on = self.coordinator.data.get(self.entity_description.key) not in self.ok_values
         self._attr_extra_state_attributes = self.entity_description.attrs(
             self.coordinator.data
         )
@@ -80,9 +78,12 @@ class DuuxBinarySensor(CoordinatorEntity, BinarySensorEntity):
 
 class DuuxErrorSensor(DuuxBinarySensor):
     def __init__(self, coordinator, api, device):
-        self.ok_values=[DUUX_ERRID.OK]
         super().__init__(coordinator, api, device, 
             DuuxBinarySensorEntityDescription(
                 key='err',
                 device_class=BinarySensorDeviceClass.PROBLEM,
             ))
+
+    @property
+    def is_on(self):
+        return DUUX_ERRID(self.coordinator.data.get(self.entity_description.key)) != DUUX_ERRID.OK
