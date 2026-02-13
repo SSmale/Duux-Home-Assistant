@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0-pre-45.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0-pre-45.1) (2026-02-13)
+
+### Added
+
+* adds support for the Duux edge 2000 ([a58a3be](https://github.com/SSmale/Duux-Home-Assistant/commit/a58a3be004203d741da63d88ced0b9c7d88fc0a6))
+
 ## [2.5.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0...v2.5.1) (2026-01-23)
 
 ### Fixed
@@ -66,6 +72,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
