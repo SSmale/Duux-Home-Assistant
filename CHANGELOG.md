@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0-pre-45.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0-pre-45.1...v2.6.0-pre-45.2) (2026-02-13)
+
+### Added
+
+* adds heater to the entity checkers ([a6c75bd](https://github.com/SSmale/Duux-Home-Assistant/commit/a6c75bd798d9bb997d7e8ba18810a4c39a3df319))
+
 ## [2.6.0-pre-45.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0-pre-45.1) (2026-02-13)
 
 ### Added
@@ -72,6 +78,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
