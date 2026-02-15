@@ -49,6 +49,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
+        
+        entities.append(DuuxErrorSensor(coordinator, api, device))
     
     async_add_entities(entities)
 
@@ -75,18 +77,20 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
             manufacturer=self._device.get("manufacturer", "Duux"),
             name=self.device_name,
         )
-        self._attr_native_value = coordinator.data.get(description.key)
         self._attr_extra_state_attributes = description.attrs(coordinator.data)
         self.entity_description = description
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_native_value = self.coordinator.data.get(self.entity_description.key)
         self._attr_extra_state_attributes = self.entity_description.attrs(
             self.coordinator.data
         )
         self.async_write_ha_state()
+    
+    @property
+    def native_value(self):
+        return self.coordinator.data.get(self.entity_description.key)
 
 class DuuxTempSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
@@ -114,10 +118,23 @@ class DuuxTimeRemainingSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
         super().__init__(coordinator, api, device, 
             DuuxSensorEntityDescription(
-            	name="Time Remaining",
+                name="Time Remaining",
                 key='timrm',
                 device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=1,
             ))
+
+class DuuxErrorSensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, 
+            DuuxSensorEntityDescription(
+                name="Error Message",
+                key='err',
+            ))
+        self._attr_icon = "mdi:comment-alert-outline"
+        
+    @property
+    def native_value(self):
+        return DUUX_ERRID(self.coordinator.data.get(self.entity_description.key)).name.replace('_', ' ')
