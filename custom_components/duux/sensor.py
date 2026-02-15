@@ -132,8 +132,6 @@ class DuuxErrorSensor(DuuxSensor):
             DuuxSensorEntityDescription(
                 name="Error Message",
                 key='err',
-                #device_class=SensorDeviceClass.ENUM,
-                #options=list(DUUX_ERRID),
             ))
         self._attr_icon = "mdi:comment-alert-outline"
         

@@ -89,6 +89,7 @@ async def async_setup_entry(
 
     async_add_entities(entities)
 
+
 class DuuxClimate(CoordinatorEntity, ClimateEntity):
     """Representation of a Duux climate device."""
 
@@ -116,7 +117,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             | ClimateEntityFeature.TURN_OFF
             | ClimateEntityFeature.TURN_ON
         )
-    
+
     @property
     def device_info(self):
         """Return device information."""
@@ -126,7 +127,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             "manufacturer": self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
-    
+
     @property
     def current_temperature(self):
         """Return the current temperature."""
@@ -142,7 +143,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Return current operation."""
         power = self.coordinator.data.get("power", 0)
         return HVACMode.HEAT if power == 1 else HVACMode.OFF
-    
+
     @property
     def preset_mode(self):
         """Return current preset mode."""
@@ -154,7 +155,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Return available preset modes."""
         # Base implementation - override in subclasses
         return []
-    
+
     async def async_set_temperature(self, **kwargs):
         """Set new target temperature."""
         if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
