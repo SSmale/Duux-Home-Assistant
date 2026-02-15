@@ -1,7 +1,5 @@
 # Duux Integration for Home Assistant
 
-![Duux Logo](https://pickitmedialive.blob.core.windows.net/6umyyz604ft4pmg-main/ZozxVBQI?sv=2025-01-05&st=2025-10-30T22%3A36%3A50Z&se=2025-10-31T04%3A36%3A50Z&sr=c&sp=r&sig=BR7YREsSajFblqlKsaXWk8OwVofdFMYyhsh5G7vfw0g%3D)
-
 A Home Assistant integration for Duux products, allowing you to control your devices directly from Home Assistant.
 
 ## 
