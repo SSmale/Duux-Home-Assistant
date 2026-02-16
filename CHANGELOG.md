@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0-pre-50.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.7.0-pre-50.1) (2026-02-16)
+
+### Added
+
+* adds support for the whisper fans ([8e7bcb2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e7bcb29a565d62e5de496325c4384d2dd2a75b6))
+
 ## [2.6.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0) (2026-02-13)
 
 ### Added
@@ -84,6 +90,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
