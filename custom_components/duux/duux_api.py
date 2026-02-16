@@ -93,7 +93,12 @@ class DuuxAPI:
         # note: Both temperature for heaters and humidity for de-humidifiers
         #       use 'set-point' (aka 'sp') to track a target value.
         return self.send_command(device_mac, f"tune set sp {temp}")
-    
+
+    def set_speed(self, device_mac, speed):
+        """Set target speed (1-30)."""
+        speed = max(1, min(30, int(speed)))
+        return self.send_command(device_mac, f"tune set speed {speed}")
+
     def set_humidity(self, device_mac, humidity):
         """Set target humidity (30-80%)."""
         temp = max(30, min(80, int(humidity)))
