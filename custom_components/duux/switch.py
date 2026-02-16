@@ -11,6 +11,7 @@ from custom_components.duux.const import (
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_WHISPER_FLEX_2,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -34,6 +35,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             DUUX_STID_EDGEHEATER_2023_V1,
             DUUX_STID_EDGEHEATER_V2,
             DUUX_STID_EDGEHEATER_2000,
+            DUUX_STID_WHISPER_FLEX_2,
         ]:
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
