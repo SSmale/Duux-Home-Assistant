@@ -9,7 +9,7 @@ from homeassistant.components.humidifier import (
 from homeassistant.components.humidifier.const import (
     HumidifierEntityFeature,
     HumidifierAction,
-    MODE_AUTO, MODE_BOOST
+    MODE_AUTO, MODE_BOOST, MODE_NORMAL
 )
 from homeassistant.const import PERCENTAGE
 from homeassistant.config_entries import ConfigEntry
@@ -44,6 +44,9 @@ async def async_setup_entry(
         # Create the appropriate de/humidifier entity based on sensor_type_id
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
+        # Add the Neo to the setup loop
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNeoHumidifier(coordinator, api, device))
         else:
             _LOGGER.warning(f"Unknown de/humidifier type {sensor_type_id}, skipping.")
     
@@ -198,5 +201,47 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
 
         await self.hass.async_add_executor_job(
             self._api.set_dry_mode, self._device_mac, mode
+        )
+        await self.coordinator.async_request_refresh()
+        
+class DuuxNeoHumidifier(DuuxDehumidifier): # Inherit from your base class
+    """Duux Neo Humidifier."""
+    
+    PRESET_NORMAL = MODE_NORMAL
+    PRESET_AUTO = MODE_AUTO
+    
+    def __init__(self, coordinator, api, device):
+        """Initialize the Neo humidifier device."""
+        super().__init__(coordinator, api, device)
+        
+        # Based on JSON: minPercent 20, maxPercent 80
+        self._attr_min_humidity = 20
+        self._attr_max_humidity = 80
+
+    @property
+    def available_modes(self):
+        """Return available preset modes."""
+        return [self.PRESET_NORMAL, self.PRESET_AUTO]
+    
+    @property
+    def mode(self):
+        """Return current preset mode."""
+        mode = self.coordinator.data.get("mode")
+        mode_map = {
+            0: self.PRESET_NORMAL,
+            1: self.PRESET_AUTO,
+        }
+        return mode_map.get(mode, self.PRESET_NORMAL)
+    
+    async def async_set_mode(self, mode):
+        """Set preset mode."""
+        mode_map = {
+            self.PRESET_NORMAL: "0",
+            self.PRESET_AUTO: "1",
+        }
+        api_mode = mode_map.get(mode, "0")
+
+        await self.hass.async_add_executor_job(
+            self._api.set_mode, self._device_mac, api_mode 
         )
         await self.coordinator.async_request_refresh()
