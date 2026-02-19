@@ -126,10 +126,11 @@ class DuuxTimeRemainingSensor(DuuxSensor):
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=1,
             ))
+# Keep your dictionary at the top or just above the class
 DUUX_ERROR_MESSAGES = {
     0: "No Error",
-    # 1: "Water Tank Empty", (Example)
-    # 2: "Filter Replacement Needed", (Example)
+    # 1: "Water Tank Empty",
+    # 2: "Filter Replacement Needed",
 }
 
 class DuuxErrorSensor(DuuxSensor):
@@ -142,10 +143,16 @@ class DuuxErrorSensor(DuuxSensor):
                 key='err',
                 entity_category=EntityCategory.DIAGNOSTIC,
                 icon="mdi:alert-circle",
-                # This maps the numeric error code to a human-readable attribute
-                attrs=lambda data: {
-                    "error_message": DUUX_ERROR_MESSAGES.get(
-                        data.get("err"), "Unknown Error"
-                    )
-                }
             ))
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor as human-readable text."""
+        raw_error = self.coordinator.data.get("err")
+        
+        # If the API doesn't return an err key at all, default to None
+        if raw_error is None:
+            return None
+            
+        # Return the mapped message, or "Unknown Error (code)" if it's a new error code
+        return DUUX_ERROR_MESSAGES.get(raw_error, f"Unknown Error ({raw_error})")
