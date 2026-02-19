@@ -204,7 +204,7 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
         )
         await self.coordinator.async_request_refresh()
         
-class DuuxNeoHumidifier(DuuxDehumidifier): # Inherit from your base class
+class DuuxNeoHumidifier(DuuxDehumidifier):
     """Duux Neo Humidifier."""
     
     PRESET_NORMAL = MODE_NORMAL
@@ -214,9 +214,28 @@ class DuuxNeoHumidifier(DuuxDehumidifier): # Inherit from your base class
         """Initialize the Neo humidifier device."""
         super().__init__(coordinator, api, device)
         
-        # Based on JSON: minPercent 20, maxPercent 80
+        # Override the base class to explicitly declare this as a Humidifier
+        self._attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+        
         self._attr_min_humidity = 20
         self._attr_max_humidity = 80
+
+    @property
+    def action(self):
+        """Return the current action of the humidifier."""
+        is_on = bool(self.coordinator.data.get("power"))
+        if not is_on:
+            return HumidifierAction.OFF
+            
+        current_hum = self.coordinator.data.get("hum")
+        target_hum = self.coordinator.data.get("sp")
+        
+        # If current humidity is below the target, it is actively running
+        if current_hum is not None and target_hum is not None and current_hum < target_hum:
+            return HumidifierAction.HUMIDIFYING
+            
+        # If the target is reached, it is on but idle
+        return HumidifierAction.IDLE
 
     @property
     def available_modes(self):
