@@ -129,6 +129,7 @@ class DuuxTimeRemainingSensor(DuuxSensor):
 # Keep your dictionary at the top or just above the class
 DUUX_ERROR_MESSAGES = {
     0: "No Error",
+    7: "Water Tank Removed",
     # 1: "Water Tank Empty",
     # 2: "Filter Replacement Needed",
 }
