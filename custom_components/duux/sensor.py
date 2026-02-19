@@ -16,6 +16,7 @@ from homeassistant.const import (
     PERCENTAGE,
     UnitOfTemperature,
     UnitOfTime,
+    EntityCategory,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -43,6 +44,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
+        entities.append(DuuxErrorSensor(coordinator, api, device))
         
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
@@ -123,4 +125,27 @@ class DuuxTimeRemainingSensor(DuuxSensor):
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=1,
+            ))
+DUUX_ERROR_MESSAGES = {
+    0: "No Error",
+    # 1: "Water Tank Empty", (Example)
+    # 2: "Filter Replacement Needed", (Example)
+}
+
+class DuuxErrorSensor(DuuxSensor):
+    """Representation of a Duux Error diagnostic sensor."""
+    
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, 
+            DuuxSensorEntityDescription(
+                name="Error Status",
+                key='err',
+                entity_category=EntityCategory.DIAGNOSTIC,
+                icon="mdi:alert-circle",
+                # This maps the numeric error code to a human-readable attribute
+                attrs=lambda data: {
+                    "error_message": DUUX_ERROR_MESSAGES.get(
+                        data.get("err"), "Unknown Error"
+                    )
+                }
             ))
