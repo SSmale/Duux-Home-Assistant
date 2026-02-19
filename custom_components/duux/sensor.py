@@ -47,6 +47,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
             entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxHumiditySensor(coordinator, api, device))
+            entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
     
