@@ -16,6 +16,7 @@ from homeassistant.const import (
     PERCENTAGE,
     UnitOfTemperature,
     UnitOfTime,
+    EntityCategory,
 )
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -43,8 +44,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
+        entities.append(DuuxErrorSensor(coordinator, api, device))
         
         if sensor_type_id == DUUX_STID_BORA_2024:
+            entities.append(DuuxHumiditySensor(coordinator, api, device))
+            entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_NEO:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
             entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
         else:
@@ -121,3 +126,34 @@ class DuuxTimeRemainingSensor(DuuxSensor):
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=1,
             ))
+# Keep your dictionary at the top or just above the class
+DUUX_ERROR_MESSAGES = {
+    0: "No Error",
+    7: "Water Tank Removed",
+    # 1: "Water Tank Empty",
+    # 2: "Filter Replacement Needed",
+}
+
+class DuuxErrorSensor(DuuxSensor):
+    """Representation of a Duux Error diagnostic sensor."""
+    
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, 
+            DuuxSensorEntityDescription(
+                name="Error Status",
+                key='err',
+                entity_category=EntityCategory.DIAGNOSTIC,
+                icon="mdi:alert-circle",
+            ))
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor as human-readable text."""
+        raw_error = self.coordinator.data.get("err")
+        
+        # If the API doesn't return an err key at all, default to None
+        if raw_error is None:
+            return None
+            
+        # Return the mapped message, or "Unknown Error (code)" if it's a new error code
+        return DUUX_ERROR_MESSAGES.get(raw_error, f"Unknown Error ({raw_error})")
