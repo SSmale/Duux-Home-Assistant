@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0-pre-55.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.1...v2.7.0-pre-55.1) (2026-03-13)
+
+### Added
+
+* Add Duux Neo Humidifier support ([#55](https://github.com/SSmale/Duux-Home-Assistant/issues/55)) ([e65fd09](https://github.com/SSmale/Duux-Home-Assistant/commit/e65fd09b6237bca331c103080906423f6292c6b0))
+* adds neo support ([332769f](https://github.com/SSmale/Duux-Home-Assistant/commit/332769fa003072808539898b4542bc582f7901f3))
+
 ## [2.6.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.6.1) (2026-03-12)
 
 ### Fixed
@@ -90,6 +97,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
