@@ -145,3 +145,10 @@ class DuuxAPI:
         """Set timer in hours."""
         value = max(0, min(24, int(hours)))
         return self.send_command(device_mac, f"tune set timer {value}")
+    def set_speed(self, device_mac, speed_val):
+        """Set spray volume / speed mode."""
+        return self.send_command(device_mac, f"tune set speed {speed_val}")
+    def set_humidifier_mode(self, device_mac, mode):
+        """Set humidifier mode (0=Normal, 1=Auto)."""
+        mode_val = max(0, min(1, int(mode)))
+        return self.send_command(device_mac, f"tune set mode {mode_val}")

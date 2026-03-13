@@ -11,6 +11,7 @@ from custom_components.duux.const import (
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_NEO,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,6 +45,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxSleepModeSwitch(coordinator, api, device))
             entities.append(DuuxCleaningModeSwitch(coordinator, api, device))
             entities.append(DuuxLaundryModeSwitch(coordinator, api, device))
+        # Neo humidifier
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
 
     async_add_entities(entities)
 

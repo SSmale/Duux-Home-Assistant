@@ -1,5 +1,6 @@
 """Support for Duux de/humidifier devices."""
 import logging
+import asyncio
 from typing import Any, Iterator
 
 from homeassistant.components.humidifier import (
@@ -9,7 +10,7 @@ from homeassistant.components.humidifier import (
 from homeassistant.components.humidifier.const import (
     HumidifierEntityFeature,
     HumidifierAction,
-    MODE_AUTO, MODE_BOOST
+    MODE_AUTO, MODE_BOOST, MODE_NORMAL
 )
 from homeassistant.const import PERCENTAGE
 from homeassistant.config_entries import ConfigEntry
@@ -44,6 +45,9 @@ async def async_setup_entry(
         # Create the appropriate de/humidifier entity based on sensor_type_id
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
+        # Add the Neo to the setup loop
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNeoHumidifier(coordinator, api, device))
         else:
             _LOGGER.warning(f"Unknown de/humidifier type {sensor_type_id}, skipping.")
     
@@ -200,3 +204,76 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
             self._api.set_dry_mode, self._device_mac, mode
         )
         await self.coordinator.async_request_refresh()
+        
+class DuuxNeoHumidifier(DuuxDehumidifier):
+    """Duux Neo Humidifier."""
+    
+    PRESET_NORMAL = MODE_NORMAL
+    PRESET_AUTO = MODE_AUTO
+    
+    def __init__(self, coordinator, api, device):
+        """Initialize the Neo humidifier device."""
+        super().__init__(coordinator, api, device)
+        self._attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+        
+        # Explicitly tell Home Assistant this device supports modes
+        self._attr_supported_features = HumidifierEntityFeature.MODES
+        
+        self._attr_min_humidity = 30
+        self._attr_max_humidity = 80
+
+    @property
+    def action(self):
+        """Return the current action of the humidifier."""
+        is_on = bool(self.coordinator.data.get("power"))
+        if not is_on:
+            return HumidifierAction.OFF
+            
+        current_hum = self.coordinator.data.get("hum")
+        target_hum = self.coordinator.data.get("sp")
+        
+        if current_hum is not None and target_hum is not None and current_hum < target_hum:
+            return HumidifierAction.HUMIDIFYING
+            
+        return HumidifierAction.IDLE
+
+    @property
+    def available_modes(self):
+        """Return available preset modes."""
+        return [self.PRESET_NORMAL, self.PRESET_AUTO]
+    
+    @property
+    def mode(self):
+        """Return current preset mode."""
+        mode = self.coordinator.data.get("mode")
+        
+        # Safely convert to string to handle both int(1) and str("1") from the API
+        if str(mode) == "1":
+            return self.PRESET_AUTO
+        return self.PRESET_NORMAL
+    
+    async def async_set_mode(self, mode):
+        """Set preset mode."""
+        # Convert Home Assistant mode back to the API value
+        api_mode = "1" if mode == self.PRESET_AUTO else "0"
+
+        await self.hass.async_add_executor_job(
+            # Use the new API function we just created
+            self._api.set_humidifier_mode, self._device_mac, api_mode 
+        )
+        # Pause to allow the Duux cloud to process the change
+        await asyncio.sleep(2)
+        await self.coordinator.async_request_refresh()
+        
+    @property
+    def extra_state_attributes(self):
+        """Return device specific state attributes."""
+        data = self.coordinator.data
+        speed_val = data.get("speed")
+        speed_map = {0: "Low", 1: "Mid", 2: "High"}
+        
+        attrs = {}
+        if speed_val is not None:
+            attrs["spray_volume"] = speed_map.get(int(speed_val), f"Unknown ({speed_val})")
+            
+        return attrs

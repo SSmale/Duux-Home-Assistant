@@ -30,6 +30,10 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
+    # Route the Neo to its selectors
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNeoSpeedSelector(coordinator, api, device))
+            entities.append(DuuxTimerSelector(coordinator, api, device))
     
     async_add_entities(entities)
 
@@ -127,5 +131,44 @@ class DuuxTimerSelector(DuuxSelector):
 
         await self.hass.async_add_executor_job(
             self._api.set_timer, self._device_mac, str(amount)
+        )
+        await self.coordinator.async_request_refresh()
+class DuuxNeoSpeedSelector(DuuxSelector):
+    """Representation of a Duux Neo spray speed selector."""
+
+    SPEED_LOW = "Low"
+    SPEED_MID = "Mid"
+    SPEED_HIGH = "High"
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the speed selector."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_speed"
+        self._attr_name = "Spray Volume"
+        self._attr_icon = "mdi:weather-partly-rainy"
+        self._attr_options = [self.SPEED_LOW, self.SPEED_MID, self.SPEED_HIGH]
+
+    @property
+    def current_option(self):
+        """Return current speed."""
+        mode = self.coordinator.data.get("speed")
+        mode_map = {
+            0: self.SPEED_LOW,
+            1: self.SPEED_MID,
+            2: self.SPEED_HIGH,
+        }
+        return mode_map.get(mode, self.SPEED_LOW)
+
+    async def async_select_option(self, option):
+        """Set spray speed mode."""
+        mode_map = {
+            self.SPEED_LOW: "0",
+            self.SPEED_MID: "1",
+            self.SPEED_HIGH: "2",
+        }
+        mode = mode_map.get(option, "0")
+
+        await self.hass.async_add_executor_job(
+            self._api.set_speed, self._device_mac, mode
         )
         await self.coordinator.async_request_refresh()
