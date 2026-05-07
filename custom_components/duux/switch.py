@@ -8,6 +8,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from custom_components.duux.const import (
     DOMAIN,
     DUUX_STID_BORA_2024,
+    DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_EDGEHEATER_V2,
@@ -44,6 +45,10 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxSleepModeSwitch(coordinator, api, device))
             entities.append(DuuxCleaningModeSwitch(coordinator, api, device))
             entities.append(DuuxLaundryModeSwitch(coordinator, api, device))
+
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
+            entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
     async_add_entities(entities)
 
@@ -219,5 +224,35 @@ class DuuxLaundryModeSwitch(DuuxSwitch):
         """Turn off Laundry mode."""
         await self.hass.async_add_executor_job(
             self._api.set_laundry_mode, self._device_mac, False
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxIonizerSwitch(DuuxSwitch):
+    """Representation of a Duux ionizer switch."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the ionizer switch."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_ionizer"
+        self._attr_name = "Ionizer"
+        self._attr_icon = "mdi:air-filter"
+
+    @property
+    def is_on(self):
+        """Return true if ionizer is on."""
+        return self.coordinator.data.get("ion") == 1
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on ionizer."""
+        await self.hass.async_add_executor_job(
+            self._api.set_ionizer, self._device_mac, True
+        )
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off ionizer."""
+        await self.hass.async_add_executor_job(
+            self._api.set_ionizer, self._device_mac, False
         )
         await self.coordinator.async_request_refresh()

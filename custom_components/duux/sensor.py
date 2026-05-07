@@ -47,6 +47,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
             entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxPM25Sensor(coordinator, api, device))
+            entities.append(DuuxTVOCSensor(coordinator, api, device))
+            entities.append(DuuxFilterLifeSensor(coordinator, api, device))
+            entities.append(DuuxAirQualitySensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
     
@@ -97,6 +102,47 @@ class DuuxTempSensor(DuuxSensor):
                 native_unit_of_measurement=UnitOfTemperature.CELSIUS,
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=1,
+            ))
+
+class DuuxPM25Sensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device,
+            DuuxSensorEntityDescription(
+                key='ppm',
+                name="PM2.5",
+                device_class=SensorDeviceClass.PM25,
+                native_unit_of_measurement="µg/m³",
+                state_class=SensorStateClass.MEASUREMENT,
+            ))
+
+class DuuxTVOCSensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device,
+            DuuxSensorEntityDescription(
+                key='tvoc',
+                name="TVOC",
+                device_class=SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
+                state_class=SensorStateClass.MEASUREMENT,
+            ))
+
+class DuuxFilterLifeSensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device,
+            DuuxSensorEntityDescription(
+                key='filter',
+                name="Filter Life",
+                native_unit_of_measurement=PERCENTAGE,
+                state_class=SensorStateClass.MEASUREMENT,
+                icon="mdi:air-filter",
+            ))
+
+class DuuxAirQualitySensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device,
+            DuuxSensorEntityDescription(
+                key='aq',
+                name="Air Quality Index",
+                state_class=SensorStateClass.MEASUREMENT,
             ))
 
 class DuuxHumiditySensor(DuuxSensor):

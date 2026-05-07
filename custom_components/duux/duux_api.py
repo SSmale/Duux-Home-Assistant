@@ -107,6 +107,16 @@ class DuuxAPI:
         mode_val = max(0, min(1, int(mode)))
         return self.send_command(device_mac, f"tune set fan {mode_val}")
 
+    def set_speed(self, device_mac, mode):
+        """Set fan speed (0=Auto, 1-4=Speed)."""
+        mode_val = max(0, min(4, int(mode)))
+        return self.send_command(device_mac, f"tune set speed {mode_val}")
+
+    def set_ionizer(self, device_mac, ion_on):
+        """Set ionizer on or off."""
+        value = "01" if ion_on else "00"
+        return self.send_command(device_mac, f"tune set ion {value}")
+
     def set_night_mode(self, device_mac, night_on):
         """Set night mode."""
         value = "01" if night_on else "00"
