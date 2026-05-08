@@ -115,7 +115,7 @@ class DuuxNightModeSwitch(DuuxSwitch):
         """Initialize the night mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_night_mode"
-        self._attr_name = "Night Mode"
+        self._attr_translation_key = "night_mode"
         self._attr_icon = "mdi:weather-night"
 
     @property
@@ -235,7 +235,7 @@ class DuuxIonizerSwitch(DuuxSwitch):
         """Initialize the ionizer switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_ionizer"
-        self._attr_name = "Ionizer"
+        self._attr_translation_key = "ionizer"
         self._attr_icon = "mdi:air-filter"
 
     @property
@@ -245,6 +245,11 @@ class DuuxIonizerSwitch(DuuxSwitch):
 
     async def async_turn_on(self, **kwargs):
         """Turn on ionizer."""
+        # Constraint: Ionizer cannot be turned on if speed is at lowest (1)
+        if self.coordinator.data.get("speed") == 1:
+            _LOGGER.warning("Ionizer cannot be turned on when fan speed is at lowest (1)")
+            return
+
         await self.hass.async_add_executor_job(
             self._api.set_ionizer, self._device_mac, True
         )

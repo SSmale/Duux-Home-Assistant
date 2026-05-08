@@ -1,0 +1,33 @@
+{
+    "entity": {
+        "sensor": {
+            "pm25": { "name": "PM2.5" },
+            "tvoc": { "name": "TVOC" },
+            "filter_life": { "name": "Levensduur HEPA filter" },
+            "air_quality_index": {
+                "name": "Luchtkwaliteitsindex",
+                "state": {
+                    "excellent": "Uitstekend",
+                    "very_good": "Zeer goed",
+                    "good": "Goed",
+                    "fair": "Redelijk",
+                    "poor": "Slecht",
+                    "harmful": "Schadelijk"
+                }
+            }
+        },
+        "switch": {
+            "ionizer": { "name": "Ionisator" },
+            "night_mode": { "name": "Nachtmodus" }
+        },
+        "select": {
+            "timer": { "name": "Timer" }
+        }
+    },
+    "issues": {
+        "device_not_recognised": {
+            "description": "Duux heeft een apparaat gedetecteerd dat niet officieel wordt ondersteund. \n\rControleer het apparaattype en meld dit aan de ontwikkelaar van de integratie. \n\rBenodigde details zijn: \n\rApparaatnaam: {device_name}\n\rApparaattype-ID: {device_type_id}\n\rSensortype-ID: {sensor_type_id}\n\rApparaattype: {reported_type}.",
+            "title": "Apparaat niet herkend"
+        }
+    }
+}

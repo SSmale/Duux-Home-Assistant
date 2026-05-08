@@ -1,0 +1,33 @@
+{
+    "entity": {
+        "sensor": {
+            "pm25": { "name": "PM2.5" },
+            "tvoc": { "name": "TVOC" },
+            "filter_life": { "name": "Durée de vie restante du filtre HEPA" },
+            "air_quality_index": {
+                "name": "Indice de qualité de l'air",
+                "state": {
+                    "excellent": "Excellent",
+                    "very_good": "Très bon",
+                    "good": "Bon",
+                    "fair": "Correct",
+                    "poor": "Mauvais",
+                    "harmful": "Nocif"
+                }
+            }
+        },
+        "switch": {
+            "ionizer": { "name": "Ioniseur" },
+            "night_mode": { "name": "Mode nuit" }
+        },
+        "select": {
+            "timer": { "name": "Miauteur" }
+        }
+    },
+    "issues": {
+        "device_not_recognised": {
+            "description": "Duxx a détecté un appareil qui n'est pas officiellement pris en charge. \n\rVeuillez vérifier le type d'appareil et le signaler au développeur de l'intégration. \n\rLes détails nécessaires sont : \n\rNom de l'appareil : {device_name}\n\rID du type d'appareil : {device_type_id}\n\rID du type de capteur : {sensor_type_id}\n\rType d'appareil : {reported_type}.",
+            "title": "Appareil non reconnu"
+        }
+    }
+}

@@ -114,7 +114,7 @@ class DuuxAPI:
 
     def set_ionizer(self, device_mac, ion_on):
         """Set ionizer on or off."""
-        value = "01" if ion_on else "00"
+        value = "1" if ion_on else "0"
         return self.send_command(device_mac, f"tune set ion {value}")
 
     def set_night_mode(self, device_mac, night_on):

@@ -7,7 +7,6 @@ from typing import Any
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util.percentage import (
-    int_states_in_range,
     percentage_to_ranged_value,
     ranged_value_to_percentage,
 )
@@ -69,7 +68,10 @@ class DuuxAirPurifierFan(DuuxFan):
         """Initialize the fan."""
         super().__init__(coordinator, api, device)
         self._attr_supported_features = (
-            FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_ON
+            | FanEntityFeature.TURN_OFF
         )
         self._attr_preset_modes = ["Auto"]
 
@@ -84,12 +86,12 @@ class DuuxAirPurifierFan(DuuxFan):
         speed = self.coordinator.data.get("speed")
         if speed is None or speed == 0:
             return None
-        return ranged_value_to_percentage(SPEED_RANGE, speed)
+        return ranged_value_to_percentage((0, 4), speed)
 
     @property
     def speed_count(self) -> int:
         """Return the number of speeds the fan supports."""
-        return int_states_in_range(SPEED_RANGE)
+        return 4
 
     @property
     def preset_mode(self) -> str | None:
@@ -105,10 +107,17 @@ class DuuxAirPurifierFan(DuuxFan):
             await self.async_turn_off()
             return
 
-        speed = math.ceil(percentage_to_ranged_value(SPEED_RANGE, percentage))
+        speed = math.ceil(percentage_to_ranged_value((0, 4), percentage))
         await self.hass.async_add_executor_job(
             self._api.set_speed, self._device_mac, speed
         )
+
+        # Constraint: Ionizer must be OFF if speed is at lowest (1)
+        if speed == 1 and self.coordinator.data.get("ion") == 1:
+            await self.hass.async_add_executor_job(
+                self._api.set_ionizer, self._device_mac, False
+            )
+
         # Ensure power is ON when setting speed
         if not self.is_on:
             await self.hass.async_add_executor_job(
