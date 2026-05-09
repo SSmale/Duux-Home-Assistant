@@ -243,6 +243,22 @@ class DuuxIonizerSwitch(DuuxSwitch):
         """Return true if ionizer is on."""
         return self.coordinator.data.get("ion") == 1
 
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        if not super().available:
+            return False
+        
+        # Constraint for Bright 2: Ionizer unavailable if speed is 1 (manual mode)
+        # Note: In Auto mode (speed 0), it should be available.
+        speed = self.coordinator.data.get("speed")
+        sensor_type_id = self._device.get("sensorTypeId")
+        
+        if sensor_type_id == DUUX_STID_BRIGHT_2 and speed == 1:
+            return False
+            
+        return True
+
     async def async_turn_on(self, **kwargs):
         """Turn on ionizer."""
         # Constraint: Ionizer cannot be turned on if speed is at lowest (1)

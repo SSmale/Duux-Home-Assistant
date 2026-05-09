@@ -86,7 +86,7 @@ class DuuxAirPurifierFan(DuuxFan):
         speed = self.coordinator.data.get("speed")
         if speed is None or speed == 0:
             return None
-        return ranged_value_to_percentage((0, 4), speed)
+        return speed * 25
 
     @property
     def speed_count(self) -> int:
@@ -107,7 +107,7 @@ class DuuxAirPurifierFan(DuuxFan):
             await self.async_turn_off()
             return
 
-        speed = math.ceil(percentage_to_ranged_value((0, 4), percentage))
+        speed = math.ceil(percentage / 25)
         await self.hass.async_add_executor_job(
             self._api.set_speed, self._device_mac, speed
         )

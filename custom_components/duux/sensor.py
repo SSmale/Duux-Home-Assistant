@@ -52,6 +52,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxTVOCSensor(coordinator, api, device))
             entities.append(DuuxFilterLifeSensor(coordinator, api, device))
             entities.append(DuuxAirQualitySensor(coordinator, api, device))
+            entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
     
@@ -177,10 +178,10 @@ class DuuxTimeRemainingSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
         super().__init__(coordinator, api, device, 
             DuuxSensorEntityDescription(
-            	name="Time Remaining",
-                key='timrm',
+                key='timerr',
+                translation_key="time_remaining",
                 device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 state_class=SensorStateClass.MEASUREMENT,
-                suggested_display_precision=1,
+                suggested_display_precision=0,
             ))

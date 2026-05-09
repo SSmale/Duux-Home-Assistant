@@ -4,6 +4,7 @@
             "pm25": { "name": "PM2.5" },
             "tvoc": { "name": "TVOC" },
             "filter_life": { "name": "HEPA Filter remaining lifespan" },
+            "time_remaining": { "name": "Time Remaining" },
             "air_quality_index": {
                 "name": "Air Quality Index",
                 "state": {
