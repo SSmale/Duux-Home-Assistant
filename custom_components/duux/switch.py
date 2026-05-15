@@ -72,7 +72,7 @@ class DuuxSwitch(CoordinatorEntity, SwitchEntity):
         """Return True if entity is available."""
         return (
             self.coordinator.last_update_success
-            and self.coordinator.data.get("online", True)
+            and (self.coordinator.data or {}).get("online", True)
         )
 
     @property
@@ -99,7 +99,7 @@ class DuuxChildLockSwitch(DuuxSwitch):
     @property
     def is_on(self):
         """Return true if child lock is on."""
-        return self.coordinator.data.get("lock") == 1
+        return (self.coordinator.data or {}).get("lock") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on child lock."""
@@ -129,7 +129,7 @@ class DuuxNightModeSwitch(DuuxSwitch):
     @property
     def is_on(self):
         """Return true if night mode is on."""
-        return self.coordinator.data.get("night") == 1
+        return (self.coordinator.data or {}).get("night") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on night mode."""
@@ -159,7 +159,7 @@ class DuuxSleepModeSwitch(DuuxSwitch):
     @property
     def is_on(self):
         """Return true if night mode is on."""
-        return self.coordinator.data.get("sleep") == 1
+        return (self.coordinator.data or {}).get("sleep") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on sleep mode."""
@@ -189,7 +189,7 @@ class DuuxCleaningModeSwitch(DuuxSwitch):
     @property
     def is_on(self):
         """Return true if self-cleaning mode is on."""
-        return self.coordinator.data.get("dry") == 1
+        return (self.coordinator.data or {}).get("dry") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on cleaning mode."""
@@ -219,7 +219,7 @@ class DuuxLaundryModeSwitch(DuuxSwitch):
     @property
     def is_on(self):
         """Return true if laundry mode is on."""
-        return self.coordinator.data.get("laundr") == 1
+        return (self.coordinator.data or {}).get("laundr") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on laundry mode."""
@@ -249,7 +249,7 @@ class DuuxIonizerSwitch(DuuxSwitch):
     @property
     def is_on(self):
         """Return true if ionizer is on."""
-        return self.coordinator.data.get("ion") == 1
+        return (self.coordinator.data or {}).get("ion") == 1
 
     @property
     def available(self) -> bool:
@@ -259,7 +259,8 @@ class DuuxIonizerSwitch(DuuxSwitch):
         
         # Constraint for Bright 2: Ionizer unavailable if speed is 1 (manual mode)
         # Note: In Auto mode (speed 0), it should be available.
-        speed = self.coordinator.data.get("speed")
+        data = self.coordinator.data or {}
+        speed = data.get("speed")
         sensor_type_id = self._device.get("sensorTypeId")
         
         if sensor_type_id == DUUX_STID_BRIGHT_2 and speed == 1:

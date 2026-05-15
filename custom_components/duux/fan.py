@@ -55,7 +55,7 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         """Return True if entity is available."""
         return (
             self.coordinator.last_update_success
-            and self.coordinator.data.get("online", True)
+            and (self.coordinator.data or {}).get("online", True)
         )
 
     @property
@@ -86,12 +86,12 @@ class DuuxAirPurifierFan(DuuxFan):
     @property
     def is_on(self) -> bool:
         """Return true if fan is on."""
-        return self.coordinator.data.get("power") == 1
+        return (self.coordinator.data or {}).get("power") == 1
 
     @property
     def percentage(self) -> int | None:
         """Return the current speed percentage."""
-        speed = self.coordinator.data.get("speed")
+        speed = (self.coordinator.data or {}).get("speed")
         if speed is None or speed == 0:
             return None
         return speed * 25
@@ -104,7 +104,7 @@ class DuuxAirPurifierFan(DuuxFan):
     @property
     def preset_mode(self) -> str | None:
         """Return the current preset mode."""
-        speed = self.coordinator.data.get("speed")
+        speed = (self.coordinator.data or {}).get("speed")
         if speed == 0:
             return "Auto"
         return None

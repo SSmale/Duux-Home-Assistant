@@ -56,7 +56,7 @@ class DuuxSelector(CoordinatorEntity, SelectEntity):
         """Return True if entity is available."""
         return (
             self.coordinator.last_update_success
-            and self.coordinator.data.get("online", True)
+            and (self.coordinator.data or {}).get("online", True)
         )
 
     @property
@@ -91,7 +91,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current fan mode."""
-        mode = self.coordinator.data.get("fan")
+        mode = (self.coordinator.data or {}).get("fan")
         mode_map = {
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
@@ -126,7 +126,7 @@ class DuuxTimerSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current timer."""
-        return str(self.coordinator.data.get("timer"))
+        return str((self.coordinator.data or {}).get("timer"))
 
     async def async_select_option(self, option):
         """Set timer amount."""

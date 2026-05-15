@@ -90,16 +90,15 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
         """Return if entity is available."""
         return (
             self.coordinator.last_update_success
-            and self.coordinator.data.get("online", True)
+            and (self.coordinator.data or {}).get("online", True)
         )
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_native_value = self.coordinator.data.get(self.entity_description.key)
-        self._attr_extra_state_attributes = self.entity_description.attrs(
-            self.coordinator.data
-        )
+        data = self.coordinator.data or {}
+        self._attr_native_value = data.get(self.entity_description.key)
+        self._attr_extra_state_attributes = self.entity_description.attrs(data)
         self.async_write_ha_state()
 
 class DuuxTempSensor(DuuxSensor):
@@ -156,7 +155,7 @@ class DuuxAirQualitySensor(DuuxSensor):
     @property
     def native_value(self) -> str | int | None:
         """Return the state of the sensor."""
-        value = self.coordinator.data.get("aq")
+        value = (self.coordinator.data or {}).get("aq")
         if value is None:
             return None
         
