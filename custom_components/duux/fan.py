@@ -51,6 +51,14 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         self._attr_has_entity_name = True
 
     @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return (
+            self.coordinator.last_update_success
+            and self.coordinator.data.get("online", True)
+        )
+
+    @property
     def device_info(self):
         """Return device information."""
         return {

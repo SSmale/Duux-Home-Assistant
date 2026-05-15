@@ -85,6 +85,14 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
         self._attr_extra_state_attributes = description.attrs(coordinator.data)
         self.entity_description = description
 
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return (
+            self.coordinator.last_update_success
+            and self.coordinator.data.get("online", True)
+        )
+
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""

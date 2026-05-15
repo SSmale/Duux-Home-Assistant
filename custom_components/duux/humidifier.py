@@ -146,7 +146,10 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     @property
     def available(self):
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return (
+            self.coordinator.last_update_success
+            and self.coordinator.data.get("online", True)
+        )
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""

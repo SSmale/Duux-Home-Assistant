@@ -58,7 +58,9 @@ class DuuxAPI:
         devices = self.get_devices()
         for device in devices:
             if device.get("deviceId") == device_id:
-                return device.get("latestData", {}).get("fullData", {})
+                data = device.get("latestData", {}).get("fullData", {})
+                data["online"] = device.get("online", True)
+                return data
         return {}
 
     def send_command(self, device_mac, command):
