@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0-pre-44.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.1...v2.7.0-pre-44.1) (2026-05-27)
+
+### Added
+
+* adds error switch and fixes diagnostics ([8c8e0d2](https://github.com/SSmale/Duux-Home-Assistant/commit/8c8e0d2d2c5f5206845bc744a52b0a16c9326d3c))
+
 <<<<<<< pre-44
 ## [2.6.0-pre-44.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0-pre-44.1) (2026-02-15)
 
@@ -111,3 +117,4 @@ All notable changes to this project will be documented in this file.
 
 
 >>>>>>> master
+
