@@ -12,5 +12,9 @@
   "requirements": [
     "requests>=2.31.0"
   ],
+<<<<<<< pre-44
   "version": "2.6.0-pre-44.1"
+=======
+  "version": "2.6.1"
+>>>>>>> master
 }

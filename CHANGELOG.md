@@ -2,11 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+<<<<<<< pre-44
 ## [2.6.0-pre-44.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0-pre-44.1) (2026-02-15)
 
 ### Added
 
 * adds error switch and fixes diagnostics ([8c8e0d2](https://github.com/SSmale/Duux-Home-Assistant/commit/8c8e0d2d2c5f5206845bc744a52b0a16c9326d3c))
+=======
+## [2.6.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.6.1) (2026-03-12)
+
+### Fixed
+
+* reduce logging level for api sync ([822bcd2](https://github.com/SSmale/Duux-Home-Assistant/commit/822bcd24d8cad9c3be7709f3154184aad0a90595))
+
+## [2.6.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0) (2026-02-13)
+
+### Added
+
+* adds support for the Duux edge 2000 ([#47](https://github.com/SSmale/Duux-Home-Assistant/issues/47)) ([bd8c070](https://github.com/SSmale/Duux-Home-Assistant/commit/bd8c0707bba6850e671672b8efe90dfe75a462ff))
+
+## [2.6.0-pre-45.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0-pre-45.1...v2.6.0-pre-45.2) (2026-02-13)
+
+### Added
+
+* adds heater to the entity checkers ([a6c75bd](https://github.com/SSmale/Duux-Home-Assistant/commit/a6c75bd798d9bb997d7e8ba18810a4c39a3df319))
+
+## [2.6.0-pre-45.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0-pre-45.1) (2026-02-13)
+
+### Added
+
+* adds support for the Duux edge 2000 ([a58a3be](https://github.com/SSmale/Duux-Home-Assistant/commit/a58a3be004203d741da63d88ced0b9c7d88fc0a6))
+>>>>>>> master
 
 ## [2.5.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.0...v2.5.1) (2026-01-23)
 
@@ -79,3 +105,9 @@ All notable changes to this project will be documented in this file.
 
 
 
+<<<<<<< pre-44
+=======
+
+
+
+>>>>>>> master
