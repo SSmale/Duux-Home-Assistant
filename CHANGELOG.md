@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0-pre-68.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-68.1...v2.7.0-pre-68.2) (2026-05-27)
+
+### Fixed
+
+* reduce logging level for api sync ([822bcd2](https://github.com/SSmale/Duux-Home-Assistant/commit/822bcd24d8cad9c3be7709f3154184aad0a90595))
+
 ## [2.6.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.6.1) (2026-03-12)
 
 ### Fixed
@@ -90,6 +96,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
