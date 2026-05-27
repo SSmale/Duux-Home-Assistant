@@ -107,7 +107,10 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         self._attr_has_entity_name = True
 
         self._attr_supported_features = (
-            FanEntityFeature.SET_SPEED | FanEntityFeature.PRESET_MODE
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_ON
+            | FanEntityFeature.TURN_OFF
         )
 
         self._speed_range = []  # To be defined in subclasses
