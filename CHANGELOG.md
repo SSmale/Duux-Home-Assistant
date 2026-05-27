@@ -2,12 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.7.0-pre-68.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.7.0-pre-68.1) (2026-05-27)
+## [2.6.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.6.1) (2026-03-12)
 
-### Added
+### Fixed
 
-* adds flex ultimate ([70dc23b](https://github.com/SSmale/Duux-Home-Assistant/commit/70dc23b3979824c43f9868ad582f24f9f311ba36))
-* adds support for the whisper fans ([8e7bcb2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e7bcb29a565d62e5de496325c4384d2dd2a75b6))
+* reduce logging level for api sync ([822bcd2](https://github.com/SSmale/Duux-Home-Assistant/commit/822bcd24d8cad9c3be7709f3154184aad0a90595))
 
 ## [2.6.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.5.1...v2.6.0) (2026-02-13)
 
