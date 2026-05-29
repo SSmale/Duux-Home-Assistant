@@ -88,9 +88,16 @@ class DuuxAirPurifierFan(DuuxFan):
     @property
     def percentage(self) -> int | None:
         """Return the current speed percentage."""
-        speed = (self.coordinator.data or {}).get("speed")
-        if speed is None or speed == 0:
+        data = self.coordinator.data or {}
+        speed = data.get("speed")
+        if speed is None:
             return None
+        if speed == 0:
+            # Auto mode: estimate effective speed from air quality index
+            # aq=0→speed 1, aq=1→speed 2, aq=2→speed 3, aq≥3→speed 4
+            aq = data.get("aq") or 0
+            estimated = min(aq + 1, SPEED_RANGE[1])
+            return ranged_value_to_percentage(SPEED_RANGE, estimated)
         return ranged_value_to_percentage(SPEED_RANGE, speed)
 
     @property
