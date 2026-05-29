@@ -271,7 +271,7 @@ class DuuxIonizerSwitch(DuuxSwitch):
     async def async_turn_on(self, **kwargs):
         """Turn on ionizer."""
         # Constraint: Ionizer cannot be turned on if speed is at lowest (1)
-        if self.coordinator.data.get("speed") == 1:
+        if (self.coordinator.data or {}).get("speed") == 1:
             _LOGGER.warning("Ionizer cannot be turned on when fan speed is at lowest (1)")
             return
 

@@ -199,7 +199,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         """Return if entity is available."""
         return (
             self.coordinator.last_update_success
-            and self.coordinator.data.get("online", True)
+            and (self.coordinator.data or {}).get("online", True)
         )
 
     async def async_added_to_hass(self):

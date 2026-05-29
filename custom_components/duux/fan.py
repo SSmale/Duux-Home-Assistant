@@ -121,7 +121,7 @@ class DuuxAirPurifierFan(DuuxFan):
         )
 
         # Constraint: Ionizer must be OFF if speed is at lowest (1)
-        if speed == 1 and self.coordinator.data.get("ion") == 1:
+        if speed == 1 and (self.coordinator.data or {}).get("ion") == 1:
             await self.hass.async_add_executor_job(
                 self._api.set_ionizer, self._device_mac, False
             )
