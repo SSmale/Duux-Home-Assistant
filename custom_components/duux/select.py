@@ -147,4 +147,5 @@ class DuuxBright2TimerSelector(DuuxTimerSelector):
     def __init__(self, coordinator, api, device):
         """Initialize the timer selector."""
         super().__init__(coordinator, api, device)
+        # Bright 2 supports specific timer presets only (hours): 0=off, 1, 2, 4, 8
         self._attr_options = ["0", "1", "2", "4", "8"]

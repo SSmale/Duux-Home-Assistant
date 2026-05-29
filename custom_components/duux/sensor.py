@@ -125,11 +125,12 @@ class DuuxPM25Sensor(DuuxSensor):
 
 class DuuxTVOCSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device, 
+        super().__init__(coordinator, api, device,
             DuuxSensorEntityDescription(
                 key='tvoc',
                 translation_key="tvoc",
                 device_class=SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
+                native_unit_of_measurement="µg/m³",
                 state_class=SensorStateClass.MEASUREMENT,
             ))
 
@@ -152,23 +153,24 @@ class DuuxAirQualitySensor(DuuxSensor):
                 translation_key="air_quality_index",
             ))
 
-    @property
-    def native_value(self) -> str | int | None:
-        """Return the state of the sensor."""
-        value = (self.coordinator.data or {}).get("aq")
-        if value is None:
-            return None
-        
-        # Mapping: 0=Excellent, 1=Very Good, 2=Good, 3=Fair, 4=Poor, 5=Harmful
-        mapping = {
-            0: "excellent",
-            1: "very_good",
-            2: "good",
-            3: "fair",
-            4: "poor",
-            5: "harmful"
-        }
-        return mapping.get(value, value)
+    _AQ_MAP = {
+        0: "excellent",
+        1: "very_good",
+        2: "good",
+        3: "fair",
+        4: "poor",
+        5: "harmful",
+    }
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        data = self.coordinator.data or {}
+        raw = data.get("aq")
+        # Map integer API value to translation key; fall back to raw value if unknown
+        self._attr_native_value = self._AQ_MAP.get(raw, raw) if raw is not None else None
+        self._attr_extra_state_attributes = self.entity_description.attrs(data)
+        self.async_write_ha_state()
 
 class DuuxHumiditySensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
@@ -192,3 +194,4 @@ class DuuxTimeRemainingSensor(DuuxSensor):
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=0,
             ))
+
