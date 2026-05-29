@@ -6,10 +6,7 @@ from typing import Any
 
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.util.percentage import (
-    percentage_to_ranged_value,
-    ranged_value_to_percentage,
-)
+from homeassistant.util.percentage import ranged_value_to_percentage
 
 from .const import DOMAIN, DUUX_STID_BRIGHT_2
 
@@ -94,12 +91,12 @@ class DuuxAirPurifierFan(DuuxFan):
         speed = (self.coordinator.data or {}).get("speed")
         if speed is None or speed == 0:
             return None
-        return speed * 25
+        return ranged_value_to_percentage(SPEED_RANGE, speed)
 
     @property
     def speed_count(self) -> int:
         """Return the number of speeds the fan supports."""
-        return 4
+        return SPEED_RANGE[1]
 
     @property
     def preset_mode(self) -> str | None:
@@ -116,6 +113,13 @@ class DuuxAirPurifierFan(DuuxFan):
             return
 
         speed = math.ceil(percentage / 25)
+
+        # Ensure power is ON before sending speed command
+        if not self.is_on:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+
         await self.hass.async_add_executor_job(
             self._api.set_speed, self._device_mac, speed
         )
@@ -126,11 +130,6 @@ class DuuxAirPurifierFan(DuuxFan):
                 self._api.set_ionizer, self._device_mac, False
             )
 
-        # Ensure power is ON when setting speed
-        if not self.is_on:
-            await self.hass.async_add_executor_job(
-                self._api.set_power, self._device_mac, True
-            )
         await self.coordinator.async_request_refresh()
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
