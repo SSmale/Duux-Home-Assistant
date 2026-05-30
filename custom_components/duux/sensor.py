@@ -81,8 +81,9 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
             manufacturer=self._device.get("manufacturer", "Duux"),
             name=self.device_name,
         )
-        self._attr_native_value = coordinator.data.get(description.key)
-        self._attr_extra_state_attributes = description.attrs(coordinator.data)
+        _init_data = coordinator.data or {}
+        self._attr_native_value = _init_data.get(description.key)
+        self._attr_extra_state_attributes = description.attrs(_init_data)
         self.entity_description = description
 
     @property
