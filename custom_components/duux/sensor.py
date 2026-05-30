@@ -129,10 +129,24 @@ class DuuxTVOCSensor(DuuxSensor):
             DuuxSensorEntityDescription(
                 key='tvoc',
                 translation_key="tvoc",
-                device_class=SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
-                native_unit_of_measurement="µg/m³",
-                state_class=SensorStateClass.MEASUREMENT,
+                # TVOC is a discrete level 0-3: 0=Healthy, 1=Acceptable, 2=Polluted, 3=Harmful
             ))
+
+    _TVOC_MAP = {
+        0: "healthy",
+        1: "acceptable",
+        2: "polluted",
+        3: "harmful",
+    }
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        data = self.coordinator.data or {}
+        raw = data.get("tvoc")
+        self._attr_native_value = self._TVOC_MAP.get(raw, raw) if raw is not None else None
+        self._attr_extra_state_attributes = self.entity_description.attrs(data)
+        self.async_write_ha_state()
 
 class DuuxFilterLifeSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):

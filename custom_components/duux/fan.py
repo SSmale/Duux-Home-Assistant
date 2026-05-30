@@ -93,8 +93,12 @@ class DuuxAirPurifierFan(DuuxFan):
         if speed is None:
             return None
         if speed == 0:
-            # Auto mode: estimate effective speed from air quality index
-            # aq=0→speed 1, aq=1→speed 2, aq=2→speed 3, aq≥3→speed 4
+            # Auto mode: estimate effective speed from air quality sensors
+            # TVOC>1 (Polluted or Harmful) → max speed immediately
+            tvoc = data.get("tvoc") or 0
+            if tvoc > 1:
+                return ranged_value_to_percentage(SPEED_RANGE, SPEED_RANGE[1])
+            # Otherwise derive from AQ: aq=0→speed 1, aq=1→2, aq=2→3, aq≥3→4
             aq = data.get("aq") or 0
             estimated = min(aq + 1, SPEED_RANGE[1])
             return ranged_value_to_percentage(SPEED_RANGE, estimated)

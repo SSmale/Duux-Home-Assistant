@@ -2,7 +2,15 @@
     "entity": {
         "sensor": {
             "pm25": { "name": "PM2.5" },
-            "tvoc": { "name": "TVOC" },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "healthy": "Gezond",
+                    "acceptable": "Acceptabel",
+                    "polluted": "Vervuild",
+                    "harmful": "Schadelijk"
+                }
+            },
             "filter_life": { "name": "Levensduur HEPA filter" },
             "time_remaining": { "name": "Resterende tijd" },
             "air_quality_index": {
