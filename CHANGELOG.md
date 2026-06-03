@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.1...v2.7.0) (2026-06-03)
+
+### Added
+
+* add Duux Bright 2 air purifier support ([#71](https://github.com/SSmale/Duux-Home-Assistant/issues/71)) ([#72](https://github.com/SSmale/Duux-Home-Assistant/issues/72)) ([ca7efef](https://github.com/SSmale/Duux-Home-Assistant/commit/ca7efef01cd42661eff3389faecb34081e07ca8a))
+
 ## [2.7.0-pre-71.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.1...v2.7.0-pre-71.1) (2026-06-03)
 
 ### Added
@@ -96,6 +102,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
