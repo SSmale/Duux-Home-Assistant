@@ -392,9 +392,9 @@ class DuuxEdgeTwoClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
+        mode = self.coordinator.data.get("heatin", 1)
         mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
-        return mode_map.get(mode, self.PRESET_LOW)
+        return mode_map.get(mode)
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
@@ -429,12 +429,12 @@ class DuuxEdgeClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
+        mode = self.coordinator.data.get("heatin", 1)
         mode_map = {
             1: self.PRESET_LOW,
             2: self.PRESET_HIGH,
         }
-        return mode_map.get(mode, self.PRESET_LOW)
+        return mode_map.get(mode)
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""

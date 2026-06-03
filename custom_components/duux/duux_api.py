@@ -141,3 +141,13 @@ class DuuxAPI:
         """Set timer in hours."""
         value = max(0, min(24, int(hours)))
         return self.send_command(device_mac, f"tune set timer {value}")
+
+    def set_horosc(self, device_mac, value):
+        """Set horizontal oscillation (0=off, 1=30°, 2=60°, 3=90°)."""
+        value = max(0, min(3, int(value)))
+        return self.send_command(device_mac, f"tune set horosc {value}")
+
+    def set_verosc(self, device_mac, value):
+        """Set vertical oscillation (0=off, 1=45°, 2=100°)."""
+        value = max(0, min(2, int(value)))
+        return self.send_command(device_mac, f"tune set verosc {value}")

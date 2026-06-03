@@ -31,13 +31,13 @@ async def async_setup_entry(
     api = data["api"]
     coordinators = data["coordinators"]
     devices = data["devices"]
-    
+
     entities = []
     for device in devices:
         device_type_id = device.get("sensorType").get("type")
         if device_type_id not in DUUX_DTID_HUMIDIFIER:
             continue
-        
+
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators[device_id]
@@ -46,7 +46,7 @@ async def async_setup_entry(
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
         else:
             _LOGGER.warning(f"Unknown de/humidifier type {sensor_type_id}, skipping.")
-    
+
     async_add_entities(entities)
 
 class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
@@ -63,11 +63,11 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
         self._attr_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
         self._attr_device_class = HumidifierDeviceClass.DEHUMIDIFIER
-        
+
         # Default humidity range (can be overridden by subclasses)
         self._attr_min_humidity = 30
         self._attr_max_humidity = 80
-        
+
         # Enable preset 'modes'..
         self._attr_supported_features = (HumidifierEntityFeature.MODES)
 
@@ -103,34 +103,34 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
             self._api.set_power, self._device_mac, True
         )
         await self.coordinator.async_request_refresh()
-    
+
     async def async_turn_off(self, **kwargs):
         await self.hass.async_add_executor_job(
             self._api.set_power, self._device_mac, False
         )
         await self.coordinator.async_request_refresh()
-    
+
     @property
     def is_on(self):
         power = self.coordinator.data.get("power", 0)
         return power == 1
-    
+
     @property
     def action(self):
         """Return current action."""
         power = self.coordinator.data.get("power", 0)
         return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
-    
+
     @property
     def current_humidity(self):
         """Return the current humidity."""
         return self.coordinator.data.get("hum")
-    
+
     @property
     def target_humidity(self):
         """Return the humidity we try to reach."""
         return self.coordinator.data.get("sp")
-    
+
     async def async_set_humidity(self, humidity: int):
         """Set new target humidity."""
         await self.hass.async_add_executor_job(
@@ -160,14 +160,14 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
 
 class DuuxBoraDehumidifier(DuuxDehumidifier):
     """Duux Bora Dehumidifier."""
-    
+
     PRESET_AUTO = MODE_AUTO
     PRESET_CONTINUOUS = MODE_BOOST
-    
+
     def __init__(self, coordinator, api, device):
         """Initialize the Bora dehumidifier device."""
         super().__init__(coordinator, api, device)
-        
+
         # min/max humidity settings for Bora.
         self._attr_min_humidity = 30
         self._attr_max_humidity = 80
@@ -176,17 +176,17 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     def available_modes(self):
         """Return available preset modes."""
         return [self.PRESET_AUTO, self.PRESET_CONTINUOUS]
-    
+
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = self.coordinator.data.get("mode", 0)
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,
         }
-        return mode_map.get(mode, self.PRESET_AUTO)
-    
+        return mode_map.get(mode)
+
     async def async_set_mode(self, mode):
         """Set preset mode."""
         mode_map = {
