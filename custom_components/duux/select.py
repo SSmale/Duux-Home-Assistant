@@ -14,6 +14,7 @@ from .const import (
     DUUX_STID_BORA_2024,
     DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_2,
+    DUUX_STID_WHISPER_FLEX_ELIVATE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -40,6 +41,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id in (DUUX_STID_WHISPER_FLEX_2, DUUX_STID_WHISPER_FLEX):
             entities.append(DuuxHorizontalOscillationSelector(coordinator, api, device))
             entities.append(DuuxVerticalOscillationSelector(coordinator, api, device))
+
+        if sensor_type_id == DUUX_STID_WHISPER_FLEX_ELIVATE:
+            entities.append(DuuxHorizontalOscillationSelector(coordinator, api, device))
+            entities.append(DuuxFanSpeedSelector(coordinator, api, device))
+            entities.append(DuuxTimerSelector(coordinator, api, device))
 
     async_add_entities(entities)
 
