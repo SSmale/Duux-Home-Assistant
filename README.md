@@ -17,6 +17,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 - 📊 **Real-time Status**: Current temperature and heating state
 - 🔄 **Auto-discovery**: Automatically finds all your Duux devices
+- 🌐 **Offline Detection**: All entities are marked unavailable when a device is disconnected from the cloud
 
 ## Supported Devices
 
@@ -35,6 +36,17 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 - Duux Threesixty Two Heater
   - 🌡️ **Temperature Control**: Set target temperature (18-30°C)
   - 🔥 **Three Heating Modes**: Low, High and Boost
+
+- Duux Bright 2 Air Purifier
+  - 💨 **Fan Control**: 4 manual speeds + Auto mode
+  - 🌿 **Auto Speed**: Automatically adjusts speed based on air quality (AQ) and TVOC levels
+  - 🔬 **PM2.5 Sensor**: Real-time particulate matter monitoring
+  - 🧪 **TVOC Sensor**: Volatile organic compound level (Healthy / Acceptable / Polluted / Harmful)
+  - 🌬️ **Air Quality Index**: 6-level air quality indicator (Excellent → Harmful)
+  - 🔋 **HEPA Filter Life**: Remaining filter lifespan (%)
+  - ⏲ **Timer**: Preset durations (0, 1, 2, 4, 8 hours)
+  - 🌙 **Night Mode**: Reduced noise and display dimming
+  - ⚡ **Ionizer**: On/off control (automatically disabled at minimum speed)
 
 - Duux Bora Dehumidifier
   - 💧 **Humidity Control**: Set target humidity (30-80%)

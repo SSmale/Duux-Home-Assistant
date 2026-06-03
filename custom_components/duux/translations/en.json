@@ -1,4 +1,61 @@
 {
+    "entity": {
+        "sensor": {
+            "pm25": { "name": "PM2.5" },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "healthy": "Healthy",
+                    "acceptable": "Acceptable",
+                    "polluted": "Polluted",
+                    "harmful": "Harmful"
+                }
+            },
+            "filter_life": { "name": "HEPA Filter remaining lifespan" },
+            "time_remaining": { "name": "Time Remaining" },
+            "air_quality_index": {
+                "name": "Air Quality Index",
+                "state": {
+                    "excellent": "Excellent",
+                    "very_good": "Very Good",
+                    "good": "Good",
+                    "fair": "Fair",
+                    "poor": "Poor",
+                    "harmful": "Harmful"
+                }
+            }
+        },
+        "switch": {
+            "child_lock": { "name": "Child Lock" },
+            "sleep_mode": { "name": "Sleep Mode" },
+            "cleaning_mode": { "name": "Cleaning Mode" },
+            "laundry_mode": { "name": "Laundry Mode" },
+            "night_mode": { "name": "Night Mode" },
+            "ionizer": { "name": "Ionizer" }
+        },
+        "select": {
+            "fan_speed": { "name": "Fan Speed" },
+            "timer": { "name": "Timer" }
+        }
+    },
+    "config": {
+        "step": {
+            "user": {
+                "title": "Duux Login",
+                "description": "Enter your Duux account credentials.",
+                "data": {
+                    "email": "Email address",
+                    "password": "Password"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Invalid credentials. Please check your email and password."
+        },
+        "abort": {
+            "already_configured": "This Duux account is already configured."
+        }
+    },
     "issues": {
         "device_not_recognised": {
             "description": "Duux has detected a device that is not officially supported. \n\rPlease check the device type and report it to the integration developer. \n\rDetails needed are: \n\rDevice Name: {device_name}\n\rDevice Type ID: {device_type_id}\n\rSensor Type ID: {sensor_type_id}\n\rDevice Type: {reported_type}.",
