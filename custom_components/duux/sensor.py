@@ -46,13 +46,13 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
-            entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
+            entities.append(DuuxBora2024TimeRemainingSensor(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxPM25Sensor(coordinator, api, device))
             entities.append(DuuxTVOCSensor(coordinator, api, device))
             entities.append(DuuxFilterLifeSensor(coordinator, api, device))
             entities.append(DuuxAirQualitySensor(coordinator, api, device))
-            entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
+            entities.append(DuuxBright2TimeRemainingSensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
     
@@ -199,14 +199,30 @@ class DuuxHumiditySensor(DuuxSensor):
             ))
 
 class DuuxTimeRemainingSensor(DuuxSensor):
-    def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device, 
+    """Base time remaining sensor — subclass per device to set the correct API key."""
+
+    def __init__(self, coordinator, api, device, key: str):
+        super().__init__(coordinator, api, device,
             DuuxSensorEntityDescription(
-                key='timerr',
+                key=key,
                 translation_key="time_remaining",
                 device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 state_class=SensorStateClass.MEASUREMENT,
                 suggested_display_precision=0,
             ))
+
+
+class DuuxBora2024TimeRemainingSensor(DuuxTimeRemainingSensor):
+    """Time remaining sensor for Duux Bora 2024 (API key: 'timrm')."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, key='timrm')
+
+
+class DuuxBright2TimeRemainingSensor(DuuxTimeRemainingSensor):
+    """Time remaining sensor for Duux Bright 2 (API key: 'timerr')."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, key='timerr')
 

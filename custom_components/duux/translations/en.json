@@ -26,11 +26,34 @@
             }
         },
         "switch": {
-            "ionizer": { "name": "Ionizer" },
-            "night_mode": { "name": "Night Mode" }
+            "child_lock": { "name": "Child Lock" },
+            "sleep_mode": { "name": "Sleep Mode" },
+            "cleaning_mode": { "name": "Cleaning Mode" },
+            "laundry_mode": { "name": "Laundry Mode" },
+            "night_mode": { "name": "Night Mode" },
+            "ionizer": { "name": "Ionizer" }
         },
         "select": {
+            "fan_speed": { "name": "Fan Speed" },
             "timer": { "name": "Timer" }
+        }
+    },
+    "config": {
+        "step": {
+            "user": {
+                "title": "Duux Login",
+                "description": "Enter your Duux account credentials (https://app.cloudgarden.nl).",
+                "data": {
+                    "email": "Email address",
+                    "password": "Password"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Invalid credentials. Please check your email and password."
+        },
+        "abort": {
+            "already_configured": "This Duux account is already configured."
         }
     },
     "issues": {

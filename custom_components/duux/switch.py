@@ -93,7 +93,7 @@ class DuuxChildLockSwitch(DuuxSwitch):
         """Initialize the child lock switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_child_lock"
-        self._attr_name = "Child Lock"
+        self._attr_translation_key = "child_lock"
         self._attr_icon = "mdi:lock"
 
     @property
@@ -153,7 +153,7 @@ class DuuxSleepModeSwitch(DuuxSwitch):
         """Initialize the sleep mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_sleep_mode"
-        self._attr_name = "Sleep Mode"
+        self._attr_translation_key = "sleep_mode"
         self._attr_icon = "mdi:weather-night"
 
     @property
@@ -183,7 +183,7 @@ class DuuxCleaningModeSwitch(DuuxSwitch):
         """Initialize the self-cleaning mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_cleaning_mode"
-        self._attr_name = "Cleaning Mode"
+        self._attr_translation_key = "cleaning_mode"
         self._attr_icon = "mdi:air-filter"
 
     @property
@@ -213,7 +213,7 @@ class DuuxLaundryModeSwitch(DuuxSwitch):
         """Initialize the laundry mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_laundry_mode"
-        self._attr_name = "Laundry Mode"
+        self._attr_translation_key = "laundry_mode"
         self._attr_icon = "mdi:tshirt-crew"
 
     @property

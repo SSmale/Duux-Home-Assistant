@@ -80,7 +80,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
         """Initialize the fan speed selector."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_fan_speed"
-        self._attr_name = "Fan Speed"
+        self._attr_translation_key = "fan_speed"
         self._attr_icon = "mdi:fan"
 
     @property
