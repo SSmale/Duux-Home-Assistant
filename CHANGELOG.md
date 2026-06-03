@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0-pre-50.5](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.4...v2.7.0-pre-50.5) (2026-06-03)
+
+### Added
+
+* adds initial support for elevate ([#70](https://github.com/SSmale/Duux-Home-Assistant/issues/70)) ([cc97983](https://github.com/SSmale/Duux-Home-Assistant/commit/cc979835eebf32e34f39d283d88182a79423e6cf))
+
 ## [2.7.0-pre-50.4](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.3...v2.7.0-pre-50.4) (2026-06-03)
 
 ### Added
@@ -84,4 +90,5 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
