@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0-pre-50.4](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.3...v2.7.0-pre-50.4) (2026-06-03)
+
+### Added
+
+* adds ossolation for fans ([8b5dc49](https://github.com/SSmale/Duux-Home-Assistant/commit/8b5dc49340123a03ca0c2c025ca87005e2bd9a57))
+
 ## [2.7.0-pre-50.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.2...v2.7.0-pre-50.3) (2026-05-27)
 
 ### Fixed
@@ -78,3 +84,4 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
