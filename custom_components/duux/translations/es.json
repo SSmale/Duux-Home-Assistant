@@ -42,7 +42,7 @@
         "step": {
             "user": {
                 "title": "Inicio de sesión Duux",
-                "description": "Introduzca las credenciales de su cuenta Duux (https://app.cloudgarden.nl).",
+                "description": "Introduzca las credenciales de su cuenta Duux.",
                 "data": {
                     "email": "Correo electrónico",
                     "password": "Contraseña"

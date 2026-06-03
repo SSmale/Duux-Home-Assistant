@@ -42,7 +42,7 @@
         "step": {
             "user": {
                 "title": "Connexion Duux",
-                "description": "Entrez les identifiants de votre compte Duux (https://app.cloudgarden.nl).",
+                "description": "Entrez les identifiants de votre compte Duux.",
                 "data": {
                     "email": "Adresse email",
                     "password": "Mot de passe"

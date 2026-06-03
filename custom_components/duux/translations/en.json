@@ -42,7 +42,7 @@
         "step": {
             "user": {
                 "title": "Duux Login",
-                "description": "Enter your Duux account credentials (https://app.cloudgarden.nl).",
+                "description": "Enter your Duux account credentials.",
                 "data": {
                     "email": "Email address",
                     "password": "Password"

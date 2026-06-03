@@ -42,7 +42,7 @@
         "step": {
             "user": {
                 "title": "Duux inloggen",
-                "description": "Voer uw Duux-accountgegevens in (https://app.cloudgarden.nl).",
+                "description": "Voer uw Duux-accountgegevens in.",
                 "data": {
                     "email": "E-mailadres",
                     "password": "Wachtwoord"
