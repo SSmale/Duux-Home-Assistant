@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.11.0-pre-50.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0...v2.11.0-pre-50.1) (2026-06-12)
+
+### Added
+
+* adds initial support for elevate ([#70](https://github.com/SSmale/Duux-Home-Assistant/issues/70)) ([cc97983](https://github.com/SSmale/Duux-Home-Assistant/commit/cc979835eebf32e34f39d283d88182a79423e6cf))
+* adds ossolation for fans ([8b5dc49](https://github.com/SSmale/Duux-Home-Assistant/commit/8b5dc49340123a03ca0c2c025ca87005e2bd9a57))
+* adds support for the whisper fans ([8e7bcb2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e7bcb29a565d62e5de496325c4384d2dd2a75b6))
+
+### Fixed
+
+* adds explicit features for the fan settings ([#69](https://github.com/SSmale/Duux-Home-Assistant/issues/69)) ([639c28c](https://github.com/SSmale/Duux-Home-Assistant/commit/639c28c335aaa25e159b9fe71acf32a63a618848))
+* fixes merge issue ([8e777c2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e777c23decd1d0381b834f210e308e1f9306b78))
+* merge issues ([fa31b83](https://github.com/SSmale/Duux-Home-Assistant/commit/fa31b83f5452e344606ca0e7af613309db0418bd))
+
 ## [2.10.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0) (2026-06-12)
 
 ### Added
@@ -145,3 +159,4 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
