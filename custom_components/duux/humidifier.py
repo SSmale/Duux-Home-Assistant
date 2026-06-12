@@ -2,11 +2,13 @@
 
 import logging
 
-from homeassistant.components.humidifier import HumidifierEntity, HumidifierDeviceClass
+from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.components.humidifier.const import (
-    HumidifierEntityFeature,
     MODE_AUTO,
+    MODE_NORMAL,
     MODE_BOOST,
+    HumidifierAction,
+    HumidifierEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -59,7 +61,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
+class DuuxBase(CoordinatorEntity, HumidifierEntity):
     """Representation of a Duux de/humidifier device."""
 
     def __init__(self, coordinator, api, device):
@@ -72,7 +74,6 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
         self._attr_unique_id = f"duux_{self._device_id}"
         self._attr_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
-        self._attr_device_class = HumidifierDeviceClass.DEHUMIDIFIER
 
         # Default humidity range (can be overridden by subclasses)
         self._attr_min_humidity = 30
@@ -134,13 +135,11 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     @property
     def current_humidity(self):
         """Return the current humidity."""
-        return self.coordinator.data.get("hum")
+        return (self.coordinator.data or {}).get("hum")
 
     @property
     def target_humidity(self):
         """Return the humidity we try to reach."""
-        return self.coordinator.data.get("sp")
-
         return (self.coordinator.data or {}).get("sp")
 
     async def async_set_humidity(self, humidity: int):
@@ -171,6 +170,38 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     async def async_update(self):
         """Update the entity."""
         await self.coordinator.async_request_refresh()
+
+
+class DuuxDehumidifier(DuuxBase):
+    """Representation of a Duux dehumidifier device."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the dehumidifier device."""
+        super().__init__(coordinator, api, device)
+
+        self._attr_device_class = HumidifierDeviceClass.DEHUMIDIFIER
+
+    @property
+    def action(self):
+        """Return current action."""
+        power = self.coordinator.data.get("power", 0)
+        return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
+
+
+class DuuxHumidifier(DuuxBase):
+    """Representation of a Duux humidifier device."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the humidifier device."""
+        super().__init__(coordinator, api, device)
+
+        self._attr_device_class = HumidifierDeviceClass.HUMIDIFIER
+
+    @property
+    def action(self):
+        """Return current action."""
+        power = self.coordinator.data.get("power", 0)
+        return HumidifierAction.HUMIDIFYING if power == 1 else HumidifierAction.OFF
 
 
 class DuuxBoraDehumidifier(DuuxDehumidifier):
@@ -205,6 +236,47 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     async def async_set_mode(self, mode):
         """Set preset mode."""
         mode_map = {self.PRESET_AUTO: "0", self.PRESET_CONTINUOUS: "1"}
+
+        mode = mode_map.get(mode, "0")
+
+        await self.hass.async_add_executor_job(
+            self._api.set_dry_mode, self._device_mac, mode
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxBeamMiniDehumidifier(DuuxHumidifier):
+    """Duux Beam Mini Humidifier."""
+
+    PRESET_AUTO = MODE_AUTO
+    PRESET_MANUAL = MODE_NORMAL
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the Beam Mini humidifier device."""
+        super().__init__(coordinator, api, device)
+
+        # min/max humidity settings for Beam Mini.
+        self._attr_min_humidity = 20
+        self._attr_max_humidity = 80
+
+    @property
+    def available_modes(self):
+        """Return available preset modes."""
+        return [self.PRESET_AUTO, self.PRESET_MANUAL]
+
+    @property
+    def mode(self):
+        """Return current preset mode."""
+        mode = self.coordinator.data.get("mode", self.PRESET_AUTO)
+        mode_map = {
+            0: self.PRESET_AUTO,
+            1: self.PRESET_MANUAL,
+        }
+        return mode_map.get(mode, self.PRESET_AUTO)
+
+    async def async_set_mode(self, mode):
+        """Set preset mode."""
+        mode_map = {self.PRESET_AUTO: "0", self.PRESET_MANUAL: "1"}
 
         mode = mode_map.get(mode, "0")
 

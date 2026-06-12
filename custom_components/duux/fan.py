@@ -67,7 +67,7 @@ async def async_setup_entry(
         model = device.get("sensorType", {}).get("name", "Unknown")
 
         if device_type_id not in [*DUUX_DTID_FAN, *DUUX_DTID_AIR_PURIFIER]:
-            if last_word in DUUX_FAN_TYPES or DUUX_DTID_AIR_PURIFIER:
+            if last_word in DUUX_FAN_TYPES:
                 _LOGGER.warning(
                     "Your device has not been officially catagorised as supporting the fan platform."
                 )
