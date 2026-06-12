@@ -8,9 +8,12 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from custom_components.duux.const import (
     DOMAIN,
     DUUX_STID_BORA_2024,
+    DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_WHISPER_FLEX_2,
+    DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_NEO,
 )
 
@@ -28,15 +31,24 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         # Only Edge heaters have night mode
         if sensor_type_id in [
             DUUX_STID_EDGEHEATER_2023_V1,
             DUUX_STID_EDGEHEATER_V2,
             DUUX_STID_EDGEHEATER_2000,
+            DUUX_STID_WHISPER_FLEX_2,
         ]:
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
+        if sensor_type_id in [
+            DUUX_STID_WHISPER_FLEX_ELIVATE,
+        ]:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
 
         # Bora has sleep (similar to night), cleaning, laundry & child lock..
@@ -48,6 +60,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         # Neo humidifier
         elif sensor_type_id == DUUX_STID_NEO:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
+
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
+            entities.append(DuuxIonizerSwitch(coordinator, api, device))
+
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
+            entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
     async_add_entities(entities)
 
@@ -67,6 +87,13 @@ class DuuxSwitch(CoordinatorEntity, SwitchEntity):
         self._attr_has_entity_name = True
 
     @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
+
+    @property
     def device_info(self):
         """Return device information."""
         return {
@@ -84,13 +111,13 @@ class DuuxChildLockSwitch(DuuxSwitch):
         """Initialize the child lock switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_child_lock"
-        self._attr_name = "Child Lock"
+        self._attr_translation_key = "child_lock"
         self._attr_icon = "mdi:lock"
 
     @property
     def is_on(self):
         """Return true if child lock is on."""
-        return self.coordinator.data.get("lock") == 1
+        return (self.coordinator.data or {}).get("lock") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on child lock."""
@@ -114,13 +141,13 @@ class DuuxNightModeSwitch(DuuxSwitch):
         """Initialize the night mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_night_mode"
-        self._attr_name = "Night Mode"
+        self._attr_translation_key = "night_mode"
         self._attr_icon = "mdi:weather-night"
 
     @property
     def is_on(self):
         """Return true if night mode is on."""
-        return self.coordinator.data.get("night") == 1
+        return (self.coordinator.data or {}).get("night") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on night mode."""
@@ -144,13 +171,13 @@ class DuuxSleepModeSwitch(DuuxSwitch):
         """Initialize the sleep mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_sleep_mode"
-        self._attr_name = "Sleep Mode"
+        self._attr_translation_key = "sleep_mode"
         self._attr_icon = "mdi:weather-night"
 
     @property
     def is_on(self):
         """Return true if night mode is on."""
-        return self.coordinator.data.get("sleep") == 1
+        return (self.coordinator.data or {}).get("sleep") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on sleep mode."""
@@ -174,13 +201,13 @@ class DuuxCleaningModeSwitch(DuuxSwitch):
         """Initialize the self-cleaning mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_cleaning_mode"
-        self._attr_name = "Cleaning Mode"
+        self._attr_translation_key = "cleaning_mode"
         self._attr_icon = "mdi:air-filter"
 
     @property
     def is_on(self):
         """Return true if self-cleaning mode is on."""
-        return self.coordinator.data.get("dry") == 1
+        return (self.coordinator.data or {}).get("dry") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on cleaning mode."""
@@ -204,13 +231,13 @@ class DuuxLaundryModeSwitch(DuuxSwitch):
         """Initialize the laundry mode switch."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_laundry_mode"
-        self._attr_name = "Laundry Mode"
+        self._attr_translation_key = "laundry_mode"
         self._attr_icon = "mdi:tshirt-crew"
 
     @property
     def is_on(self):
         """Return true if laundry mode is on."""
-        return self.coordinator.data.get("laundr") == 1
+        return (self.coordinator.data or {}).get("laundr") == 1
 
     async def async_turn_on(self, **kwargs):
         """Turn on laundry mode."""
@@ -223,5 +250,59 @@ class DuuxLaundryModeSwitch(DuuxSwitch):
         """Turn off Laundry mode."""
         await self.hass.async_add_executor_job(
             self._api.set_laundry_mode, self._device_mac, False
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxIonizerSwitch(DuuxSwitch):
+    """Representation of a Duux ionizer switch."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the ionizer switch."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_ionizer"
+        self._attr_translation_key = "ionizer"
+        self._attr_icon = "mdi:air-filter"
+
+    @property
+    def is_on(self):
+        """Return true if ionizer is on."""
+        return (self.coordinator.data or {}).get("ion") == 1
+
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        if not super().available:
+            return False
+
+        # Constraint for Bright 2: Ionizer unavailable if speed is 1 (manual mode)
+        # Note: In Auto mode (speed 0), it should be available.
+        data = self.coordinator.data or {}
+        speed = data.get("speed")
+        sensor_type_id = self._device.get("sensorTypeId")
+
+        if sensor_type_id == DUUX_STID_BRIGHT_2 and speed == 1:
+            return False
+
+        return True
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on ionizer."""
+        # Constraint: Ionizer cannot be turned on if speed is at lowest (1)
+        if (self.coordinator.data or {}).get("speed") == 1:
+            _LOGGER.warning(
+                "Ionizer cannot be turned on when fan speed is at lowest (1)"
+            )
+            return
+
+        await self.hass.async_add_executor_job(
+            self._api.set_ionizer, self._device_mac, True
+        )
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off ionizer."""
+        await self.hass.async_add_executor_job(
+            self._api.set_ionizer, self._device_mac, False
         )
         await self.coordinator.async_request_refresh()
