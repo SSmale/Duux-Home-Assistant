@@ -15,6 +15,7 @@ from .const import (
     DUUX_DTID_HEATER,
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HUMIDIFIER,
+    DUUX_DTID_AIR_PURIFIER,
     DUUX_DTID_OTHER_HEATER,
     DUUX_SUPPORTED_TYPES,
 )
@@ -25,6 +26,7 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = [
     Platform.CLIMATE,
     Platform.HUMIDIFIER,
+    Platform.FAN,
     Platform.SWITCH,
     Platform.SELECT,
     Platform.SENSOR,
@@ -61,6 +63,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             *DUUX_DTID_HEATER,
             *DUUX_DTID_THERMOSTAT,
             *DUUX_DTID_HUMIDIFIER,
+            *DUUX_DTID_AIR_PURIFIER,
             *DUUX_DTID_OTHER_HEATER,
         ]:
             ir.async_create_issue(

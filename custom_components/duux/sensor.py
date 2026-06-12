@@ -46,7 +46,13 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
-            entities.append(DuuxTimeRemainingSensor(coordinator, api, device))
+            entities.append(DuuxBora2024TimeRemainingSensor(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxPM25Sensor(coordinator, api, device))
+            entities.append(DuuxTVOCSensor(coordinator, api, device))
+            entities.append(DuuxFilterLifeSensor(coordinator, api, device))
+            entities.append(DuuxAirQualitySensor(coordinator, api, device))
+            entities.append(DuuxBright2TimeRemainingSensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
         
@@ -77,15 +83,25 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
             manufacturer=self._device.get("manufacturer", "Duux"),
             name=self.device_name,
         )
-        self._attr_extra_state_attributes = description.attrs(coordinator.data)
+        _init_data = coordinator.data or {}
+        self._attr_native_value = _init_data.get(description.key)
+        self._attr_extra_state_attributes = description.attrs(_init_data)
         self.entity_description = description
+
+    @property
+    def available(self) -> bool:
+        """Return if entity is available."""
+        return (
+            self.coordinator.last_update_success
+            and (self.coordinator.data or {}).get("online", True)
+        )
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_extra_state_attributes = self.entity_description.attrs(
-            self.coordinator.data
-        )
+        data = self.coordinator.data or {}
+        self._attr_native_value = data.get(self.entity_description.key)
+        self._attr_extra_state_attributes = self.entity_description.attrs(data)
         self.async_write_ha_state()
     
     @property
@@ -103,6 +119,80 @@ class DuuxTempSensor(DuuxSensor):
                 suggested_display_precision=1,
             ))
 
+class DuuxPM25Sensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, 
+            DuuxSensorEntityDescription(
+                key='ppm',
+                translation_key="pm25",
+                device_class=SensorDeviceClass.PM25,
+                native_unit_of_measurement="µg/m³",
+                state_class=SensorStateClass.MEASUREMENT,
+            ))
+
+class DuuxTVOCSensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device,
+            DuuxSensorEntityDescription(
+                key='tvoc',
+                translation_key="tvoc",
+                # TVOC is a discrete level 0-3: 0=Healthy, 1=Acceptable, 2=Polluted, 3=Harmful
+            ))
+
+    _TVOC_MAP = {
+        0: "healthy",
+        1: "acceptable",
+        2: "polluted",
+        3: "harmful",
+    }
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        data = self.coordinator.data or {}
+        raw = data.get("tvoc")
+        self._attr_native_value = self._TVOC_MAP.get(raw, raw) if raw is not None else None
+        self._attr_extra_state_attributes = self.entity_description.attrs(data)
+        self.async_write_ha_state()
+
+class DuuxFilterLifeSensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, 
+            DuuxSensorEntityDescription(
+                key='filter',
+                translation_key="filter_life",
+                native_unit_of_measurement=PERCENTAGE,
+                state_class=SensorStateClass.MEASUREMENT,
+                icon="mdi:air-filter",
+            ))
+
+class DuuxAirQualitySensor(DuuxSensor):
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, 
+            DuuxSensorEntityDescription(
+                key='aq',
+                translation_key="air_quality_index",
+            ))
+
+    _AQ_MAP = {
+        0: "excellent",
+        1: "very_good",
+        2: "good",
+        3: "fair",
+        4: "poor",
+        5: "harmful",
+    }
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        data = self.coordinator.data or {}
+        raw = data.get("aq")
+        # Map integer API value to translation key; fall back to raw value if unknown
+        self._attr_native_value = self._AQ_MAP.get(raw, raw) if raw is not None else None
+        self._attr_extra_state_attributes = self.entity_description.attrs(data)
+        self.async_write_ha_state()
+
 class DuuxHumiditySensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
         super().__init__(coordinator, api, device, 
@@ -115,8 +205,10 @@ class DuuxHumiditySensor(DuuxSensor):
             ))
 
 class DuuxTimeRemainingSensor(DuuxSensor):
-    def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device, 
+    """Base time remaining sensor — subclass per device to set the correct API key."""
+
+    def __init__(self, coordinator, api, device, key: str):
+        super().__init__(coordinator, api, device,
             DuuxSensorEntityDescription(
                 name="Time Remaining",
                 key='timrm',
@@ -138,3 +230,25 @@ class DuuxErrorSensor(DuuxSensor):
     @property
     def native_value(self):
         return DUUX_ERRID(self.coordinator.data.get(self.entity_description.key)).name.replace('_', ' ')
+                key=key,
+                translation_key="time_remaining",
+                device_class=SensorDeviceClass.DURATION,
+                native_unit_of_measurement=UnitOfTime.MINUTES,
+                state_class=SensorStateClass.MEASUREMENT,
+                suggested_display_precision=0,
+            ))
+
+
+class DuuxBora2024TimeRemainingSensor(DuuxTimeRemainingSensor):
+    """Time remaining sensor for Duux Bora 2024 (API key: 'timrm')."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, key='timrm')
+
+
+class DuuxBright2TimeRemainingSensor(DuuxTimeRemainingSensor):
+    """Time remaining sensor for Duux Bright 2 (API key: 'timerr')."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, key='timerr')
+
