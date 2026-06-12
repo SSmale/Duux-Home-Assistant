@@ -1,17 +1,14 @@
 """Support for Duux de/humidifier devices."""
-import logging
-from typing import Any, Iterator
 
-from homeassistant.components.humidifier import (
-    HumidifierEntity,
-    HumidifierDeviceClass
-)
+import logging
+
+from homeassistant.components.humidifier import HumidifierEntity, HumidifierDeviceClass
 from homeassistant.components.humidifier.const import (
     HumidifierEntityFeature,
     HumidifierAction,
-    MODE_AUTO, MODE_BOOST
+    MODE_AUTO,
+    MODE_BOOST,
 )
-from homeassistant.const import PERCENTAGE
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -20,6 +17,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import *
 
 _LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -49,6 +47,7 @@ async def async_setup_entry(
 
     async_add_entities(entities)
 
+
 class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     """Representation of a Duux de/humidifier device."""
 
@@ -69,7 +68,7 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
         self._attr_max_humidity = 80
 
         # Enable preset 'modes'..
-        self._attr_supported_features = (HumidifierEntityFeature.MODES)
+        self._attr_supported_features = HumidifierEntityFeature.MODES
 
     @property
     def device_info(self):
@@ -77,7 +76,7 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
         return {
             "identifiers": {(DOMAIN, str(self._device_id))},
             "name": self._attr_name,
-            "manufacturer":  self._device.get("manufacturer", "Duux"),
+            "manufacturer": self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
 
@@ -112,13 +111,13 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
 
     @property
     def is_on(self):
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return power == 1
 
     @property
     def action(self):
         """Return current action."""
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
 
     @property
@@ -130,6 +129,8 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     def target_humidity(self):
         """Return the humidity we try to reach."""
         return self.coordinator.data.get("sp")
+
+        return (self.coordinator.data or {}).get("sp")
 
     async def async_set_humidity(self, humidity: int):
         """Set new target humidity."""
@@ -146,7 +147,9 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     @property
     def available(self):
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""
@@ -157,6 +160,7 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     async def async_update(self):
         """Update the entity."""
         await self.coordinator.async_request_refresh()
+
 
 class DuuxBoraDehumidifier(DuuxDehumidifier):
     """Duux Bora Dehumidifier."""
@@ -180,7 +184,7 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode", 0)
+        mode = (self.coordinator.data or {}).get("mode", 0)
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,
@@ -189,10 +193,7 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
 
     async def async_set_mode(self, mode):
         """Set preset mode."""
-        mode_map = {
-            self.PRESET_AUTO: "0",
-            self.PRESET_CONTINUOUS: "1"
-        }
+        mode_map = {self.PRESET_AUTO: "0", self.PRESET_CONTINUOUS: "1"}
 
         mode = mode_map.get(mode, "0")
 

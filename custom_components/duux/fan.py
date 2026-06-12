@@ -16,18 +16,24 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util.percentage import (
     ordered_list_item_to_percentage,
     percentage_to_ordered_list_item,
+    percentage_to_ranged_value,
+    ranged_value_to_percentage,
 )
 
 from .const import (
     DOMAIN,
+    DUUX_DTID_AIR_PURIFIER,
     DUUX_FAN_TYPES,
     DUUX_DTID_FAN,
     DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_2,
+    DUUX_STID_BRIGHT_2,
 )
+
 
 _LOGGER = logging.getLogger(__name__)
 
+SPEED_RANGE = (1, 4)
 # Define preset modes
 PRESET_MODE_NORMAL = "normal"
 PRESET_MODE_NATURAL = "natural"
@@ -56,8 +62,8 @@ async def async_setup_entry(
 
         model = device.get("sensorType", {}).get("name", "Unknown")
 
-        if device_type_id not in [*DUUX_DTID_FAN]:
-            if last_word in DUUX_FAN_TYPES:
+        if device_type_id not in [*DUUX_DTID_FAN, *DUUX_DTID_AIR_PURIFIER]:
+            if last_word in DUUX_FAN_TYPES or DUUX_DTID_AIR_PURIFIER:
                 _LOGGER.warning(
                     "Your device has not been officially catagorised as supporting the fan platform."
                 )
@@ -79,6 +85,8 @@ async def async_setup_entry(
             entities.append(DuuxWhisperFlexTwoFan(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_WHISPER_FLEX:
             entities.append(DuuxWhisperFlexFan(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxAirPurifierFan(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
             entities.append(DuuxFanAutoDiscovery(coordinator, api, device))
@@ -116,6 +124,23 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         self._speed_range = []  # To be defined in subclasses
         self._attr_preset_modes = []  # To be defined in subclasses
         self._attr_speed_count = 0  # To be defined in subclasses
+
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
+
+    @property
+    def device_info(self):
+        """Return device information."""
+        return {
+            "identifiers": {(DOMAIN, str(self._device_id))},
+            "name": self._attr_name,
+            "manufacturer": self._device.get("manufacturer", "Duux"),
+            "model": self._device.get("sensorType", {}).get("name", "Unknown"),
+        }
 
     @property
     def is_on(self):
@@ -361,3 +386,118 @@ class DuuxFanAutoDiscovery(DuuxFan):
         elif isinstance(obj, list):
             for item in obj:
                 yield from DuuxFanAutoDiscovery._deep_find(item, key)
+
+
+class DuuxAirPurifierFan(DuuxFan):
+    """Representation of a Duux air purifier fan."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the fan."""
+        super().__init__(coordinator, api, device)
+        self._attr_supported_features = (
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_ON
+            | FanEntityFeature.TURN_OFF
+        )
+        self._attr_preset_modes = ["Auto"]
+
+    @property
+    def is_on(self) -> bool:
+        """Return true if fan is on."""
+        return (self.coordinator.data or {}).get("power") == 1
+
+    @property
+    def percentage(self) -> int | None:
+        """Return the current speed percentage."""
+        data = self.coordinator.data or {}
+        speed = data.get("speed")
+        if speed is None:
+            return None
+        if speed == 0:
+            # Auto mode: estimate effective speed from air quality sensors
+            # TVOC>1 (Polluted or Harmful) → max speed immediately
+            tvoc = data.get("tvoc") or 0
+            if tvoc > 1:
+                return ranged_value_to_percentage(SPEED_RANGE, SPEED_RANGE[1])
+            # Otherwise derive from AQ: aq=0→speed 1, aq=1→2, aq=2→3, aq≥3→4
+            aq = data.get("aq") or 0
+            estimated = min(aq + 1, SPEED_RANGE[1])
+            return ranged_value_to_percentage(SPEED_RANGE, estimated)
+        return ranged_value_to_percentage(SPEED_RANGE, speed)
+
+    @property
+    def speed_count(self) -> int:
+        """Return the number of speeds the fan supports."""
+        return SPEED_RANGE[1]
+
+    @property
+    def preset_mode(self) -> str | None:
+        """Return the current preset mode."""
+        speed = (self.coordinator.data or {}).get("speed")
+        if speed == 0:
+            return "Auto"
+        return None
+
+    async def async_set_percentage(self, percentage: int) -> None:
+        """Set the speed percentage of the fan."""
+        if percentage == 0:
+            await self.async_turn_off()
+            return
+
+        speed = round(percentage_to_ranged_value(SPEED_RANGE, percentage))
+
+        # Ensure power is ON before sending speed command
+        if not self.is_on:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+
+        await self.hass.async_add_executor_job(
+            self._api.set_speed, self._device_mac, speed
+        )
+
+        # Constraint: Ionizer must be OFF if speed is at lowest (1)
+        if speed == 1 and (self.coordinator.data or {}).get("ion") == 1:
+            await self.hass.async_add_executor_job(
+                self._api.set_ionizer, self._device_mac, False
+            )
+
+        await self.coordinator.async_request_refresh()
+
+    async def async_set_preset_mode(self, preset_mode: str) -> None:
+        """Set the preset mode of the fan."""
+        if preset_mode == "Auto":
+            # Ensure power is ON before sending mode command
+            if not self.is_on:
+                await self.hass.async_add_executor_job(
+                    self._api.set_power, self._device_mac, True
+                )
+            await self.hass.async_add_executor_job(
+                self._api.set_speed, self._device_mac, 0
+            )
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_on(
+        self,
+        percentage: int | None = None,
+        preset_mode: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        """Turn on the fan."""
+        if percentage is not None:
+            await self.async_set_percentage(percentage)
+        elif preset_mode is not None:
+            await self.async_set_preset_mode(preset_mode)
+        else:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+            await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        """Turn off the fan."""
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, False
+        )
+        await self.coordinator.async_request_refresh()

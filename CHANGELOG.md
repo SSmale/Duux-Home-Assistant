@@ -2,29 +2,57 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.7.0-pre-50.5](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.4...v2.7.0-pre-50.5) (2026-06-03)
-
-### Added
-
-* adds initial support for elevate ([#70](https://github.com/SSmale/Duux-Home-Assistant/issues/70)) ([cc97983](https://github.com/SSmale/Duux-Home-Assistant/commit/cc979835eebf32e34f39d283d88182a79423e6cf))
-
-## [2.7.0-pre-50.4](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.3...v2.7.0-pre-50.4) (2026-06-03)
-
-### Added
-
-* adds ossolation for fans ([8b5dc49](https://github.com/SSmale/Duux-Home-Assistant/commit/8b5dc49340123a03ca0c2c025ca87005e2bd9a57))
-
-## [2.7.0-pre-50.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.2...v2.7.0-pre-50.3) (2026-05-27)
+## [2.10.0-pre-44.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-44.2...v2.10.0-pre-44.3) (2026-06-12)
 
 ### Fixed
 
-* adds explicit features for the fan settings ([#69](https://github.com/SSmale/Duux-Home-Assistant/issues/69)) ([639c28c](https://github.com/SSmale/Duux-Home-Assistant/commit/639c28c335aaa25e159b9fe71acf32a63a618848))
+* manifest order ([30a56c1](https://github.com/SSmale/Duux-Home-Assistant/commit/30a56c1429665f470c44fabd4452504fa7dd8be6))
 
-## [2.7.0-pre-50.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0-pre-50.1...v2.7.0-pre-50.2) (2026-05-27)
+## [2.10.0-pre-44.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-44.1...v2.10.0-pre-44.2) (2026-06-12)
 
 ### Fixed
 
-* reduce logging level for api sync ([822bcd2](https://github.com/SSmale/Duux-Home-Assistant/commit/822bcd24d8cad9c3be7709f3154184aad0a90595))
+* fixes merge issue ([da09935](https://github.com/SSmale/Duux-Home-Assistant/commit/da09935bd5e3da98dfd8e702a1f12887ce346ef1))
+
+## [2.10.0-pre-44.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0-pre-44.1) (2026-06-12)
+
+### Added
+
+* adds error switch and fixes diagnostics ([8c8e0d2](https://github.com/SSmale/Duux-Home-Assistant/commit/8c8e0d2d2c5f5206845bc744a52b0a16c9326d3c))
+
+### Fixed
+
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/SSmale/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/SSmale/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
+
+## [2.9.1-pre-65.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.9.1-pre-65.1) (2026-06-12)
+
+### Fixed
+
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([af9e3ac](https://github.com/SSmale/Duux-Home-Assistant/commit/af9e3ace76fbc4bd60b8b735259db4c2254a4fd3))
+
+## [2.9.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.8.0...v2.9.0) (2026-06-12)
+
+### Added
+
+* Updated loglevel for authentication ([#74](https://github.com/SSmale/Duux-Home-Assistant/issues/74)) ([6251e73](https://github.com/SSmale/Duux-Home-Assistant/commit/6251e732d27169d04efbdf63ddbafc3d5abcb7e8)), closes [#59](https://github.com/SSmale/Duux-Home-Assistant/issues/59)
+
+## [2.8.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.7.0...v2.8.0) (2026-06-12)
+
+### Added
+
+* Updated loglevel for authentication ([#74](https://github.com/SSmale/Duux-Home-Assistant/issues/74)) ([#75](https://github.com/SSmale/Duux-Home-Assistant/issues/75)) ([4c482af](https://github.com/SSmale/Duux-Home-Assistant/commit/4c482af64c0481fe9830957ed912c714bac11eb7)), closes [#59](https://github.com/SSmale/Duux-Home-Assistant/issues/59)
+
+## [2.7.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.1...v2.7.0) (2026-06-03)
+
+### Added
+
+* add Duux Bright 2 air purifier support ([#71](https://github.com/SSmale/Duux-Home-Assistant/issues/71)) ([#72](https://github.com/SSmale/Duux-Home-Assistant/issues/72)) ([ca7efef](https://github.com/SSmale/Duux-Home-Assistant/commit/ca7efef01cd42661eff3389faecb34081e07ca8a))
+
+## [2.7.0-pre-71.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.1...v2.7.0-pre-71.1) (2026-06-03)
+
+### Added
+
+* add Duux Bright 2 air purifier support ([#71](https://github.com/SSmale/Duux-Home-Assistant/issues/71)) ([4ac3244](https://github.com/SSmale/Duux-Home-Assistant/commit/4ac324488f2a7526300425338bc6608902d1bd46))
 
 ## [2.6.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.6.0...v2.6.1) (2026-03-12)
 
@@ -70,7 +98,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Initial release
+* Initial release
+
 * Climate entity support for Duux Edge heaters
 * Temperature control (5-36°C)
 * Three preset modes (Low, Boost, High)
@@ -81,7 +110,7 @@ All notable changes to this project will be documented in this file.
 
 ### Known Issues
 
-- None
+* None
 
 ## Future Plans
 
@@ -90,5 +119,3 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
-
-
