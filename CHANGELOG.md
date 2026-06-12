@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.12.0-pre-68.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0-pre-68.2...v2.12.0-pre-68.3) (2026-06-12)
+
+### Fixed
+
+* puts MR removed code back ([99c67fe](https://github.com/SSmale/Duux-Home-Assistant/commit/99c67fe26d147bf62945f12755b840a1db4d60a2))
+
 ## [2.12.0-pre-68.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0-pre-68.1...v2.12.0-pre-68.2) (2026-06-12)
 
 ### Fixed
@@ -214,5 +220,6 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
