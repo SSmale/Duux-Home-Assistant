@@ -1,16 +1,16 @@
 {
+  "domain": "duux",
+  "name": "Duux",
   "codeowners": [
     "@ssmale"
   ],
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/ssmale/Duux-Home-Assistant",
-  "domain": "duux",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ssmale/Duux-Home-Assistant/issues",
-  "name": "Duux",
   "requirements": [
     "requests>=2.31.0"
   ],
-  "version": "2.10.0-pre-44.2"
+  "version": "2.7.0-pre-50.5"
 }
