@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.10.0-pre-44.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0-pre-44.1) (2026-06-12)
+
+### Added
+
+* adds error switch and fixes diagnostics ([8c8e0d2](https://github.com/SSmale/Duux-Home-Assistant/commit/8c8e0d2d2c5f5206845bc744a52b0a16c9326d3c))
+
+### Fixed
+
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/SSmale/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/SSmale/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
+
 ## [2.9.1-pre-65.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.9.1-pre-65.1) (2026-06-12)
 
 ### Fixed
@@ -120,6 +130,7 @@ All notable changes to this project will be documented in this file.
 - [ ] Support for Duux fans
 - [ ] Local API support (if available)
 - [ ] Energy dashboard integration
+
 
 
 
