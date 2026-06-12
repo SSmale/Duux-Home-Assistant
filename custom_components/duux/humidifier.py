@@ -21,6 +21,7 @@ from .const import (
     DUUX_DTID_HUMIDIFIER,
     DUUX_STID_BEAM_MINI,
     DUUX_STID_BORA_2024,
+    DUUX_STID_NEO,
 )
 
 _LOGGER = logging.getLogger(__name__)
