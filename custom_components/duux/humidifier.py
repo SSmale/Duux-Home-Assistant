@@ -5,7 +5,6 @@ import logging
 from homeassistant.components.humidifier import HumidifierEntity, HumidifierDeviceClass
 from homeassistant.components.humidifier.const import (
     HumidifierEntityFeature,
-    HumidifierAction,
     MODE_AUTO,
     MODE_BOOST,
 )
@@ -14,7 +13,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import *
+from .const import (
+    DOMAIN,
+    DUUX_DTID_HUMIDIFIER,
+    DUUX_STID_BEAM_MINI,
+    DUUX_STID_BORA_2024,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -38,10 +42,17 @@ async def async_setup_entry(
 
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
+
         # Create the appropriate de/humidifier entity based on sensor_type_id
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_BEAM_MINI:
+            entities.append(DuuxBeamMiniDehumidifier(coordinator, api, device))
         else:
             _LOGGER.warning(f"Unknown de/humidifier type {sensor_type_id}, skipping.")
 
@@ -117,8 +128,8 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     @property
     def action(self):
         """Return current action."""
-        power = (self.coordinator.data or {}).get("power", 0)
-        return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
+        # Base implementation - override in subclasses
+        pass
 
     @property
     def current_humidity(self):
@@ -184,12 +195,12 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = (self.coordinator.data or {}).get("mode", 0)
+        mode = (self.coordinator.data or {}).get("mode", self.PRESET_AUTO)
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,
         }
-        return mode_map.get(mode)
+        return mode_map.get(mode, self.PRESET_AUTO)
 
     async def async_set_mode(self, mode):
         """Set preset mode."""

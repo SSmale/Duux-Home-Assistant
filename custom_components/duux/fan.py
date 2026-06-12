@@ -58,7 +58,11 @@ async def async_setup_entry(
         last_word = google_type.split(".")[-1]  # "FAN"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         model = device.get("sensorType", {}).get("name", "Unknown")
 
