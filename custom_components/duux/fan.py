@@ -241,7 +241,7 @@ class DuuxWhisperFlexTwoFan(DuuxFan):
     ) -> None:
         """Initialize the fan."""
         super().__init__(coordinator, api, device)
-        SPEED_RANGE_WHISPER_FLEX_2 = list(range(1, 30))
+        SPEED_RANGE_WHISPER_FLEX_2 = list(range(1, 31))
         self._speed_range = SPEED_RANGE_WHISPER_FLEX_2
         self._attr_preset_modes = [PRESET_MODE_NORMAL, PRESET_MODE_NATURAL]
         self._attr_speed_count = len(self._speed_range)
