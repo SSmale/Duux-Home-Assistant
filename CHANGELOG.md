@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.11.0-pre-50.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.0-pre-50.1...v2.11.0-pre-50.2) (2026-06-12)
+
+### Fixed
+
+* reverts merge overrite ([23c9836](https://github.com/SSmale/Duux-Home-Assistant/commit/23c9836555dcfb0976f46441fbef0ff51c626412))
+
+## [2.11.0-pre-50.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0...v2.11.0-pre-50.1) (2026-06-12)
+
+### Added
+
+* adds initial support for elevate ([#70](https://github.com/SSmale/Duux-Home-Assistant/issues/70)) ([cc97983](https://github.com/SSmale/Duux-Home-Assistant/commit/cc979835eebf32e34f39d283d88182a79423e6cf))
+* adds ossolation for fans ([8b5dc49](https://github.com/SSmale/Duux-Home-Assistant/commit/8b5dc49340123a03ca0c2c025ca87005e2bd9a57))
+* adds support for the whisper fans ([8e7bcb2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e7bcb29a565d62e5de496325c4384d2dd2a75b6))
+
+### Fixed
+
+* adds explicit features for the fan settings ([#69](https://github.com/SSmale/Duux-Home-Assistant/issues/69)) ([639c28c](https://github.com/SSmale/Duux-Home-Assistant/commit/639c28c335aaa25e159b9fe71acf32a63a618848))
+* fixes merge issue ([8e777c2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e777c23decd1d0381b834f210e308e1f9306b78))
+* merge issues ([fa31b83](https://github.com/SSmale/Duux-Home-Assistant/commit/fa31b83f5452e344606ca0e7af613309db0418bd))
+
 ## [2.10.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0) (2026-06-12)
 
 ### Added
@@ -112,32 +132,6 @@ All notable changes to this project will be documented in this file.
 
 ## [2.5.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.1...v2.5.0) (2026-01-23)
 
-### Added
-
-* adds support for reporting unknown devices. ([772eba0](https://github.com/SSmale/Duux-Home-Assistant/commit/772eba0a7b26462c1be3b0febb0b56ff680930e2))
-
-## [2.4.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.4.0...v2.4.1) (2026-01-21)
-
-### Fixed
-
-* moves the v1 heater to the THERMOSTAT type array ([36b55fc](https://github.com/SSmale/Duux-Home-Assistant/commit/36b55fc284c059dfde31cf31573760d7a7a30583)), closes [#27](https://github.com/SSmale/Duux-Home-Assistant/issues/27)
-
-## [2.4.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.3...v2.4.0) (2026-01-18)
-
-### Added
-
-* adds device diagnostics and fixes humidifier  ([6541b03](https://github.com/SSmale/Duux-Home-Assistant/commit/6541b03968dead77dc29435cd91a93e479e6c316))
-
-## [2.3.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.2...v2.3.3) (2026-01-17)
-
-### Fixed
-
-* fixes a renamed import that got missed in a refactor ([a90881f](https://github.com/SSmale/Duux-Home-Assistant/commit/a90881f8b02241aa7d265c522c58b38ec65cdd4f))
-
-## [2.3.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.1...v2.3.2) (2026-01-17)
-
-### Fixed
-
 * adds in the other currently know type ids for heaters ([d7dcf94](https://github.com/SSmale/Duux-Home-Assistant/commit/d7dcf944023ca8988e77c337080b274594f71e42))
 
 ## [2.3.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.3.0...v2.3.1) (2026-01-17)
@@ -150,7 +144,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Initial release
+* Initial release
+
 * Climate entity support for Duux Edge heaters
 * Temperature control (5-36°C)
 * Three preset modes (Low, Boost, High)
@@ -161,7 +156,7 @@ All notable changes to this project will be documented in this file.
 
 ### Known Issues
 
-- None
+* None
 
 ## Future Plans
 

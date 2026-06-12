@@ -96,6 +96,11 @@ class DuuxAPI:
         #       use 'set-point' (aka 'sp') to track a target value.
         return self.send_command(device_mac, f"tune set sp {temp}")
 
+    def set_speed(self, device_mac, speed):
+        """Set target speed (1-30)."""
+        speed = max(1, min(30, int(speed)))
+        return self.send_command(device_mac, f"tune set speed {speed}")
+
     def set_humidity(self, device_mac, humidity):
         """Set target humidity (30-80%)."""
         temp = max(30, min(80, int(humidity)))
@@ -157,3 +162,13 @@ class DuuxAPI:
         """Set timer in hours."""
         value = max(0, min(24, int(hours)))
         return self.send_command(device_mac, f"tune set timer {value}")
+
+    def set_horosc(self, device_mac, value):
+        """Set horizontal oscillation (0=off, 1=30°, 2=60°, 3=90°)."""
+        value = max(0, min(3, int(value)))
+        return self.send_command(device_mac, f"tune set horosc {value}")
+
+    def set_verosc(self, device_mac, value):
+        """Set vertical oscillation (0=off, 1=45°, 2=100°)."""
+        value = max(0, min(2, int(value)))
+        return self.send_command(device_mac, f"tune set verosc {value}")

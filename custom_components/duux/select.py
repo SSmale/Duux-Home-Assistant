@@ -107,7 +107,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
         }
-        return mode_map.get(mode, self.FAN_LOW)
+        return mode_map.get(mode)
 
     async def async_select_option(self, option):
         """Set fan speed mode."""
