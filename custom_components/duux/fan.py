@@ -28,12 +28,12 @@ from .const import (
     DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_BRIGHT_2,
+    DUUX_STID_WHISPER_FLEX_ULTIMATE,
 )
 
 
 _LOGGER = logging.getLogger(__name__)
 
-SPEED_RANGE = (1, 4)
 # Define preset modes
 PRESET_MODE_NORMAL = "normal"
 PRESET_MODE_NATURAL = "natural"
@@ -53,48 +53,50 @@ async def async_setup_entry(
 
     entities = []
     for device in devices:
-        device_type_id = device.get("sensorType").get("type")
-        google_type = device.get("sensorType").get("googleDeviceType")
-        last_word = google_type.split(".")[-1]  # "FAN"
+        sensor_type = device.get("sensorType") or {}
+        device_type_id = sensor_type.get("type")
+        google_type = sensor_type.get("googleDeviceType") or ""
+        last_word = google_type.split(".")[-1]  # "FAN", "HEATER", etc.
         sensor_type_id = device.get("sensorTypeId")
-        device_id = device["deviceId"]
-        coordinator = coordinator = coordinators.get(device_id)
+        device_id = device.get("deviceId")
+        coordinator = coordinators.get(device_id)
 
         # Skip devices that have no coordinator (were filtered out in __init__)
         if coordinator is None:
             continue
 
-        model = device.get("sensorType", {}).get("name", "Unknown")
+        model = sensor_type.get("name", "Unknown")
 
         if device_type_id not in [*DUUX_DTID_FAN, *DUUX_DTID_AIR_PURIFIER]:
             if last_word in DUUX_FAN_TYPES:
                 _LOGGER.warning(
-                    "Your device has not been officially catagorised as supporting the fan platform."
+                    "Device '%s' (type=%s, sensorTypeId=%s, googleType=%s) is not "
+                    "officially categorised as a fan but matches a known fan Google "
+                    "type — attempting to set up as fan. Please report this to the "
+                    "integration developer.",
+                    model,
+                    device_type_id,
+                    sensor_type_id,
+                    google_type,
                 )
-                _LOGGER.warning(
-                    f"It is classified as type {last_word}, so attempting to set up as a fan device.",
-                )
-                _LOGGER.warning(
-                    "Please report this to the integration developer so they can update the supported device list.",
-                )
-                _LOGGER.warning(
-                    f"Required details: Device Name: {model}, Device Type ID: {device_type_id}, Sensor Type ID: {sensor_type_id}, Google Device Type: {google_type}",
-                )
-
             else:
                 continue
 
-        # Create the appropriate fan entity based on heater type
         if sensor_type_id == DUUX_STID_WHISPER_FLEX_2:
             entities.append(DuuxWhisperFlexTwoFan(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_WHISPER_FLEX:
             entities.append(DuuxWhisperFlexFan(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxAirPurifierFan(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_WHISPER_FLEX_ULTIMATE:
+            entities.append(DuuxWhisperFlexUltimateFan(coordinator, api, device))
         else:
-            # Fallback to generic entity for unknown types
             entities.append(DuuxFanAutoDiscovery(coordinator, api, device))
-            _LOGGER.warning(f"Unknown fan type {sensor_type_id}, using generic entity")
+            _LOGGER.warning(
+                "Unknown fan sensorTypeId %s for device '%s' — using generic autodiscovery entity.",
+                sensor_type_id,
+                model,
+            )
 
     async_add_entities(entities)
 
@@ -147,23 +149,23 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         }
 
     @property
-    def is_on(self):
-        power = self.coordinator.data.get("power", 0)
-        return power == 1
+    def is_on(self) -> bool:
+        return (self.coordinator.data or {}).get("power") == 1
 
     @property
     def percentage(self) -> int | None:
-        """Return the current speed percentage."""
-        speed = self.coordinator.data.get("speed")
+        speed = (self.coordinator.data or {}).get("speed")
         if speed is None:
             return None
-
-        return ordered_list_item_to_percentage(self._speed_range, speed)
+        try:
+            return ordered_list_item_to_percentage(self._speed_range, int(speed))
+        except (ValueError, KeyError):
+            return None
 
     @property
     def preset_mode(self) -> str | None:
         """Return the current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = (self.coordinator.data or {}).get("mode")
 
         if mode == 0:
             return PRESET_MODE_NORMAL
@@ -245,6 +247,22 @@ class DuuxWhisperFlexTwoFan(DuuxFan):
         self._attr_speed_count = len(self._speed_range)
 
 
+class DuuxWhisperFlexUltimateFan(DuuxFan):
+    """Representation of a DUUX Whisper Flex Ultimate fan (sensorTypeId 40)."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device)
+
+        self._speed_range = list(range(1, 31))
+        self._attr_speed_count = len(self._speed_range)
+
+        self._attr_preset_modes = [
+            PRESET_MODE_NORMAL,  # value 0
+            PRESET_MODE_NATURAL,  # value 1
+            PRESET_MODE_NIGHT,  # value 2
+        ]
+
+
 class DuuxWhisperFlexFan(DuuxFan):
     """Representation of a DUUX Whisper Flex 2 fan."""
 
@@ -267,115 +285,216 @@ class DuuxWhisperFlexFan(DuuxFan):
 
 
 class DuuxFanAutoDiscovery(DuuxFan):
-    """Duux fan autodiscovery."""
+    """Duux fan autodiscovery — builds speed list and presets from device traits."""
 
     def __init__(self, coordinator, api, device):
-        """Initialize the fan device."""
         super().__init__(coordinator, api, device)
-        self._presets = self.presets_discovery()
+        self._speed_presets = (
+            self._discover_speeds()
+        )  # list of {"speed", "label", "command"}
+        self._mode_presets = (
+            self._discover_modes()
+        )  # list of {"name", "value", "label", "command"}
 
-    def presets_discovery(self):
-        """Discover available presets."""
+        # Wire up the speed range HA needs for percentage conversion
+        numeric = [int(p["speed"]) for p in self._speed_presets if p["speed"].isdigit()]
+        self._speed_range = (
+            list(range(min(numeric), max(numeric) + 1)) if numeric else []
+        )
+        self._attr_speed_count = len(self._speed_range)
 
-        # Guard against coordinator.data being None during initialization
-        modes: Any = (self.coordinator.data or {}).get("availableModes")
-        if modes is None:
-            modes = next(
-                DuuxFanAutoDiscovery._deep_find(self._device, "availableModes"),
-                None,
-            )
+        # Preset modes come from the Modes trait, not speeds
+        self._attr_preset_modes = [p["name"] for p in self._mode_presets] or None
 
-        if isinstance(modes, list):
-            modes = next(
-                (
-                    candidate
-                    for candidate in modes
-                    if isinstance(candidate, dict) and candidate.get("settings")
-                ),
-                None,
-            )
+    # ── Trait discovery helpers ────────────────────────────────────────────────
 
-        if not isinstance(modes, dict):
-            _LOGGER.debug("No available modes found")
-            return []
+    def _get_traits(self) -> list:
+        """Return the Traits list from the device's sensorType."""
+        sensor_type: dict = self._device.get("sensorType") or {}
+        traits = sensor_type.get("Traits")
+        if isinstance(traits, list):
+            return traits
+        # Fallback deep-search (handles unexpected nesting)
+        return list(DuuxFanAutoDiscovery._deep_find(self._device, "Traits"))
 
-        settings = modes.get("settings")
-        if not isinstance(settings, list):
-            _LOGGER.debug("No settings found in available modes")
-            return []
+    def _discover_speeds(self) -> list[dict]:
+        """Parse the FanSpeed trait into a list of speed dicts."""
+        traits = self._get_traits()
 
-        command_prefix = (
-            modes.get("command_key") or modes.get("commandKey") or modes.get("key")
+        fan_speed_trait = next(
+            (
+                t
+                for t in traits
+                if isinstance(t, dict)
+                and (
+                    t.get("name") == "FanSpeed"
+                    or (t.get("config") or {})
+                    .get("unique_name", "")
+                    .startswith("FanSpeed")
+                )
+            ),
+            None,
         )
 
-        presets = []
-        for setting in settings:
-            if not isinstance(setting, dict):
+        if fan_speed_trait is None:
+            _LOGGER.debug("%s: no FanSpeed trait found", self._attr_name)
+            return []
+
+        commands: list = fan_speed_trait.get("commands") or []
+        cmd_template: str = commands[0] if commands else "tune set speed {fanSpeed}"
+
+        settings: dict = fan_speed_trait.get("settings") or {}
+        raw_speeds: list = (settings.get("availableFanSpeeds") or {}).get(
+            "speeds"
+        ) or []
+
+        speeds = []
+        for raw in raw_speeds:
+            if not isinstance(raw, dict):
+                continue
+            speed_name: str = raw.get("speed_name") or raw.get("speedName") or ""
+            if not speed_name:
                 continue
 
-            name = (
-                setting.get("setting_name")
-                or setting.get("settingName")
-                or setting.get("name")
+            label = speed_name
+            for sv in raw.get("speed_values") or []:
+                if isinstance(sv, dict) and sv.get("lang") == "en":
+                    synonyms = sv.get("speed_synonym") or []
+                    if synonyms:
+                        label = synonyms[0]
+                    break
+
+            speeds.append(
+                {
+                    "speed": speed_name,
+                    "label": label,
+                    "command": cmd_template.replace("{fanSpeed}", speed_name),
+                }
             )
 
-            value = (
-                setting.get("setting_value")
-                or setting.get("settingValue")
-                or setting.get("value")
-            )
+        _LOGGER.debug("%s: discovered %d speeds", self._attr_name, len(speeds))
+        return speeds
 
-            name = self._normalize_mode_name(name, value)
+    def _discover_modes(self) -> list[dict]:
+        """Parse all Modes traits into a flat list of preset dicts."""
+        traits = self._get_traits()
+        presets: list[dict] = []
 
-            command = setting.get("command")
-            if command is None and command_prefix and value is not None:
-                command = f"{command_prefix} {value}"
-            elif command is None:
-                command = value
+        for trait in traits:
+            if not isinstance(trait, dict) or trait.get("name") != "Modes":
+                continue
 
-            if name and command is not None:
-                normalized_command = str(command)
-                normalized_value = None if value is None else str(value)
-                presets.append(
-                    {
-                        "name": str(name),
-                        "command": normalized_command,
-                        "value": normalized_value,
-                    }
+            commands: list = trait.get("commands") or []
+            cmd_template: str = commands[0] if commands else ""
+            config: dict = trait.get("config") or {}
+            settings: dict = trait.get("settings") or {}
+
+            for mode_group in settings.get("availableModes") or []:
+                if not isinstance(mode_group, dict):
+                    continue
+
+                command_key: str = (
+                    mode_group.get("command_key") or mode_group.get("commandKey") or ""
                 )
 
-        _LOGGER.debug("Discovered presets: %s", presets)
+                for raw_setting in mode_group.get("settings") or []:
+                    if not isinstance(raw_setting, dict):
+                        continue
 
+                    setting_name: str = (
+                        raw_setting.get("setting_name")
+                        or raw_setting.get("settingName")
+                        or ""
+                    )
+                    setting_value: str = (
+                        raw_setting.get("setting_value")
+                        or raw_setting.get("settingValue")
+                        or ""
+                    )
+
+                    label = setting_name
+                    for sv in raw_setting.get("setting_values") or []:
+                        if isinstance(sv, dict) and sv.get("lang") == "en":
+                            synonyms = sv.get("setting_synonym") or []
+                            if synonyms:
+                                label = synonyms[0]
+                            break
+
+                    command = cmd_template.replace(f"{{{command_key}}}", setting_value)
+
+                    presets.append(
+                        {
+                            "name": label,  # display name, e.g. "Night"
+                            "setting_name": setting_name,  # raw key, e.g. "low"
+                            "value": setting_value,  # raw value, e.g. "2"
+                            "command": command,  # e.g. "tune set mode 2"
+                        }
+                    )
+
+        _LOGGER.debug("%s: discovered mode presets: %s", self._attr_name, presets)
         return presets
 
-    def _normalize_mode_name(self, name, value: Any) -> Any:
-        """Return normalized mode value."""
-        return name
+    # ── HA properties ─────────────────────────────────────────────────────────
 
     @property
-    def preset_mode(self):
-        """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
-        for preset in self._presets:
+    def percentage(self) -> int | None:
+        """Return current speed as a percentage."""
+        speed = (self.coordinator.data or {}).get("speed")
+        if speed is None or not self._speed_range:
+            return None
+        try:
+            return ordered_list_item_to_percentage(self._speed_range, int(speed))
+        except (ValueError, KeyError):
+            return None
+
+    @property
+    def preset_mode(self) -> str | None:
+        """Return current preset mode label."""
+        if not self._mode_presets:
+            return None
+        mode = (self.coordinator.data or {}).get("mode")
+        if mode is None:
+            return None
+        for preset in self._mode_presets:
             if preset["value"] == str(mode):
                 return preset["name"]
         return None
 
     @property
-    def preset_modes(self):
-        """Return available preset modes."""
-        # Base implementation - override in subclasses if needed
-        return [preset["name"] for preset in self._presets]
+    def preset_modes(self) -> list[str] | None:
+        """Return available preset mode labels."""
+        return [p["name"] for p in self._mode_presets] or None
 
-    async def async_set_preset_mode(self, preset_mode):
-        """Set preset mode."""
-        for preset in self._presets:
-            if preset["name"] == preset_mode:
-                mode_command = preset["command"]
-                break
+    # ── HA commands ───────────────────────────────────────────────────────────
 
+    async def async_set_percentage(self, percentage: int) -> None:
+        """Set speed by percentage."""
+        if percentage == 0:
+            await self.async_turn_off()
+            return
+        if not self._speed_range:
+            return
+        speed = percentage_to_ordered_list_item(self._speed_range, percentage)
+        # Find the matching preset to get the pre-built command
+        preset = next(
+            (p for p in self._speed_presets if int(p["speed"]) == speed), None
+        )
+        command = preset["command"] if preset else f"tune set speed {speed}"
         await self.hass.async_add_executor_job(
-            self._api.send_command, self._device_mac, f"tune set {mode_command}"
+            self._api.send_command, self._device_mac, command
+        )
+        await self.coordinator.async_request_refresh()
+
+    async def async_set_preset_mode(self, preset_mode: str) -> None:
+        """Set preset mode by label."""
+        preset = next((p for p in self._mode_presets if p["name"] == preset_mode), None)
+        if preset is None:
+            _LOGGER.warning(
+                "%s: unknown preset mode '%s'", self._attr_name, preset_mode
+            )
+            return
+        await self.hass.async_add_executor_job(
+            self._api.send_command, self._device_mac, preset["command"]
         )
         await self.coordinator.async_request_refresh()
 
@@ -395,6 +514,8 @@ class DuuxFanAutoDiscovery(DuuxFan):
 class DuuxAirPurifierFan(DuuxFan):
     """Representation of a Duux air purifier fan."""
 
+    SPEED_RANGE = (1, 4)
+
     def __init__(self, coordinator, api, device):
         """Initialize the fan."""
         super().__init__(coordinator, api, device)
@@ -404,6 +525,9 @@ class DuuxAirPurifierFan(DuuxFan):
             | FanEntityFeature.TURN_ON
             | FanEntityFeature.TURN_OFF
         )
+        SPEED_RANGE_AIR_PURIFIER = list(range(1, 4))
+        self._speed_range = SPEED_RANGE_AIR_PURIFIER
+        self._attr_speed_count = len(self._speed_range)
         self._attr_preset_modes = ["Auto"]
 
     @property
@@ -423,17 +547,17 @@ class DuuxAirPurifierFan(DuuxFan):
             # TVOC>1 (Polluted or Harmful) → max speed immediately
             tvoc = data.get("tvoc") or 0
             if tvoc > 1:
-                return ranged_value_to_percentage(SPEED_RANGE, SPEED_RANGE[1])
+                return ranged_value_to_percentage(self.SPEED_RANGE, self.SPEED_RANGE[1])
             # Otherwise derive from AQ: aq=0→speed 1, aq=1→2, aq=2→3, aq≥3→4
             aq = data.get("aq") or 0
-            estimated = min(aq + 1, SPEED_RANGE[1])
-            return ranged_value_to_percentage(SPEED_RANGE, estimated)
-        return ranged_value_to_percentage(SPEED_RANGE, speed)
+            estimated = min(aq + 1, self.SPEED_RANGE[1])
+            return ranged_value_to_percentage(self.SPEED_RANGE, estimated)
+        return ranged_value_to_percentage(self.SPEED_RANGE, speed)
 
     @property
     def speed_count(self) -> int:
         """Return the number of speeds the fan supports."""
-        return SPEED_RANGE[1]
+        return self.SPEED_RANGE[1]
 
     @property
     def preset_mode(self) -> str | None:
@@ -449,7 +573,7 @@ class DuuxAirPurifierFan(DuuxFan):
             await self.async_turn_off()
             return
 
-        speed = round(percentage_to_ranged_value(SPEED_RANGE, percentage))
+        speed = round(percentage_to_ranged_value(self.SPEED_RANGE, percentage))
 
         # Ensure power is ON before sending speed command
         if not self.is_on:
