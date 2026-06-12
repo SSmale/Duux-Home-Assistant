@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.10.0-pre-68.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-68.2...v2.10.0-pre-68.3) (2026-06-12)
+
+### Added
+
+* gets the ultimate fan setup ([0715f28](https://github.com/SSmale/Duux-Home-Assistant/commit/0715f28b7ff859ca1e68348a746290378f9dfa46))
+
 ## [2.10.0-pre-68.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-68.1...v2.10.0-pre-68.2) (2026-06-12)
 
 ### Fixed
@@ -140,4 +146,5 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
