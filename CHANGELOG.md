@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.11.0-pre-55.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.0-pre-55.2...v2.11.0-pre-55.3) (2026-06-12)
+
+### Fixed
+
+* fixes merge issue with import ([3e5d4e7](https://github.com/SSmale/Duux-Home-Assistant/commit/3e5d4e78c9e1754574e080adbf07b90962ff9190))
+
+## [2.11.0-pre-55.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.0-pre-55.1...v2.11.0-pre-55.2) (2026-06-12)
+
+### Fixed
+
+* fixes manifest ([5cb9644](https://github.com/SSmale/Duux-Home-Assistant/commit/5cb9644f925015539a31d7465094248bb6a2ff3f))
+
+## [2.11.0-pre-55.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0...v2.11.0-pre-55.1) (2026-06-12)
+
+### Added
+
+* Add Duux Neo Humidifier support ([#55](https://github.com/SSmale/Duux-Home-Assistant/issues/55)) ([e65fd09](https://github.com/SSmale/Duux-Home-Assistant/commit/e65fd09b6237bca331c103080906423f6292c6b0))
+* adds neo support ([332769f](https://github.com/SSmale/Duux-Home-Assistant/commit/332769fa003072808539898b4542bc582f7901f3))
+* adds the Whisper Fans ([#51](https://github.com/SSmale/Duux-Home-Assistant/issues/51)) ([78395c8](https://github.com/SSmale/Duux-Home-Assistant/commit/78395c8ec493975446fd8111403ed26e7d1eb885)), closes [#69](https://github.com/SSmale/Duux-Home-Assistant/issues/69) [#70](https://github.com/SSmale/Duux-Home-Assistant/issues/70)
+
 ## [2.11.0-pre-50.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.0-pre-50.1...v2.11.0-pre-50.2) (2026-06-12)
 
 ### Fixed
@@ -165,5 +185,6 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
