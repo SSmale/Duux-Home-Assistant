@@ -135,17 +135,17 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def current_temperature(self):
         """Return the current temperature."""
-        return self.coordinator.data.get("temp")
+        return (self.coordinator.data or {}).get("temp")
 
     @property
     def target_temperature(self):
         """Return the temperature we try to reach."""
-        return self.coordinator.data.get("sp")
+        return (self.coordinator.data or {}).get("sp")
 
     @property
     def hvac_mode(self):
         """Return current operation."""
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return HVACMode.HEAT if power == 1 else HVACMode.OFF
 
     @property
@@ -197,7 +197,9 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def available(self):
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""
@@ -299,7 +301,7 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = (self.coordinator.data or {}).get("mode")
         for preset in self._presets:
             if preset["value"] == str(mode):
                 return preset["name"]
@@ -392,9 +394,9 @@ class DuuxEdgeTwoClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
+        mode = (self.coordinator.data or {}).get("heatin", 1)
         mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
-        return mode_map.get(mode, self.PRESET_LOW)
+        return mode_map.get(mode)
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
@@ -429,12 +431,12 @@ class DuuxEdgeClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
+        mode = (self.coordinator.data or {}).get("heatin", 1)
         mode_map = {
             1: self.PRESET_LOW,
             2: self.PRESET_HIGH,
         }
-        return mode_map.get(mode, self.PRESET_LOW)
+        return mode_map.get(mode)
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""

@@ -30,7 +30,7 @@ class DuuxAPI:
             self.token = data.get("token")
             if self.token:
                 self.session.headers.update({"Authorization": f"{self.token}"})
-                _LOGGER.warning("Successfully logged in to Duux API")
+                _LOGGER.info("Successfully logged in to Duux API")
                 return True
 
             _LOGGER.error("No token received from Duux API")
@@ -58,7 +58,17 @@ class DuuxAPI:
         devices = self.get_devices()
         for device in devices:
             if device.get("deviceId") == device_id:
-                return device.get("latestData", {}).get("fullData", {})
+                latest_data = device.get("latestData")
+                if latest_data is None:
+                    return {"online": device.get("online", True)}
+
+                data = latest_data.get("fullData")
+                if data is None:
+                    return {"online": device.get("online", True)}
+
+                data_copy = data.copy()
+                data_copy["online"] = device.get("online", True)
+                return data_copy
         return {}
 
     def send_command(self, device_mac, command):
@@ -112,6 +122,16 @@ class DuuxAPI:
         mode_val = max(0, min(1, int(mode)))
         return self.send_command(device_mac, f"tune set fan {mode_val}")
 
+    def set_speed(self, device_mac, mode):
+        """Set fan speed (0=Auto, 1-4=Speed)."""
+        mode_val = max(0, min(4, int(mode)))
+        return self.send_command(device_mac, f"tune set speed {mode_val}")
+
+    def set_ionizer(self, device_mac, ion_on):
+        """Set ionizer on or off."""
+        value = "1" if ion_on else "0"
+        return self.send_command(device_mac, f"tune set ion {value}")
+
     def set_night_mode(self, device_mac, night_on):
         """Set night mode."""
         value = "01" if night_on else "00"
@@ -141,3 +161,13 @@ class DuuxAPI:
         """Set timer in hours."""
         value = max(0, min(24, int(hours)))
         return self.send_command(device_mac, f"tune set timer {value}")
+
+    def set_horosc(self, device_mac, value):
+        """Set horizontal oscillation (0=off, 1=30°, 2=60°, 3=90°)."""
+        value = max(0, min(3, int(value)))
+        return self.send_command(device_mac, f"tune set horosc {value}")
+
+    def set_verosc(self, device_mac, value):
+        """Set vertical oscillation (0=off, 1=45°, 2=100°)."""
+        value = max(0, min(2, int(value)))
+        return self.send_command(device_mac, f"tune set verosc {value}")

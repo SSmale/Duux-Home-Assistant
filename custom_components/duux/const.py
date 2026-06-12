@@ -1,4 +1,5 @@
 # custom_components/duux/const.py
+from enum import Enum
 
 DOMAIN = "duux"
 CONF_EMAIL = "email"
@@ -21,20 +22,29 @@ DUUX_STID_BORA_2024 = 62
 DUUX_STID_WHISPER_FLEX_2 = 67
 DUUX_STID_WHISPER_FLEX = 36
 DUUX_STID_WHISPER_FLEX_ULTIMATE = 40
+DUUX_STID_WHISPER_FLEX_ELIVATE = 70
+DUUX_STID_BRIGHT_2 = 61
 
 # Device Type IDs
 DUUX_DTID_THERMOSTAT = [50, 52]
 DUUX_DTID_HEATER = [51, 21, 23]
 DUUX_DTID_HUMIDIFIER = [56]
-DUUX_DTID_FAN = [26, 58, 27]
+DUUX_DTID_FAN = [26, 58, 27, 59]
+DUUX_DTID_AIR_PURIFIER = [55]
 
 DUUX_DTID_OTHER_HEATER = []
 
 DUUX_CLIMATE_TYPES = ["THERMOSTAT", "HEATER"]
 DUUX_HUMIDIFIER_TYPES = ["HUMIDIFIER"]
 DUUX_FAN_TYPES = ["FAN"]
+DUUX_AIR_PURIFIER_TYPES = ["AIRPURIFIER"]
 
-DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES + DUUX_FAN_TYPES
+DUUX_SUPPORTED_TYPES = (
+    DUUX_CLIMATE_TYPES
+    + DUUX_HUMIDIFIER_TYPES
+    + DUUX_FAN_TYPES
+    + DUUX_AIR_PURIFIER_TYPES
+)
 
 # {
 #     "data": [
@@ -70,3 +80,17 @@ DUUX_SUPPORTED_TYPES = DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES + DUUX_FAN_TYP
 #         },
 #     ],
 # }
+
+
+# Error codes
+class DUUX_ERRID(Enum):
+    Unavailable = None
+    OK = 0
+    Ice_Detected = 4
+    Water_Tank_Full = 8
+
+    Unknown_Error = 9999999
+
+    @classmethod
+    def _missing_(cls, value):
+        return cls.Unknown_Error
