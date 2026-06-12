@@ -1,0 +1,40 @@
+---
+name: Device Not Supported
+description: This is to submit details of a device not being supported.
+title: 'Add support for'
+labels: User Reported
+body:
+  - id: device_name
+    type: input
+    attributes:
+      label: The device name from Duux
+  - id: device_type_id
+    type: input
+    attributes:
+      label: The device type ID
+  - id: sensor_type_id
+    type: input
+    attributes:
+      label: The sensor type ID
+  - id: reported_type
+    type: input
+    attributes:
+      label: The device type Duux reports to Google
+  - type: textarea
+    attributes:
+      label: Describe the device
+      description: A clear and concise description of what the device is. A URL to the product page and manual would be helpful
+      placeholder: 'The Duux XYZ is a smart humidifier that can be controlled via the Duux app. It features a 4L water tank, adjustable mist levels, and a built-in hygrometer. Manual can be found at https://www.duux.com/xyz-manual'
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Supported Commands
+      description: Please paste the output from following this guide - https://github.com/SSmale/Duux-Home-Assistant/wiki/Getting-the-sensor-data-from-Home-Assistant
+  - id: help_test
+    type: checkboxes
+    attributes:
+      label: Are you willing to help test?
+      options:
+        - label: 'Yes'
+        - label: 'No'

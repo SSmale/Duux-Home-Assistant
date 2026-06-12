@@ -44,7 +44,12 @@ async def async_setup_entry(
 
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
+
         # Create the appropriate de/humidifier entity based on sensor_type_id
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
@@ -118,7 +123,7 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
 
     @property
     def is_on(self):
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return power == 1
 
     @property
@@ -130,12 +135,12 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
     @property
     def current_humidity(self):
         """Return the current humidity."""
-        return self.coordinator.data.get("hum")
+        return (self.coordinator.data or {}).get("hum")
 
     @property
     def target_humidity(self):
         """Return the humidity we try to reach."""
-        return self.coordinator.data.get("sp")
+        return (self.coordinator.data or {}).get("sp")
 
     async def async_set_humidity(self, humidity: int):
         """Set new target humidity."""
@@ -152,7 +157,9 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
     @property
     def available(self):
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""
@@ -219,7 +226,7 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode", self.PRESET_AUTO)
+        mode = (self.coordinator.data or {}).get("mode", self.PRESET_AUTO)
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,

@@ -1,4 +1,5 @@
 # custom_components/duux/const.py
+from enum import Enum
 
 DOMAIN = "duux"
 CONF_EMAIL = "email"
@@ -15,18 +16,27 @@ API_COMMANDS = "/sensor/{deviceMac}/commands"
 DUUX_STID_THREESIXTY_TWO = 31
 DUUX_STID_THREESIXTY_2023 = 49
 DUUX_STID_EDGEHEATER_V2 = 50
+DUUX_STID_EDGEHEATER_2000 = 33
 DUUX_STID_EDGEHEATER_2023_V1 = 51
 DUUX_STID_BORA_2024 = 62
 DUUX_STID_BEAM_MINI = 35
+DUUX_STID_BRIGHT_2 = 61
 
 # Device Type IDs
-
 DUUX_DTID_THERMOSTAT = [50]
-DUUX_DTID_HEATER = [51, 52]
+DUUX_DTID_HEATER = [51, 52, 21, 23]
 DUUX_DTID_HUMIDIFIER = [56, 25]
+DUUX_DTID_AIR_PURIFIER = [55]
 
-DUUX_DTID_OTHER_HEATER = [21, 23]
+DUUX_DTID_OTHER_HEATER = []
 
+DUUX_CLIMATE_TYPES = ["THERMOSTAT", "HEATER"]
+DUUX_HUMIDIFIER_TYPES = ["HUMIDIFIER"]
+DUUX_AIR_PURIFIER_TYPES = ["AIRPURIFIER"]
+
+DUUX_SUPPORTED_TYPES = (
+    DUUX_CLIMATE_TYPES + DUUX_HUMIDIFIER_TYPES + DUUX_AIR_PURIFIER_TYPES
+)
 
 # {
 #     "data": [
@@ -62,3 +72,17 @@ DUUX_DTID_OTHER_HEATER = [21, 23]
 #         },
 #     ],
 # }
+
+
+# Error codes
+class DUUX_ERRID(Enum):
+    Unavailable = None
+    OK = 0
+    Ice_Detected = 4
+    Water_Tank_Full = 8
+
+    Unknown_Error = 9999999
+
+    @classmethod
+    def _missing_(cls, value):
+        return cls.Unknown_Error
