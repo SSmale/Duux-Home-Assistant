@@ -249,11 +249,6 @@ class DuuxHumiditySensor(DuuxSensor):
 
 
 class DuuxTimeRemainingSensor(DuuxSensor):
-    def __init__(self, coordinator, api, device):
-        super().__init__(
-            coordinator,
-            api,
-            device,
     """Base time remaining sensor — subclass per device to set the correct API key."""
 
     def __init__(self, coordinator, api, device, key: str):
@@ -262,8 +257,8 @@ class DuuxTimeRemainingSensor(DuuxSensor):
             api,
             device,
             DuuxSensorEntityDescription(
-                name="Time Remaining",
-                key="timrm",
+                key=key,
+                translation_key="time_remaining",
                 device_class=SensorDeviceClass.DURATION,
                 native_unit_of_measurement=UnitOfTime.MINUTES,
                 state_class=SensorStateClass.MEASUREMENT,
