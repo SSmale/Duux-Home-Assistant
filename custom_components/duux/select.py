@@ -30,6 +30,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
+        # Added Duux Bright 2 for timer selector
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxBright2TimerSelector(coordinator, api, device))
     
     async_add_entities(entities)
 
@@ -47,6 +50,14 @@ class DuuxSelector(CoordinatorEntity, SelectEntity):
         self._attr_unique_id = f"duux_{self._device_id}"
         self.device_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
+
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return (
+            self.coordinator.last_update_success
+            and (self.coordinator.data or {}).get("online", True)
+        )
 
     @property
     def device_info(self):
@@ -69,7 +80,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
         """Initialize the fan speed selector."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_fan_speed"
-        self._attr_name = "Fan Speed"
+        self._attr_translation_key = "fan_speed"
         self._attr_icon = "mdi:fan"
 
     @property
@@ -80,7 +91,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current fan mode."""
-        mode = self.coordinator.data.get("fan")
+        mode = (self.coordinator.data or {}).get("fan")
         mode_map = {
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
@@ -108,15 +119,14 @@ class DuuxTimerSelector(DuuxSelector):
         """Initialize the timer selector."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_timer"
-        self._attr_name = "Timer"
+        self._attr_translation_key = "timer"
         self._attr_icon = "mdi:timer"
-        self._attr_unit_of_measurement = UnitOfTime.HOURS
         self._attr_options = list(map(str, range(0, 24+1)))
 
     @property
     def current_option(self):
         """Return current timer."""
-        return str(self.coordinator.data.get("timer"))
+        return str((self.coordinator.data or {}).get("timer"))
 
     async def async_select_option(self, option):
         """Set timer amount."""
@@ -129,3 +139,13 @@ class DuuxTimerSelector(DuuxSelector):
             self._api.set_timer, self._device_mac, str(amount)
         )
         await self.coordinator.async_request_refresh()
+
+
+class DuuxBright2TimerSelector(DuuxTimerSelector):
+    """Representation of a Duux Bright 2 timer selector."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the timer selector."""
+        super().__init__(coordinator, api, device)
+        # Bright 2 supports specific timer presets only (hours): 0=off, 1, 2, 4, 8
+        self._attr_options = ["0", "1", "2", "4", "8"]

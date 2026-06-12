@@ -24,9 +24,9 @@ from .const import (
     DOMAIN,
     DUUX_STID_THREESIXTY_2023,
     DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_THREESIXTY_TWO,
-    DUUX_STID_EDGEHEATER,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -77,7 +77,10 @@ async def async_setup_entry(
             entities.append(DuuxThreesixtyClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_EDGEHEATER_V2:
             entities.append(DuuxEdgeTwoClimate(coordinator, api, device))
-        elif sensor_type_id in [DUUX_STID_EDGEHEATER_2023_V1, DUUX_STID_EDGEHEATER]:
+        elif sensor_type_id in [
+            DUUX_STID_EDGEHEATER_2023_V1,
+            DUUX_STID_EDGEHEATER_2000,
+        ]:
             entities.append(DuuxEdgeClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
@@ -132,17 +135,17 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def current_temperature(self):
         """Return the current temperature."""
-        return self.coordinator.data.get("temp")
+        return (self.coordinator.data or {}).get("temp")
 
     @property
     def target_temperature(self):
         """Return the temperature we try to reach."""
-        return self.coordinator.data.get("sp")
+        return (self.coordinator.data or {}).get("sp")
 
     @property
     def hvac_mode(self):
         """Return current operation."""
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return HVACMode.HEAT if power == 1 else HVACMode.OFF
 
     @property
@@ -194,7 +197,9 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def available(self):
         """Return if entity is available."""
-        return self.coordinator.last_update_success
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""
@@ -296,7 +301,7 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = (self.coordinator.data or {}).get("mode")
         for preset in self._presets:
             if preset["value"] == str(mode):
                 return preset["name"]
@@ -389,7 +394,7 @@ class DuuxEdgeTwoClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
+        mode = (self.coordinator.data or {}).get("heatin")
         mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
         return mode_map.get(mode, self.PRESET_LOW)
 
@@ -426,7 +431,7 @@ class DuuxEdgeClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("heatin")
+        mode = (self.coordinator.data or {}).get("heatin")
         mode_map = {
             1: self.PRESET_LOW,
             2: self.PRESET_HIGH,
