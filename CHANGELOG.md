@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.10.0-alpha.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0-alpha.1) (2026-06-12)
+
+### Added
+
+* adds support for the beam mini ([0d423fb](https://github.com/SSmale/Duux-Home-Assistant/commit/0d423fb6d03c57e6bd9c93055d0cca901397e4e7))
+* code issue tidy up ([000cea9](https://github.com/SSmale/Duux-Home-Assistant/commit/000cea9058726ec77a334466c2e877f3bd1a6564))
+* more features of the Beam implemented ([83fcab8](https://github.com/SSmale/Duux-Home-Assistant/commit/83fcab84256a4bfbaa7882416be1e5943ee87498))
+
+### Fixed
+
+* adds a new base class for dehumidifier and humidifier ([570a4c6](https://github.com/SSmale/Duux-Home-Assistant/commit/570a4c649d6ef062f319a68d10d0c46f64ab3764))
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/SSmale/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/SSmale/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
+* the import was needed for the Bora ([60ca64d](https://github.com/SSmale/Duux-Home-Assistant/commit/60ca64dfb25f0c1ab022ea16e27cf862c0223536))
+* used the HA import for the mode ([a974655](https://github.com/SSmale/Duux-Home-Assistant/commit/a974655f36a3e62b2158b9a0f9691fac2e812f66))
+
 ## [2.10.0-pre-44.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-44.2...v2.10.0-pre-44.3) (2026-06-12)
 
 ### Fixed
@@ -123,41 +138,25 @@ All notable changes to this project will be documented in this file.
 ## [1.0.0] - 2025-10-15
 
 ### Added
+
 - Initial release
-- Climate entity support for Duux Edge heaters
-- Temperature control (5-36°C)
-- Three preset modes (Low, Boost, High)
-- Night mode support
-- Auto-discovery of devices
-- HACS support
-- Configuration flow via UI
+* Climate entity support for Duux Edge heaters
+* Temperature control (5-36°C)
+* Three preset modes (Low, Boost, High)
+* Night mode support
+* Auto-discovery of devices
+* HACS support
+* Configuration flow via UI
 
 ### Known Issues
+
 - None
 
 ## Future Plans
 
-- [ ] Add switch entities for lock and timer
-- [ ] Add sensor entities for power consumption
-- [ ] Support for Duux fans
-- [ ] Local API support (if available)
-- [ ] Energy dashboard integration
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* [ ] Add switch entities for lock and timer
+* [ ] Add sensor entities for power consumption
+* [ ] Support for Duux fans
+* [ ] Local API support (if available)
+* [ ] Energy dashboard integration
 

@@ -19,12 +19,13 @@ DUUX_STID_EDGEHEATER_V2 = 50
 DUUX_STID_EDGEHEATER_2000 = 33
 DUUX_STID_EDGEHEATER_2023_V1 = 51
 DUUX_STID_BORA_2024 = 62
+DUUX_STID_BEAM_MINI = 35
 DUUX_STID_BRIGHT_2 = 61
 
 # Device Type IDs
-DUUX_DTID_THERMOSTAT = [50, 52]
-DUUX_DTID_HEATER = [51, 21, 23]
-DUUX_DTID_HUMIDIFIER = [56]
+DUUX_DTID_THERMOSTAT = [50]
+DUUX_DTID_HEATER = [51, 52, 21, 23]
+DUUX_DTID_HUMIDIFIER = [56, 25]
 DUUX_DTID_AIR_PURIFIER = [55]
 
 DUUX_DTID_OTHER_HEATER = []
@@ -72,15 +73,16 @@ DUUX_SUPPORTED_TYPES = (
 #     ],
 # }
 
+
 # Error codes
 class DUUX_ERRID(Enum):
     Unavailable = None
     OK = 0
     Ice_Detected = 4
     Water_Tank_Full = 8
-    
-    Unknown_Error=9999999
-    
+
+    Unknown_Error = 9999999
+
     @classmethod
     def _missing_(cls, value):
         return cls.Unknown_Error

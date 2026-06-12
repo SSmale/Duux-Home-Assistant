@@ -1,4 +1,5 @@
 """Support for Duux sensors."""
+
 from __future__ import annotations
 import logging
 
@@ -11,13 +12,14 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import *
+from .const import DOMAIN, ATTRIBUTION, DUUX_ERRID
 
 _LOGGER = logging.getLogger(__name__)
+
 
 @dataclass(frozen=True)
 class DuuxBinarySensorEntityDescription(BinarySensorEntityDescription):
@@ -25,22 +27,28 @@ class DuuxBinarySensorEntityDescription(BinarySensorEntityDescription):
 
     attrs: Callable[[dict[str, Any]], dict[str, Any]] = lambda data: {}
 
+
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up Duux binay sensor entities based on a config entry."""
     data = hass.data[DOMAIN][config_entry.entry_id]
     api = data["api"]
     coordinators = data["coordinators"]
     devices = data["devices"]
-    
+
     entities = []
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
-        
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
+
         entities.append(DuuxErrorSensor(coordinator, api, device))
-    
+
     async_add_entities(entities)
+
 
 class DuuxBinarySensor(CoordinatorEntity, BinarySensorEntity):
     """Define an Duux binary sensor."""
@@ -59,7 +67,7 @@ class DuuxBinarySensor(CoordinatorEntity, BinarySensorEntity):
         self._attr_unique_id = f"duux_{self._device_id}_{description.key}"
         self.device_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
-        
+
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, str(self._device_id))},
             manufacturer=self._device.get("manufacturer", "Duux"),
@@ -76,14 +84,22 @@ class DuuxBinarySensor(CoordinatorEntity, BinarySensorEntity):
         )
         self.async_write_ha_state()
 
+
 class DuuxErrorSensor(DuuxBinarySensor):
     def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device, 
+        super().__init__(
+            coordinator,
+            api,
+            device,
             DuuxBinarySensorEntityDescription(
-                key='err',
+                key="err",
                 device_class=BinarySensorDeviceClass.PROBLEM,
-            ))
+            ),
+        )
 
     @property
     def is_on(self):
-        return DUUX_ERRID(self.coordinator.data.get(self.entity_description.key)) != DUUX_ERRID.OK
+        return (
+            DUUX_ERRID(self.coordinator.data.get(self.entity_description.key))
+            != DUUX_ERRID.OK
+        )

@@ -50,7 +50,11 @@ async def async_setup_entry(
         last_word = google_type.split(".")[-1]  # "HEATER" OR ""THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         model = device.get("sensorType", {}).get("name", "Unknown")
 
@@ -197,10 +201,9 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def available(self):
         """Return if entity is available."""
-        return (
-            self.coordinator.last_update_success
-            and (self.coordinator.data or {}).get("online", True)
-        )
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     async def async_added_to_hass(self):
         """When entity is added to hass."""
@@ -395,7 +398,7 @@ class DuuxEdgeTwoClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = (self.coordinator.data or {}).get("heatin")
+        mode = (self.coordinator.data or {}).get("heatin", self.PRESET_LOW)
         mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
         return mode_map.get(mode, self.PRESET_LOW)
 
@@ -432,7 +435,7 @@ class DuuxEdgeClimate(DuuxClimate):
     @property
     def preset_mode(self):
         """Return current preset mode."""
-        mode = (self.coordinator.data or {}).get("heatin")
+        mode = (self.coordinator.data or {}).get("heatin", self.PRESET_LOW)
         mode_map = {
             1: self.PRESET_LOW,
             2: self.PRESET_HIGH,

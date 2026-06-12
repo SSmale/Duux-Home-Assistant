@@ -23,11 +23,12 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
-    DUUX_ERRID,
     DOMAIN,
     DUUX_STID_BORA_2024,
     DUUX_STID_BRIGHT_2,
     ATTRIBUTION,
+    DUUX_STID_BEAM_MINI,
+    DUUX_ERRID,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -51,7 +52,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
@@ -62,6 +67,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxFilterLifeSensor(coordinator, api, device))
             entities.append(DuuxAirQualitySensor(coordinator, api, device))
             entities.append(DuuxBright2TimeRemainingSensor(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_BEAM_MINI:
+            entities.append(DuuxHumiditySensor(coordinator, api, device))
+            entities.append(DuuxTempSensor(coordinator, api, device))
         else:
             entities.append(DuuxTempSensor(coordinator, api, device))
 

@@ -1,9 +1,10 @@
 # custom_components/duux/duux_api.py
 
-import requests
 import logging
 
-from .const import API_BASE_URL, API_LOGIN, API_SENSORS, API_COMMANDS
+import requests
+
+from .const import API_BASE_URL, API_COMMANDS, API_LOGIN, API_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
 

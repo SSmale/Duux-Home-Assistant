@@ -1,7 +1,6 @@
 """Support for Duux fans."""
 
 import logging
-import math
 from typing import Any
 
 from homeassistant.components.fan import FanEntity, FanEntityFeature
@@ -17,6 +16,7 @@ _LOGGER = logging.getLogger(__name__)
 
 SPEED_RANGE = (1, 4)
 
+
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Set up Duux fan entities from a config entry."""
     data = hass.data[DOMAIN][config_entry.entry_id]
@@ -28,7 +28,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         if sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxAirPurifierFan(coordinator, api, device))
@@ -53,10 +57,9 @@ class DuuxFan(CoordinatorEntity, FanEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return (
-            self.coordinator.last_update_success
-            and (self.coordinator.data or {}).get("online", True)
-        )
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     @property
     def device_info(self):
