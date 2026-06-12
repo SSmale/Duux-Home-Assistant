@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.10.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0) (2026-06-12)
+
+### Added
+
+* adds support for the beam mini ([#37](https://github.com/SSmale/Duux-Home-Assistant/issues/37)) ([1dcaa20](https://github.com/SSmale/Duux-Home-Assistant/commit/1dcaa2029daeb41b12ec813e0ca8c0fcaa38c305))
+* release trigger ([9e6718e](https://github.com/SSmale/Duux-Home-Assistant/commit/9e6718e4d905986011cb85721cabcdf5033a3e69))
+
+### Fixed
+
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/SSmale/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/SSmale/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
+
 ## [2.10.0-alpha.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0-alpha.1) (2026-06-12)
 
 ### Added
@@ -159,4 +170,5 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
