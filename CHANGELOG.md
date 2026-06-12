@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.9.1-beta.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.9.1-beta.1) (2026-06-12)
+
+### Fixed
+
+* adds the IDs in for edge heater from Issue ([0aed679](https://github.com/SSmale/Duux-Home-Assistant/commit/0aed6793fe410b10de93a51db16f8311377fdffe))
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/SSmale/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/SSmale/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
+
 ## [2.10.0-pre-44.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-44.2...v2.10.0-pre-44.3) (2026-06-12)
 
 ### Fixed
@@ -144,3 +151,4 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
