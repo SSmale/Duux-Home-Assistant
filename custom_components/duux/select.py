@@ -12,10 +12,8 @@ from homeassistant.const import (
 from .const import (
     DOMAIN,
     DUUX_STID_BORA_2024,
-    DUUX_STID_WHISPER_FLEX,
-    DUUX_STID_WHISPER_FLEX_2,
-    DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_BRIGHT_2,
+    DUUX_STID_NEO,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -38,17 +36,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
-        if sensor_type_id == DUUX_STID_BRIGHT_2:
+        # Route the Neo to its selectors
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNeoSpeedSelector(coordinator, api, device))
+            entities.append(DuuxTimerSelector(coordinator, api, device))
+        # Added Duux Bright 2 for timer selector
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxBright2TimerSelector(coordinator, api, device))
 
-        if sensor_type_id in (DUUX_STID_WHISPER_FLEX_2, DUUX_STID_WHISPER_FLEX):
-            entities.append(DuuxHorizontalOscillationSelector(coordinator, api, device))
-            entities.append(DuuxVerticalOscillationSelector(coordinator, api, device))
-
-        if sensor_type_id == DUUX_STID_WHISPER_FLEX_ELIVATE:
-            entities.append(DuuxHorizontalOscillationSelector(coordinator, api, device))
-            entities.append(DuuxFanSpeedSelector(coordinator, api, device))
-            entities.append(DuuxTimerSelector(coordinator, api, device))
     async_add_entities(entities)
 
 
@@ -105,7 +100,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current fan mode."""
-        mode = (self.coordinator.data or {}).get("fan", 1)
+        mode = (self.coordinator.data or {}).get("fan", self.FAN_LOW)
         mode_map = {
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
@@ -123,56 +118,6 @@ class DuuxFanSpeedSelector(DuuxSelector):
 
         await self.hass.async_add_executor_job(
             self._api.set_fan, self._device_mac, mode
-        )
-        await self.coordinator.async_request_refresh()
-
-
-class DuuxHorizontalOscillationSelector(DuuxSelector):
-    """Selector for horizontal oscillation angle."""
-
-    OPTIONS = {"Off": 0, "30°": 1, "60°": 2, "90°": 3}
-
-    def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device)
-        self._attr_unique_id = f"duux_{self._device_id}_horosc"
-        self._attr_name = "Horizontal Oscillation"
-        self._attr_icon = "mdi:rotate-left"
-        self._attr_options = list(self.OPTIONS.keys())
-
-    @property
-    def current_option(self):
-        value = self.coordinator.data.get("horosc", 0)
-        return next((k for k, v in self.OPTIONS.items() if v == value), "Off")
-
-    async def async_select_option(self, option):
-        value = self.OPTIONS.get(option, 0)
-        await self.hass.async_add_executor_job(
-            self._api.set_horosc, self._device_mac, value
-        )
-        await self.coordinator.async_request_refresh()
-
-
-class DuuxVerticalOscillationSelector(DuuxSelector):
-    """Selector for vertical oscillation angle."""
-
-    OPTIONS = {"Off": 0, "45°": 1, "100°": 2}
-
-    def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device)
-        self._attr_unique_id = f"duux_{self._device_id}_verosc"
-        self._attr_name = "Vertical Oscillation"
-        self._attr_icon = "mdi:rotate-right"
-        self._attr_options = list(self.OPTIONS.keys())
-
-    @property
-    def current_option(self):
-        value = self.coordinator.data.get("verosc", 0)
-        return next((k for k, v in self.OPTIONS.items() if v == value), "Off")
-
-    async def async_select_option(self, option):
-        value = self.OPTIONS.get(option, 0)
-        await self.hass.async_add_executor_job(
-            self._api.set_verosc, self._device_mac, value
         )
         await self.coordinator.async_request_refresh()
 
@@ -215,3 +160,44 @@ class DuuxBright2TimerSelector(DuuxTimerSelector):
         super().__init__(coordinator, api, device)
         # Bright 2 supports specific timer presets only (hours): 0=off, 1, 2, 4, 8
         self._attr_options = ["0", "1", "2", "4", "8"]
+
+
+class DuuxNeoSpeedSelector(DuuxSelector):
+    """Representation of a Duux Neo spray speed selector."""
+
+    SPEED_LOW = "Low"
+    SPEED_MID = "Mid"
+    SPEED_HIGH = "High"
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the speed selector."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_speed"
+        self._attr_name = "Spray Volume"
+        self._attr_icon = "mdi:weather-partly-rainy"
+        self._attr_options = [self.SPEED_LOW, self.SPEED_MID, self.SPEED_HIGH]
+
+    @property
+    def current_option(self):
+        """Return current speed."""
+        mode = self.coordinator.data.get("speed", self.SPEED_LOW)
+        mode_map = {
+            0: self.SPEED_LOW,
+            1: self.SPEED_MID,
+            2: self.SPEED_HIGH,
+        }
+        return mode_map.get(mode, self.SPEED_LOW)
+
+    async def async_select_option(self, option):
+        """Set spray speed mode."""
+        mode_map = {
+            self.SPEED_LOW: "0",
+            self.SPEED_MID: "1",
+            self.SPEED_HIGH: "2",
+        }
+        mode = mode_map.get(option, "0")
+
+        await self.hass.async_add_executor_job(
+            self._api.set_speed, self._device_mac, mode
+        )
+        await self.coordinator.async_request_refresh()

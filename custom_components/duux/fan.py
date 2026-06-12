@@ -133,9 +133,7 @@ class DuuxFan(CoordinatorEntity, FanEntity):
 
     @property
     def available(self) -> bool:
-        # Entity is unavailable rather than erroring if data hasn't arrived yet
-        if self.coordinator.data is None:
-            return False
+        """Return True if entity is available."""
         return self.coordinator.last_update_success and (
             self.coordinator.data or {}
         ).get("online", True)

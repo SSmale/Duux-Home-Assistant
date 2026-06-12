@@ -13,7 +13,8 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from .const import ATTRIBUTION, DOMAIN, DUUX_ERRID
+
+from .const import DOMAIN, ATTRIBUTION, DUUX_ERRID
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,7 +36,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     entities = []
     for device in devices:
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
+
         entities.append(DuuxErrorSensor(coordinator, api, device))
         entities.append(DuuxConnectivitySensor(coordinator, api, device))
 
@@ -59,6 +65,7 @@ class DuuxBinarySensor(CoordinatorEntity, BinarySensorEntity):
         self._attr_unique_id = f"duux_{self._device_id}_{description.key}"
         self.device_name = device.get("displayName") or device.get("name")
         self._attr_has_entity_name = True
+
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, str(self._device_id))},
             manufacturer=self._device.get("manufacturer", "Duux"),
@@ -124,12 +131,8 @@ class DuuxConnectivitySensor(DuuxBinarySensor):
         )
 
     @property
-    def is_on(self) -> bool:
-        """True when the device is online.
-
-        CONNECTIVITY device class: True = Connected, False = Disconnected.
-        The 'online' flag lives on the device envelope, not the polled
-        status payload, so we read from self._device rather than
-        coordinator.data.
-        """
-        return bool(self._device.get("online", False))
+    def is_on(self):
+        return (
+            DUUX_ERRID(self.coordinator.data.get(self.entity_description.key))
+            != DUUX_ERRID.OK
+        )

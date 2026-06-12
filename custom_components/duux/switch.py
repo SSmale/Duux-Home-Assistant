@@ -14,6 +14,7 @@ from custom_components.duux.const import (
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
+    DUUX_STID_NEO,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,7 +31,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         # Only Edge heaters have night mode
         if sensor_type_id in [
@@ -52,6 +57,13 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxSleepModeSwitch(coordinator, api, device))
             entities.append(DuuxCleaningModeSwitch(coordinator, api, device))
             entities.append(DuuxLaundryModeSwitch(coordinator, api, device))
+        # Neo humidifier
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
+
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
+            entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
         elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
@@ -77,10 +89,9 @@ class DuuxSwitch(CoordinatorEntity, SwitchEntity):
     @property
     def available(self) -> bool:
         """Return True if entity is available."""
-        return (
-            self.coordinator.last_update_success
-            and (self.coordinator.data or {}).get("online", True)
-        )
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
 
     @property
     def device_info(self):
@@ -263,23 +274,25 @@ class DuuxIonizerSwitch(DuuxSwitch):
         """Return True if entity is available."""
         if not super().available:
             return False
-        
+
         # Constraint for Bright 2: Ionizer unavailable if speed is 1 (manual mode)
         # Note: In Auto mode (speed 0), it should be available.
         data = self.coordinator.data or {}
         speed = data.get("speed")
         sensor_type_id = self._device.get("sensorTypeId")
-        
+
         if sensor_type_id == DUUX_STID_BRIGHT_2 and speed == 1:
             return False
-            
+
         return True
 
     async def async_turn_on(self, **kwargs):
         """Turn on ionizer."""
         # Constraint: Ionizer cannot be turned on if speed is at lowest (1)
         if (self.coordinator.data or {}).get("speed") == 1:
-            _LOGGER.warning("Ionizer cannot be turned on when fan speed is at lowest (1)")
+            _LOGGER.warning(
+                "Ionizer cannot be turned on when fan speed is at lowest (1)"
+            )
             return
 
         await self.hass.async_add_executor_job(
