@@ -12,7 +12,9 @@ from homeassistant.const import (
 from .const import (
     DOMAIN,
     DUUX_STID_BORA_2024,
+    DUUX_STID_BEAM_MINI,
     DUUX_STID_BRIGHT_2,
+    DUUX_STID_EDGEHEATER_V2,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,15 +31,21 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
 
         # Bora has two fan speeds..
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
-        if sensor_type_id == DUUX_STID_BRIGHT_2:
+        # Added Duux Bright 2 for timer selector
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxBright2TimerSelector(coordinator, api, device))
-
+        elif sensor_type_id in [DUUX_STID_BEAM_MINI, DUUX_STID_EDGEHEATER_V2]:
+            entities.append(DuuxTimerSelector(coordinator, api, device))
     async_add_entities(entities)
 
 
