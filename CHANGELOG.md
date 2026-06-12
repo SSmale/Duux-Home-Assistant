@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.10.0-pre-68.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.9.0...v2.10.0-pre-68.1) (2026-06-12)
+
+### Added
+
+* adds flex ultimate ([70dc23b](https://github.com/SSmale/Duux-Home-Assistant/commit/70dc23b3979824c43f9868ad582f24f9f311ba36))
+* adds initial support for elevate ([#70](https://github.com/SSmale/Duux-Home-Assistant/issues/70)) ([cc97983](https://github.com/SSmale/Duux-Home-Assistant/commit/cc979835eebf32e34f39d283d88182a79423e6cf))
+* adds ossolation for fans ([8b5dc49](https://github.com/SSmale/Duux-Home-Assistant/commit/8b5dc49340123a03ca0c2c025ca87005e2bd9a57))
+* adds support for the whisper fans ([8e7bcb2](https://github.com/SSmale/Duux-Home-Assistant/commit/8e7bcb29a565d62e5de496325c4384d2dd2a75b6))
+
+### Fixed
+
+* adds explicit features for the fan settings ([fb4c03b](https://github.com/SSmale/Duux-Home-Assistant/commit/fb4c03b733c137176f7671f82437723b94bee646))
+* adds explicit features for the fan settings ([#69](https://github.com/SSmale/Duux-Home-Assistant/issues/69)) ([639c28c](https://github.com/SSmale/Duux-Home-Assistant/commit/639c28c335aaa25e159b9fe71acf32a63a618848))
+* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/SSmale/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/SSmale/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/SSmale/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/SSmale/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
+
 ## [2.10.0-pre-44.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.10.0-pre-44.2...v2.10.0-pre-44.3) (2026-06-12)
 
 ### Fixed
@@ -119,3 +134,4 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
