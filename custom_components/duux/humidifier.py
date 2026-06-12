@@ -112,24 +112,24 @@ class DuuxDehumidifier(CoordinatorEntity, HumidifierEntity):
     
     @property
     def is_on(self):
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return power == 1
-    
+
     @property
     def action(self):
         """Return current action."""
-        power = self.coordinator.data.get("power", 0)
+        power = (self.coordinator.data or {}).get("power", 0)
         return HumidifierAction.DRYING if power == 1 else HumidifierAction.OFF
-    
+
     @property
     def current_humidity(self):
         """Return the current humidity."""
-        return self.coordinator.data.get("hum")
-    
+        return (self.coordinator.data or {}).get("hum")
+
     @property
     def target_humidity(self):
         """Return the humidity we try to reach."""
-        return self.coordinator.data.get("sp")
+        return (self.coordinator.data or {}).get("sp")
     
     async def async_set_humidity(self, humidity: int):
         """Set new target humidity."""
@@ -183,7 +183,7 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
     @property
     def mode(self):
         """Return current preset mode."""
-        mode = self.coordinator.data.get("mode")
+        mode = (self.coordinator.data or {}).get("mode")
         mode_map = {
             0: self.PRESET_AUTO,
             1: self.PRESET_CONTINUOUS,
