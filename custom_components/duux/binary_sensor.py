@@ -131,8 +131,12 @@ class DuuxConnectivitySensor(DuuxBinarySensor):
         )
 
     @property
-    def is_on(self):
-        return (
-            DUUX_ERRID(self.coordinator.data.get(self.entity_description.key))
-            != DUUX_ERRID.OK
-        )
+    def is_on(self) -> bool:
+        """True when the device is online.
+
+        CONNECTIVITY device class: True = Connected, False = Disconnected.
+        The 'online' flag lives on the device envelope, not the polled
+        status payload, so we read from self._device rather than
+        coordinator.data.
+        """
+        return bool(self._device.get("online", False))
