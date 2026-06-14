@@ -64,6 +64,14 @@
             "spray_volume": {
                 "name": "Spray Volume"
             }
+        },
+        "binary_sensor": {
+            "problem": {
+                "name": "Problem"
+            },
+            "connected": {
+                "name": "Connected"
+            }
         }
     },
     "config": {

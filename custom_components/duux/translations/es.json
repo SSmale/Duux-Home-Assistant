@@ -64,6 +64,14 @@
             "spray_volume": {
                 "name": "Volumen de nebulización"
             }
+        },
+        "binary_sensor": {
+            "problem": {
+                "name": "Problema"
+            },
+            "connected": {
+                "name": "Conectado"
+            }
         }
     },
     "config": {

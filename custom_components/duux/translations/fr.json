@@ -64,6 +64,14 @@
             "spray_volume": {
                 "name": "Volume de pulvérisation"
             }
+        },
+        "binary_sensor": {
+            "problem": {
+                "name": "Problème"
+            },
+            "connected": {
+                "name": "Connecté"
+            }
         }
     },
     "config": {
