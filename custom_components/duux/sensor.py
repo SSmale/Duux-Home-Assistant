@@ -121,11 +121,6 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
         self._attr_extra_state_attributes = self.entity_description.attrs(data)
         self.async_write_ha_state()
 
-    @property
-    def native_value(self):
-        return self.coordinator.data.get(self.entity_description.key)
-
-
 class DuuxTempSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
         super().__init__(
@@ -296,14 +291,4 @@ class DuuxErrorSensor(DuuxSensor):
 
 
 class DuuxBora2024TimeRemainingSensor(DuuxTimeRemainingSensor):
-    """Time remaining sensor for Duux Bora 2024 (API key: 'timrm')."""
-
-    def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device, key="timrm")
-
-
-class DuuxBright2TimeRemainingSensor(DuuxTimeRemainingSensor):
-    """Time remaining sensor for Duux Bright 2 (API key: 'timerr')."""
-
-    def __init__(self, coordinator, api, device):
-        super().__init__(coordinator, api, device, key="timerr")
+    """Time remaining sens
