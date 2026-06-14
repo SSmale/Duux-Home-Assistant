@@ -291,4 +291,14 @@ class DuuxErrorSensor(DuuxSensor):
 
 
 class DuuxBora2024TimeRemainingSensor(DuuxTimeRemainingSensor):
-    """Time remaining sens
+    """Time remaining sensor for Duux Bora 2024 (API key: 'timrm')."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, key="timrm")
+
+
+class DuuxBright2TimeRemainingSensor(DuuxTimeRemainingSensor):
+    """Time remaining sensor for Duux Bright 2 (API key: 'timerr')."""
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(coordinator, api, device, key="timerr")
