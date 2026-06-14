@@ -1,7 +1,9 @@
 {
     "entity": {
         "sensor": {
-            "pm25": { "name": "PM2.5" },
+            "pm25": {
+                "name": "PM2.5"
+            },
             "tvoc": {
                 "name": "TVOC",
                 "state": {
@@ -11,8 +13,12 @@
                     "harmful": "Harmful"
                 }
             },
-            "filter_life": { "name": "HEPA Filter remaining lifespan" },
-            "time_remaining": { "name": "Time Remaining" },
+            "filter_life": {
+                "name": "HEPA Filter remaining lifespan"
+            },
+            "time_remaining": {
+                "name": "Time Remaining"
+            },
             "air_quality_index": {
                 "name": "Air Quality Index",
                 "state": {
@@ -23,19 +29,41 @@
                     "poor": "Poor",
                     "harmful": "Harmful"
                 }
+            },
+            "error_message": {
+                "name": "Error Message"
             }
         },
         "switch": {
-            "child_lock": { "name": "Child Lock" },
-            "sleep_mode": { "name": "Sleep Mode" },
-            "cleaning_mode": { "name": "Cleaning Mode" },
-            "laundry_mode": { "name": "Laundry Mode" },
-            "night_mode": { "name": "Night Mode" },
-            "ionizer": { "name": "Ionizer" }
+            "child_lock": {
+                "name": "Child Lock"
+            },
+            "sleep_mode": {
+                "name": "Sleep Mode"
+            },
+            "cleaning_mode": {
+                "name": "Cleaning Mode"
+            },
+            "laundry_mode": {
+                "name": "Laundry Mode"
+            },
+            "night_mode": {
+                "name": "Night Mode"
+            },
+            "ionizer": {
+                "name": "Ionizer"
+            }
         },
         "select": {
-            "fan_speed": { "name": "Fan Speed" },
-            "timer": { "name": "Timer" }
+            "fan_speed": {
+                "name": "Fan Speed"
+            },
+            "timer": {
+                "name": "Timer"
+            },
+            "spray_volume": {
+                "name": "Spray Volume"
+            }
         }
     },
     "config": {

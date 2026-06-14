@@ -277,8 +277,8 @@ class DuuxErrorSensor(DuuxSensor):
             api,
             device,
             DuuxSensorEntityDescription(
-                name="Error Message",
                 key="err",
+                translation_key="error_message",
             ),
         )
         self._attr_icon = "mdi:comment-alert-outline"
