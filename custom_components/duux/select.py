@@ -180,7 +180,7 @@ class DuuxNeoSpeedSelector(DuuxSelector):
         """Initialize the speed selector."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_speed"
-        self._attr_name = "Spray Volume"
+        self._attr_translation_key = "spray_volume"
         self._attr_icon = "mdi:weather-partly-rainy"
         self._attr_options = [self.SPEED_LOW, self.SPEED_MID, self.SPEED_HIGH]
 

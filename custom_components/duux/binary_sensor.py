@@ -93,7 +93,7 @@ class DuuxErrorSensor(DuuxBinarySensor):
             device,
             DuuxBinarySensorEntityDescription(
                 key="err",
-                name="Problem",
+                translation_key="problem",
                 device_class=BinarySensorDeviceClass.PROBLEM,
                 attrs=lambda data: {
                     "error_code": (data or {}).get("err"),
@@ -121,7 +121,7 @@ class DuuxConnectivitySensor(DuuxBinarySensor):
             device,
             DuuxBinarySensorEntityDescription(
                 key="connectivity",
-                name="Connected",
+                translation_key="connected",
                 device_class=BinarySensorDeviceClass.CONNECTIVITY,
                 attrs=lambda data: {
                     "last_seen": device.get("connectionUpdateDate"),
