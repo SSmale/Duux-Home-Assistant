@@ -1,0 +1,101 @@
+{
+    "entity": {
+        "sensor": {
+            "pm25": {
+                "name": "PM2.5"
+            },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "healthy": "Sano",
+                    "acceptable": "Accettabile",
+                    "polluted": "Inquinato",
+                    "harmful": "Nocivo"
+                }
+            },
+            "filter_life": {
+                "name": "Durata residua filtro HEPA"
+            },
+            "time_remaining": {
+                "name": "Tempo rimanente"
+            },
+            "air_quality_index": {
+                "name": "Indice di qualità dell'aria",
+                "state": {
+                    "excellent": "Eccellente",
+                    "very_good": "Molto buono",
+                    "good": "Buono",
+                    "fair": "Discreto",
+                    "poor": "Scarso",
+                    "harmful": "Nocivo"
+                }
+            },
+            "error_message": {
+                "name": "Messaggio di errore"
+            }
+        },
+        "switch": {
+            "child_lock": {
+                "name": "Blocco bambini"
+            },
+            "sleep_mode": {
+                "name": "Modalità sonno"
+            },
+            "cleaning_mode": {
+                "name": "Modalità pulizia"
+            },
+            "laundry_mode": {
+                "name": "Modalità bucato"
+            },
+            "night_mode": {
+                "name": "Modalità notte"
+            },
+            "ionizer": {
+                "name": "Ionizzatore"
+            }
+        },
+        "select": {
+            "fan_speed": {
+                "name": "Velocità ventilatore"
+            },
+            "timer": {
+                "name": "Timer"
+            },
+            "spray_volume": {
+                "name": "Volume di nebulizzazione"
+            }
+        },
+        "binary_sensor": {
+            "problem": {
+                "name": "Problema"
+            },
+            "connected": {
+                "name": "Connesso"
+            }
+        }
+    },
+    "config": {
+        "step": {
+            "user": {
+                "title": "Accesso Duux",
+                "description": "Inserisci le credenziali del tuo account Duux.",
+                "data": {
+                    "email": "Indirizzo email",
+                    "password": "Password"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Credenziali non valide. Verifica la tua email e la password."
+        },
+        "abort": {
+            "already_configured": "Questo account Duux è già configurato."
+        }
+    },
+    "issues": {
+        "device_not_recognised": {
+            "description": "Duux ha rilevato un dispositivo non ufficialmente supportato. \n\rVerifica il tipo di dispositivo e segnalalo allo sviluppatore dell'integrazione. \n\rDettagli necessari: \n\rNome dispositivo: {device_name}\n\rID tipo dispositivo: {device_type_id}\n\rID tipo sensore: {sensor_type_id}\n\rTipo dispositivo: {reported_type}.",
+            "title": "Dispositivo non riconosciuto"
+        }
+    }
+}

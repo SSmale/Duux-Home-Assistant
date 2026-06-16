@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.11.2-pre-79.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.1...v2.11.2-pre-79.1) (2026-06-15)
+
+### Fixed
+
+* restore translated states for TVOC and AQ sensors; add missing translations (DE/IT + new entities) ([#79](https://github.com/SSmale/Duux-Home-Assistant/issues/79)) ([bce8ca3](https://github.com/SSmale/Duux-Home-Assistant/commit/bce8ca30131d20b6dba7020a80eec0b267595d78))
+
 ## [2.11.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.0...v2.11.1) (2026-06-12)
 
 ### Fixed
@@ -226,6 +232,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 

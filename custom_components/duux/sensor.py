@@ -121,11 +121,6 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
         self._attr_extra_state_attributes = self.entity_description.attrs(data)
         self.async_write_ha_state()
 
-    @property
-    def native_value(self):
-        return self.coordinator.data.get(self.entity_description.key)
-
-
 class DuuxTempSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
         super().__init__(
@@ -282,8 +277,8 @@ class DuuxErrorSensor(DuuxSensor):
             api,
             device,
             DuuxSensorEntityDescription(
-                name="Error Message",
                 key="err",
+                translation_key="error_message",
             ),
         )
         self._attr_icon = "mdi:comment-alert-outline"

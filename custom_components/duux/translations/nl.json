@@ -1,7 +1,9 @@
 {
     "entity": {
         "sensor": {
-            "pm25": { "name": "PM2.5" },
+            "pm25": {
+                "name": "PM2.5"
+            },
             "tvoc": {
                 "name": "TVOC",
                 "state": {
@@ -11,8 +13,12 @@
                     "harmful": "Schadelijk"
                 }
             },
-            "filter_life": { "name": "Levensduur HEPA filter" },
-            "time_remaining": { "name": "Resterende tijd" },
+            "filter_life": {
+                "name": "Levensduur HEPA filter"
+            },
+            "time_remaining": {
+                "name": "Resterende tijd"
+            },
             "air_quality_index": {
                 "name": "Luchtkwaliteitsindex",
                 "state": {
@@ -23,19 +29,49 @@
                     "poor": "Slecht",
                     "harmful": "Schadelijk"
                 }
+            },
+            "error_message": {
+                "name": "Foutmelding"
             }
         },
         "switch": {
-            "child_lock": { "name": "Kinderslot" },
-            "sleep_mode": { "name": "Slaapstand" },
-            "cleaning_mode": { "name": "Reinigingsstand" },
-            "laundry_mode": { "name": "Wasstand" },
-            "night_mode": { "name": "Nachtmodus" },
-            "ionizer": { "name": "Ionisator" }
+            "child_lock": {
+                "name": "Kinderslot"
+            },
+            "sleep_mode": {
+                "name": "Slaapstand"
+            },
+            "cleaning_mode": {
+                "name": "Reinigingsstand"
+            },
+            "laundry_mode": {
+                "name": "Wasstand"
+            },
+            "night_mode": {
+                "name": "Nachtmodus"
+            },
+            "ionizer": {
+                "name": "Ionisator"
+            }
         },
         "select": {
-            "fan_speed": { "name": "Ventilatorsnelheid" },
-            "timer": { "name": "Timer" }
+            "fan_speed": {
+                "name": "Ventilatorsnelheid"
+            },
+            "timer": {
+                "name": "Timer"
+            },
+            "spray_volume": {
+                "name": "Sproeivolume"
+            }
+        },
+        "binary_sensor": {
+            "problem": {
+                "name": "Probleem"
+            },
+            "connected": {
+                "name": "Verbonden"
+            }
         }
     },
     "config": {
