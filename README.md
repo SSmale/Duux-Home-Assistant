@@ -1,10 +1,6 @@
 # Duux Integration for Home Assistant
 
-![Duux Logo](https://pickitmedialive.blob.core.windows.net/6umyyz604ft4pmg-main/ZozxVBQI?sv=2025-01-05&st=2025-10-30T22%3A36%3A50Z&se=2025-10-31T04%3A36%3A50Z&sr=c&sp=r&sig=BR7YREsSajFblqlKsaXWk8OwVofdFMYyhsh5G7vfw0g%3D)
-
 A Home Assistant integration for Duux products, allowing you to control your devices directly from Home Assistant.
-
-## 
 
 [![Home Assistant](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=duux)
 
@@ -15,41 +11,127 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 ## Features
 
-- 📊 **Real-time Status**: Current temperature and heating state
+- 📊 **Real-time Status**: Current temperature, humidity, and device state
 - 🔄 **Auto-discovery**: Automatically finds all your Duux devices
+- 🌐 **Offline Detection**: All entities are marked unavailable when a device is disconnected from the cloud
 
 ## Supported Devices
 
-- Duux Edge Heater 2023 (v1)
-  - 🌡️ **Temperature Control**: Set target temperature (5-36°C)
-  - 🔥 **Two Heating Modes**: Low and High
-  - 🌙 **Night Mode**: Dim the display
-  - 🔒 **Child Lock**: Prevent accidental changes
+### 🌡️ Heaters
 
-- Duux Edge Heater (v2)
-  - 🌡️ **Temperature Control**: Set target temperature (5-36°C)
-  - 🔥 **Three Heating Modes**: Low, High and Boost
-  - 🌙 **Night Mode**: Dim the display
-  - 🔒 **Child Lock**: Prevent accidental changes
+#### Duux Edge Heater 2000
 
-- Duux Threesixty Two Heater
-  - 🌡️ **Temperature Control**: Set target temperature (18-30°C)
-  - 🔥 **Three Heating Modes**: Low, High and Boost
+- 🌡️ **Temperature Control**: Set target temperature (5–36°C)
+- 🔥 **Two Heating Modes**: Low and High
+- 🌙 **Night Mode**: Dim the display
+- 🔒 **Child Lock**: Prevent accidental changes
 
-- Duux Bora Dehumidifier
-  - 💧 **Humidity Control**: Set target humidity (30-80%)
-  - ✌ **Two drying modes**: Auto or Continuous
-  - 🍃 **Two fan speeds**: Low or High
-  - 👕 **Laundry Mode**: Start a laundry drying cycle
-  - 🧹 **Cleaning Mode**: Start a self-cleaning cycle
-  - 🌙 **Sleep Mode**: Enable sleep mode to dim the lights and silence the beep
-  - 💧 **Humidity Sensor**: Track current humidity levels
-  - ⏲ **Timer Mode**: Set and track timers
+#### Duux Edge Heater 2023 (v1)
 
-- Unknown Duux Heaters
-  - Basic functionality may be available; please report any issues.
+- 🌡️ **Temperature Control**: Set target temperature (5–36°C)
+- 🔥 **Two Heating Modes**: Low and High
+- 🌙 **Night Mode**: Dim the display
+- 🔒 **Child Lock**: Prevent accidental changes
 
-## Support the development of the integration 
+#### Duux Edge Heater (v2)
+
+- 🌡️ **Temperature Control**: Set target temperature (5–36°C)
+- 🔥 **Three Heating Modes**: Low, High and Boost
+- 🌙 **Night Mode**: Dim the display
+- 🔒 **Child Lock**: Prevent accidental changes
+- ⏲️ **Timer**: Set a shutdown timer (0–24 hours)
+
+#### Duux Threesixty 2
+
+- 🌡️ **Temperature Control**: Set target temperature (18–30°C)
+- 🔥 **Three Heating Modes**: Eco, Comfort and Boost
+
+#### Duux Threesixty 2023
+
+- 🌡️ **Temperature Control**: Set target temperature (18–30°C)
+- 🔥 **Three Heating Modes**: Eco, Comfort and Boost
+
+---
+
+### 💨 Fans
+
+#### Duux Whisper Flex Ultimate
+
+- ⚡ **Power**: On/Off control
+- 💨 **30-Speed Fan**: Fine-grained speed control (1–30)
+- 🌀 **Three Modes**: Normal, Natural and Night
+
+#### Duux Whisper Flex
+
+- ⚡ **Power**: On/Off control
+- 💨 **25-Speed Fan**: Fine-grained speed control (1–25)
+- 🌀 **Three Modes**: Normal, Natural and Night
+
+#### Duux Whisper Flex 2
+
+- ⚡ **Power**: On/Off control
+- 💨 **30-Speed Fan**: Fine-grained speed control (1–30)
+- 🌀 **Two Modes**: Normal and Natural
+
+---
+
+### 🌿 Air Purifiers
+
+#### Duux Bright 2
+
+- ⚡ **Power**: On/Off control
+- 💨 **Fan Control**: 4 manual speeds + Auto mode
+- 🌿 **Auto Speed**: Automatically adjusts based on air quality (AQ) and TVOC levels
+- 🔬 **PM2.5 Sensor**: Real-time particulate matter monitoring
+- 🧪 **TVOC Sensor**: Volatile organic compound level (Healthy / Acceptable / Polluted / Harmful)
+- 🌬️ **Air Quality Index**: 6-level indicator (Excellent → Harmful)
+- 🔋 **HEPA Filter Life**: Remaining filter lifespan (%)
+- ⏲️ **Timer**: Preset durations (0, 1, 2, 4, 8 hours) with time-remaining sensor
+- 🌙 **Night Mode**: Reduced noise and display dimming
+- ⚡ **Ionizer**: On/off control (automatically disabled at minimum speed)
+
+---
+
+### 💧 Dehumidifiers & Humidifiers
+
+#### Duux Bora Dehumidifier (2024)
+
+- 💧 **Humidity Control**: Set target humidity (30–80%)
+- ✌️ **Two Drying Modes**: Auto or Continuous
+- 🍃 **Two Fan Speeds**: Low or High
+- 👕 **Laundry Mode**: Start a laundry drying cycle
+- 🧹 **Cleaning Mode**: Start a self-cleaning cycle
+- 🌙 **Sleep Mode**: Dim the lights and silence the beep
+- 💧 **Humidity Sensor**: Track current humidity levels
+- ⏲️ **Timer**: Set a shutdown timer (0–24 hours) with time-remaining sensor
+
+#### Duux Beam Mini Humidifier
+
+- 💧 **Humidity Control**: Set target humidity (20–80%)
+- 🌡️ **Temperature Sensor**: Real-time ambient temperature
+- 💧 **Humidity Sensor**: Track current humidity levels
+- 🔄 **Two Modes**: Auto and Manual
+- ⏲️ **Timer**: Set a shutdown timer (0–24 hours)
+
+#### Duux Neo Humidifier
+
+- 💧 **Humidity Control**: Set target humidity (30–80%)
+- 🔄 **Two Modes**: Normal and Auto
+- 💧 **Humidity Sensor**: Track current humidity levels
+- 🌬️ **Spray Volume**: Low, Mid or High selector
+
+---
+
+### ⚠️ All Devices
+
+Every supported device also gets:
+
+- 🔴 **Problem Sensor**: Fires when the device reports an error code (ice detected, water tank full, etc.)
+- 🟢 **Connectivity Sensor**: Shows whether the device is online or offline, with last-seen timestamp
+
+---
+
+## Support the Development
 
 [![GitHub Sponsor Badge](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/ssmale)
 
@@ -78,13 +160,14 @@ A Home Assistant integration for Duux products, allowing you to control your dev
    - **Password**: Your Duux account password
 
 **Note**: If you only use the mobile app with OTP login, you'll need to set a password first:
+
 1. Go to `https://app.cloudgarden.nl`
 2. Click "Forgot Password"
 3. Enter your email and set a new password
 
 ## Usage
 
-### Climate Entity
+### Climate Entity (Heaters)
 
 The integration creates a climate entity for each heater:
 
@@ -93,14 +176,42 @@ climate.office_heater
 ```
 
 **Attributes:**
+
 - `current_temperature`: Current room temperature
 - `temperature`: Target temperature
 - `hvac_mode`: `heat` or `off`
-- `preset_mode`: `low`, `boost`, or `high`
+- `preset_mode`: `eco`, `comfort`, or `boost` (varies by model)
+
+### Fan Entity
+
+The integration creates a fan entity for each fan:
+
+```yaml
+fan.living_room_fan
+```
+
+**Attributes:**
+
+- `percentage`: Current speed as a percentage
+- `preset_mode`: `normal`, `natural`, or `night`
+- `speed_count`: Total number of speed steps
+
+### Humidifier Entity
+
+```yaml
+humidifier.bedroom_humidifier
+```
+
+**Attributes:**
+
+- `current_humidity`: Current room humidity
+- `humidity`: Target humidity
+- `mode`: `auto`, `normal`, or `boost` (varies by model)
 
 ### Example Automations
 
 **Morning Warmup:**
+
 ```yaml
 automation:
   - alias: "Morning Heat Boost"
@@ -124,6 +235,7 @@ automation:
 ```
 
 **Energy Saving at Night:**
+
 ```yaml
 automation:
   - alias: "Night Mode Energy Saving"
@@ -135,7 +247,7 @@ automation:
         target:
           entity_id: climate.office_heater
         data:
-          preset_mode: "low"
+          preset_mode: "eco"
       - service: climate.set_temperature
         target:
           entity_id: climate.office_heater
@@ -143,24 +255,42 @@ automation:
           temperature: 18
 ```
 
-**Temperature-Based Control:**
+**Fan Night Mode:**
+
 ```yaml
 automation:
-  - alias: "Auto Heat Control"
+  - alias: "Fan Night Mode at Bedtime"
     trigger:
-      platform: numeric_state
-      entity_id: climate.office_heater
-      attribute: current_temperature
-      below: 19
+      platform: time
+      at: "22:30:00"
     action:
-      - service: climate.set_temperature
+      - service: fan.set_preset_mode
         target:
-          entity_id: climate.office_heater
+          entity_id: fan.bedroom_fan
         data:
-          temperature: 21
+          preset_mode: "night"
 ```
 
-### Lovelace Card Example
+**Air Purifier Auto Mode when Air Quality Drops:**
+
+```yaml
+automation:
+  - alias: "Purifier boost on poor air quality"
+    trigger:
+      platform: state
+      entity_id: sensor.bright_2_air_quality_index
+      to: "poor"
+    action:
+      - service: fan.set_preset_mode
+        target:
+          entity_id: fan.bright_2
+        data:
+          preset_mode: "auto"
+```
+
+### Lovelace Card Examples
+
+**Heater:**
 
 ```yaml
 type: thermostat
@@ -168,49 +298,48 @@ entity: climate.office_heater
 name: Office Heater
 ```
 
-Or use a more detailed card:
+**Fan:**
 
 ```yaml
-type: vertical-stack
-cards:
-  - type: thermostat
-    entity: climate.office_heater
-  - type: entities
-    entities:
-      - entity: climate.office_heater
-        attribute: current_temperature
-        name: Current Temperature
-      - entity: climate.office_heater
-        attribute: preset_mode
-        name: Heating Mode
+type: entities
+entities:
+  - entity: fan.living_room_fan
+  - entity: fan.living_room_fan
+    type: attribute
+    attribute: percentage
+    name: Speed
+  - entity: fan.living_room_fan
+    type: attribute
+    attribute: preset_mode
+    name: Mode
 ```
-
-## Services
-
-All standard Home Assistant climate services are supported:
-
-- `climate.turn_on`
-- `climate.turn_off`
-- `climate.set_temperature`
-- `climate.set_hvac_mode`
-- `climate.set_preset_mode`
 
 ## Troubleshooting
 
 ### Authentication Issues
 
 If you can't log in:
+
 1. Verify your credentials at `https://app.cloudgarden.nl`
 2. Make sure you've set a password (not just using OTP)
 3. Check Home Assistant logs for detailed error messages
 
 ### Device Not Found
 
-If your heater doesn't appear:
-1. Ensure the heater is connected to the Duux app
-2. Check that the heater is online in the Duux app
+If your device doesn't appear:
+
+1. Ensure the device is connected to the Duux app
+2. Check that the device is online in the Duux app
 3. Try removing and re-adding the integration
 4. Check the logs: Settings → System → Logs
+
+### Device Shows as Unavailable
+
+Check the Connectivity sensor for the device — it will show the last time the device was seen online. If the device has been offline for a while, check your Wi-Fi connection and the Duux app.
+
+### My Device Isn't Listed Above
+
+If your Duux device isn't in the supported list but is a fan, heater, or air purifier, the integration will attempt to set it up using auto-discovery and log a warning with the device details. Please open a [GitHub issue](https://github.com/SSmale/Duux-Home-Assistant/issues/new?template=device_not_supported.yaml) with those details so it can be added to the official list.
 
 ### Enable Debug Logging
 
@@ -225,15 +354,17 @@ logger:
 
 ## Credits
 
-This integration is based on the reverse engineering work by [Simon Smale](https://smale.codes). 
+This integration is based on the reverse engineering work by [Simon Smale](https://smale.codes).
 
 Thanks to:
+
 - [Noah Evans](https://github.com/ThisIsNoahEvans/DuuxAPI) for the DuuxAPI reference implementation
 - The Home Assistant community
 
 ## Contributing
 
 Contributions are welcome! Please:
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -241,7 +372,7 @@ Contributions are welcome! Please:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ## Disclaimer
 

@@ -1,4 +1,5 @@
 """Support for Duux selectors."""
+
 import logging
 
 from homeassistant.components.select import SelectEntity
@@ -8,7 +9,14 @@ from homeassistant.const import (
     UnitOfTime,
 )
 
-from .const import *
+from .const import (
+    DOMAIN,
+    DUUX_STID_BORA_2024,
+    DUUX_STID_BEAM_MINI,
+    DUUX_STID_BRIGHT_2,
+    DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_NEO,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,13 +32,25 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators[device_id]
-        
+        coordinator = coordinator = coordinators.get(device_id)
+
+        # Skip devices that have no coordinator (were filtered out in __init__)
+        if coordinator is None:
+            continue
+
         # Bora has two fan speeds..
         if sensor_type_id == DUUX_STID_BORA_2024:
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
-    
+        # Route the Neo to its selectors
+        elif sensor_type_id == DUUX_STID_NEO:
+            entities.append(DuuxNeoSpeedSelector(coordinator, api, device))
+            entities.append(DuuxTimerSelector(coordinator, api, device))
+        # Added Duux Bright 2 for timer selector
+        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+            entities.append(DuuxBright2TimerSelector(coordinator, api, device))
+        elif sensor_type_id in [DUUX_STID_BEAM_MINI, DUUX_STID_EDGEHEATER_V2]:
+            entities.append(DuuxTimerSelector(coordinator, api, device))
     async_add_entities(entities)
 
 
@@ -49,19 +69,26 @@ class DuuxSelector(CoordinatorEntity, SelectEntity):
         self._attr_has_entity_name = True
 
     @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
+
+    @property
     def device_info(self):
         """Return device information."""
         return {
             "identifiers": {(DOMAIN, str(self._device_id))},
             "name": self.device_name,
-            "manufacturer":  self._device.get("manufacturer", "Duux"),
+            "manufacturer": self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
 
 
 class DuuxFanSpeedSelector(DuuxSelector):
     """Representation of a Duux fan speed selector."""
-    
+
     FAN_HIGH = "high"
     FAN_LOW = "low"
 
@@ -69,7 +96,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
         """Initialize the fan speed selector."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_fan_speed"
-        self._attr_name = "Fan Speed"
+        self._attr_translation_key = "fan_speed"
         self._attr_icon = "mdi:fan"
 
     @property
@@ -80,12 +107,12 @@ class DuuxFanSpeedSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current fan mode."""
-        mode = self.coordinator.data.get("fan")
+        mode = (self.coordinator.data or {}).get("fan", self.FAN_LOW)
         mode_map = {
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
         }
-        return mode_map.get(mode, self.FAN_LOW)
+        return mode_map.get(mode)
 
     async def async_select_option(self, option):
         """Set fan speed mode."""
@@ -101,6 +128,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
         )
         await self.coordinator.async_request_refresh()
 
+
 class DuuxTimerSelector(DuuxSelector):
     """Representation of a Duux timer selector."""
 
@@ -108,24 +136,75 @@ class DuuxTimerSelector(DuuxSelector):
         """Initialize the timer selector."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_timer"
-        self._attr_name = "Timer"
+        self._attr_translation_key = "timer"
         self._attr_icon = "mdi:timer"
         self._attr_unit_of_measurement = UnitOfTime.HOURS
-        self._attr_options = list(map(str, range(0, 24+1)))
+        self._attr_options = list(map(str, range(0, 24 + 1)))
 
     @property
     def current_option(self):
         """Return current timer."""
-        return str(self.coordinator.data.get("timer"))
+        return str((self.coordinator.data or {}).get("timer"))
 
     async def async_select_option(self, option):
         """Set timer amount."""
         try:
-        	amount = max(0, min(24, int(option)))
+            amount = max(0, min(24, int(option)))
         except:
-        	amount = 0
+            amount = 0
 
         await self.hass.async_add_executor_job(
             self._api.set_timer, self._device_mac, str(amount)
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxBright2TimerSelector(DuuxTimerSelector):
+    """Representation of a Duux Bright 2 timer selector."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the timer selector."""
+        super().__init__(coordinator, api, device)
+        # Bright 2 supports specific timer presets only (hours): 0=off, 1, 2, 4, 8
+        self._attr_options = ["0", "1", "2", "4", "8"]
+
+
+class DuuxNeoSpeedSelector(DuuxSelector):
+    """Representation of a Duux Neo spray speed selector."""
+
+    SPEED_LOW = "Low"
+    SPEED_MID = "Mid"
+    SPEED_HIGH = "High"
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the speed selector."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_speed"
+        self._attr_translation_key = "spray_volume"
+        self._attr_icon = "mdi:weather-partly-rainy"
+        self._attr_options = [self.SPEED_LOW, self.SPEED_MID, self.SPEED_HIGH]
+
+    @property
+    def current_option(self):
+        """Return current speed."""
+        mode = self.coordinator.data.get("speed", self.SPEED_LOW)
+        mode_map = {
+            0: self.SPEED_LOW,
+            1: self.SPEED_MID,
+            2: self.SPEED_HIGH,
+        }
+        return mode_map.get(mode, self.SPEED_LOW)
+
+    async def async_select_option(self, option):
+        """Set spray speed mode."""
+        mode_map = {
+            self.SPEED_LOW: "0",
+            self.SPEED_MID: "1",
+            self.SPEED_HIGH: "2",
+        }
+        mode = mode_map.get(option, "0")
+
+        await self.hass.async_add_executor_job(
+            self._api.set_speed, self._device_mac, mode
         )
         await self.coordinator.async_request_refresh()

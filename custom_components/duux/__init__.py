@@ -13,8 +13,10 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import (
     DOMAIN,
+    DUUX_DTID_FAN,
     DUUX_DTID_HEATER,
     DUUX_DTID_HUMIDIFIER,
+    DUUX_DTID_AIR_PURIFIER,
     DUUX_DTID_OTHER_HEATER,
     DUUX_DTID_THERMOSTAT,
     DUUX_SUPPORTED_TYPES,
@@ -29,6 +31,8 @@ PLATFORMS = [
     Platform.SWITCH,
     Platform.SELECT,
     Platform.SENSOR,
+    Platform.FAN,
+    Platform.BINARY_SENSOR,
 ]
 
 
@@ -61,7 +65,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             *DUUX_DTID_HEATER,
             *DUUX_DTID_THERMOSTAT,
             *DUUX_DTID_HUMIDIFIER,
+            *DUUX_DTID_AIR_PURIFIER,
             *DUUX_DTID_OTHER_HEATER,
+            *DUUX_DTID_FAN,
         ]:
             ir.async_create_issue(
                 hass,

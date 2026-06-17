@@ -1,0 +1,101 @@
+{
+    "entity": {
+        "sensor": {
+            "pm25": {
+                "name": "PM2.5"
+            },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "healthy": "Gezond",
+                    "acceptable": "Acceptabel",
+                    "polluted": "Vervuild",
+                    "harmful": "Schadelijk"
+                }
+            },
+            "filter_life": {
+                "name": "Levensduur HEPA filter"
+            },
+            "time_remaining": {
+                "name": "Resterende tijd"
+            },
+            "air_quality_index": {
+                "name": "Luchtkwaliteitsindex",
+                "state": {
+                    "excellent": "Uitstekend",
+                    "very_good": "Zeer goed",
+                    "good": "Goed",
+                    "fair": "Redelijk",
+                    "poor": "Slecht",
+                    "harmful": "Schadelijk"
+                }
+            },
+            "error_message": {
+                "name": "Foutmelding"
+            }
+        },
+        "switch": {
+            "child_lock": {
+                "name": "Kinderslot"
+            },
+            "sleep_mode": {
+                "name": "Slaapstand"
+            },
+            "cleaning_mode": {
+                "name": "Reinigingsstand"
+            },
+            "laundry_mode": {
+                "name": "Wasstand"
+            },
+            "night_mode": {
+                "name": "Nachtmodus"
+            },
+            "ionizer": {
+                "name": "Ionisator"
+            }
+        },
+        "select": {
+            "fan_speed": {
+                "name": "Ventilatorsnelheid"
+            },
+            "timer": {
+                "name": "Timer"
+            },
+            "spray_volume": {
+                "name": "Sproeivolume"
+            }
+        },
+        "binary_sensor": {
+            "problem": {
+                "name": "Probleem"
+            },
+            "connected": {
+                "name": "Verbonden"
+            }
+        }
+    },
+    "config": {
+        "step": {
+            "user": {
+                "title": "Duux inloggen",
+                "description": "Voer uw Duux-accountgegevens in.",
+                "data": {
+                    "email": "E-mailadres",
+                    "password": "Wachtwoord"
+                }
+            }
+        },
+        "error": {
+            "invalid_auth": "Ongeldige inloggegevens. Controleer uw e-mail en wachtwoord."
+        },
+        "abort": {
+            "already_configured": "Dit Duux-account is al geconfigureerd."
+        }
+    },
+    "issues": {
+        "device_not_recognised": {
+            "description": "Duux heeft een apparaat gedetecteerd dat niet officieel wordt ondersteund. \n\rControleer het apparaattype en meld dit aan de ontwikkelaar van de integratie. \n\rBenodigde details zijn: \n\rApparaatnaam: {device_name}\n\rApparaattype-ID: {device_type_id}\n\rSensortype-ID: {sensor_type_id}\n\rApparaattype: {reported_type}.",
+            "title": "Apparaat niet herkend"
+        }
+    }
+}
