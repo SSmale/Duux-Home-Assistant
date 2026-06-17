@@ -411,7 +411,10 @@ class DuuxEdgeTwoClimate(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        # await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["heatin"] = mode
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxEdgeClimate(DuuxClimate):
