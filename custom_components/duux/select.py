@@ -177,7 +177,7 @@ class DuuxHorizontalSwingSelect(DuuxSwingSelect):
         """Initialize the horizontal swing select."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_horizontal_swing"
-        self._attr_name = "Horizontal swing"
+        self._attr_translation_key = "horizontal_swing"
         self._attr_icon = "mdi:arrow-left-right"
 
 
@@ -194,7 +194,7 @@ class DuuxVerticalSwingSelect(DuuxSwingSelect):
         """Initialize the vertical swing select."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_vertical_swing"
-        self._attr_name = "Vertical swing"
+        self._attr_translation_key = "vertical_swing"
         self._attr_icon = "mdi:arrow-up-down"
 
 
