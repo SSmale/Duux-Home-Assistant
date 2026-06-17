@@ -96,14 +96,21 @@ class DuuxAPI:
         #       use 'set-point' (aka 'sp') to track a target value.
         return self.send_command(device_mac, f"tune set sp {temp}")
 
-    def set_speed(self, device_mac, speed):
-        """Set target speed (1-30)."""
-        speed = max(1, min(30, int(speed)))
+    def set_fan_speed(self, device_mac, speed):
+        """Set fan speed (1-30)."""
+        return self.set_speed(device_mac, speed, 1, 30)
+
+    def set_purifier_speed(self, device_mac, speed):
+        """Set purifier speed (0=Auto, 1-4=Speed)."""
+        return self.set_speed(device_mac, speed, 0, 4)
+
+    def set_speed(self, device_mac, speed, min, max):
+        speed = max(min, min(max, int(speed)))
         return self.send_command(device_mac, f"tune set speed {speed}")
 
     def set_humidity(self, device_mac, humidity):
         """Set target humidity (30-80%)."""
-        temp = max(30, min(80, int(humidity)))
+        humidity = max(30, min(80, int(humidity)))
         # note: Both temperature for heaters and humidity for de-humidifiers
         #       use 'set-point' (aka 'sp') to track a target value.
         return self.send_command(device_mac, f"tune set sp {humidity}")
@@ -122,11 +129,6 @@ class DuuxAPI:
         """Set fan mode (1=Low, 0=High)."""
         mode_val = max(0, min(1, int(mode)))
         return self.send_command(device_mac, f"tune set fan {mode_val}")
-
-    def set_speed(self, device_mac, mode):
-        """Set fan speed (0=Auto, 1-4=Speed)."""
-        mode_val = max(0, min(4, int(mode)))
-        return self.send_command(device_mac, f"tune set speed {mode_val}")
 
     def set_ionizer(self, device_mac, ion_on):
         """Set ionizer on or off."""

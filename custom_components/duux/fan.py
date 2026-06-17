@@ -208,7 +208,11 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         speed = percentage_to_ordered_list_item(self._speed_range, percentage)
         if speed is not None:
             await self.hass.async_add_executor_job(
-                self._api.set_speed, self._device_mac, speed
+                self._api.set_speed,
+                self._device_mac,
+                speed,
+                self._speed_range[0],
+                self._speed_range[-1],
             )
             await self.coordinator.async_request_refresh()
 
@@ -582,7 +586,7 @@ class DuuxAirPurifierFan(DuuxFan):
             )
 
         await self.hass.async_add_executor_job(
-            self._api.set_speed, self._device_mac, speed
+            self._api.set_purifier_speed, self._device_mac, speed
         )
 
         # Constraint: Ionizer must be OFF if speed is at lowest (1)
@@ -602,7 +606,7 @@ class DuuxAirPurifierFan(DuuxFan):
                     self._api.set_power, self._device_mac, True
                 )
             await self.hass.async_add_executor_job(
-                self._api.set_speed, self._device_mac, 0
+                self._api.set_purifier_speed, self._device_mac, 0
             )
         await self.coordinator.async_request_refresh()
 
