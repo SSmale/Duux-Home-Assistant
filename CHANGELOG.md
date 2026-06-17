@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.12.0-pre-81.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.2...v2.12.0-pre-81.1) (2026-06-17)
+
+### Added
+
+* adds connection type sensor ([2d70138](https://github.com/SSmale/Duux-Home-Assistant/commit/2d701380ad2bc6eec23085ef0a9380a87e291d35))
+* adds swing to the integration ([ec47b85](https://github.com/SSmale/Duux-Home-Assistant/commit/ec47b851c1f79c1cea83a8a414213bbfa28aff72))
+* adds translations for the select and a warning if the mode is set wrong ([f567051](https://github.com/SSmale/Duux-Home-Assistant/commit/f567051d38e37e257d5cec916e2c2a4314bde9ea))
+
 ## [2.11.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.1...v2.11.2) (2026-06-16)
 
 ### Fixed
@@ -238,6 +246,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
