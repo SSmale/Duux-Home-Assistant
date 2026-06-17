@@ -128,6 +128,7 @@ Every supported device also gets:
 
 - 🔴 **Problem Sensor**: Fires when the device reports an error code (ice detected, water tank full, etc.)
 - 🟢 **Connectivity Sensor**: Shows whether the device is online or offline, with last-seen timestamp
+- 📡 **Connection Type Sensor**: Reports whether the device is connected via MQTT or TCP
 
 ---
 

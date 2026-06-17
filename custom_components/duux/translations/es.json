@@ -32,6 +32,13 @@
             },
             "error_message": {
                 "name": "Mensaje de error"
+            },
+            "connection_type": {
+                "name": "Tipo de conexión",
+                "state": {
+                    "mqtt": "MQTT",
+                    "tcp": "TCP"
+                }
             }
         },
         "switch": {

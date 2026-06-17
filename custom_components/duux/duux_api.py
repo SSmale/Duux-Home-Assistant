@@ -59,16 +59,24 @@ class DuuxAPI:
         devices = self.get_devices()
         for device in devices:
             if device.get("deviceId") == device_id:
+                connection_type = device.get("connectionType")
                 latest_data = device.get("latestData")
                 if latest_data is None:
-                    return {"online": device.get("online", True)}
+                    return {
+                        "online": device.get("online", True),
+                        "connectionType": connection_type,
+                    }
 
                 data = latest_data.get("fullData")
                 if data is None:
-                    return {"online": device.get("online", True)}
+                    return {
+                        "online": device.get("online", True),
+                        "connectionType": connection_type,
+                    }
 
                 data_copy = data.copy()
                 data_copy["online"] = device.get("online", True)
+                data_copy["connectionType"] = connection_type
                 return data_copy
         return {}
 
