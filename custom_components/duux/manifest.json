@@ -12,5 +12,5 @@
   "requirements": [
     "requests>=2.31.0"
   ],
-  "version": "2.13.1-pre-96.1"
+  "version": "2.13.1"
 }

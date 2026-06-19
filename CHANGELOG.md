@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.13.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.0...v2.13.1) (2026-06-19)
+
+### Fixed
+
+* handle null googleDeviceType during device discovery ([#96](https://github.com/SSmale/Duux-Home-Assistant/issues/96)) ([#99](https://github.com/SSmale/Duux-Home-Assistant/issues/99)) ([f77b0bc](https://github.com/SSmale/Duux-Home-Assistant/commit/f77b0bc9e01424aebde3c22acce2e001fce894ac))
+
 ## [2.13.1-pre-96.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.0...v2.13.1-pre-96.1) (2026-06-19)
 
 ### Fixed
@@ -276,4 +282,5 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
