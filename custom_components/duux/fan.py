@@ -183,7 +183,9 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         **kwargs: Any,
     ) -> None:
         """Turn on the fan."""
-        await self.hass.async_add_executor_job(self._api.set_power, self._device_mac, 1)
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, True
+        )
         await self.coordinator.async_request_refresh()
 
         if percentage is not None:
@@ -196,7 +198,9 @@ class DuuxFan(CoordinatorEntity, FanEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the fan off."""
-        await self.hass.async_add_executor_job(self._api.set_power, self._device_mac, 0)
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, False
+        )
         await self.coordinator.async_request_refresh()
 
     async def async_set_percentage(self, percentage: int) -> None:
