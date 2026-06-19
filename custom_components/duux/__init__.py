@@ -53,12 +53,28 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # Create coordinator for each device
     coordinators = {}
     for device in devices:
+        sensor_type = device.get("sensorType") or {}
         sensor_type_id = device.get("sensorTypeId")
-        device_type_id = device.get("sensorType").get("type")
-        google_type = device.get("sensorType").get("googleDeviceType")
-        last_word = google_type.split(".")[-1]  # "HEATER" OR ""THERMOSTAT"
+        device_type_id = sensor_type.get("type")
+        google_type = sensor_type.get("googleDeviceType") or ""
+        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
         device_name = device.get("displayName") or device.get("name")
-        model = device.get("sensorType", {}).get("name", "Unknown")
+        model = sensor_type.get("name", "Unknown")
+
+        if device.get("connectionType") != "mqtt":
+            _LOGGER.warning(
+                f"Device {device_name} (ID: {device.get('deviceId')}) is not connected via MQTT. Some features may not work.",
+            )
+            ir.async_create_issue(
+                hass,
+                DOMAIN,
+                "device_not_mqtt",
+                is_fixable=False,
+                severity=ir.IssueSeverity.WARNING,
+                translation_key="device_not_mqtt",
+                learn_more_url="https://github.com/SSmale/Duux-Home-Assistant/discussions/81",
+                translation_placeholders={"device_name": model},
+            )
 
         if device_type_id not in [
             *DUUX_DTID_HEATER,

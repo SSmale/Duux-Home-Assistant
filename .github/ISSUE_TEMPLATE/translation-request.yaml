@@ -1,0 +1,74 @@
+name: Translation Request
+description: Request a new language, report a wrong/missing translation, or offer to contribute one.
+title: '[Translation]: <language>'
+labels:
+  - translation
+  - documentation
+  - User Reported
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make the integration available in more languages! 🌍
+
+        **Currently supported:** English (`en`), German (`de`), Spanish (`es`), French (`fr`), Italian (`it`), Dutch (`nl`), Greek (`el`).
+
+        Translations live in [`custom_components/duux/translations`](https://github.com/SSmale/Duux-Home-Assistant/tree/master/custom_components/duux/translations), with [`en.json`](https://github.com/SSmale/Duux-Home-Assistant/blob/master/custom_components/duux/translations/en.json) as the source file to copy and translate.
+
+  - id: request_type
+    type: dropdown
+    attributes:
+      label: What are you requesting?
+      options:
+        - A brand new language
+        - A fix to an existing translation
+        - I'd like to contribute a translation myself
+    validations:
+      required: true
+
+  - id: language
+    type: input
+    attributes:
+      label: Language
+      description: Name of the language and, if known, the two-letter code Home Assistant uses for it.
+      placeholder: 'e.g. Polish - pl'
+    validations:
+      required: true
+
+  - id: incorrect_text
+    type: textarea
+    attributes:
+      label: Current text (only if reporting a wrong or missing translation)
+      description: Paste the existing string and the file/key it's found in.
+      placeholder: |
+        File: translations/de.json
+        Key: entity.select.fan_speed.name
+        Current text: "..."
+    validations:
+      required: false
+
+  - id: suggested_text
+    type: textarea
+    attributes:
+      label: Suggested translation
+      description: Paste your suggested text, or a full translated JSON file based on en.json.
+      render: json
+    validations:
+      required: false
+
+  - id: confirm
+    type: checkboxes
+    attributes:
+      label: Checks
+      options:
+        - label: I've checked the translations folder above to confirm this language isn't already supported
+        - label: I'm a native or fluent speaker of this language
+        - label: I'm willing to help review or test this translation
+
+  - id: additional_context
+    type: textarea
+    attributes:
+      label: Additional context
+      description: Anything else that would help — links, screenshots of mistranslated UI, etc.
+    validations:
+      required: false

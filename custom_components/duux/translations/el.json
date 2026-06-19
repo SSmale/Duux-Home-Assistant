@@ -1,0 +1,118 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Αυτός ο λογαριασμός Duux έχει ήδη ρυθμιστεί."
+        },
+        "error": {
+            "invalid_auth": "Μη έγκυρα στοιχεία σύνδεσης. Ελέγξτε το email και τον κωδικό πρόσβασής σας."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Διεύθυνση email",
+                    "password": "Κωδικός πρόσβασης"
+                },
+                "description": "Εισάγετε τα στοιχεία σύνδεσης του λογαριασμού Duux.",
+                "title": "Σύνδεση Duux"
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "connected": {
+                "name": "Συνδεδεμένο"
+            },
+            "problem": {
+                "name": "Πρόβλημα"
+            }
+        },
+        "select": {
+            "fan_speed": {
+                "name": "Ταχύτητα ανεμιστήρα"
+            },
+            "horizontal_swing": {
+                "name": "Οριζόντια κίνηση"
+            },
+            "spray_volume": {
+                "name": "Ένταση ψεκασμού"
+            },
+            "timer": {
+                "name": "Χρονοδιακόπτης"
+            },
+            "vertical_swing": {
+                "name": "Κάθετη κίνηση"
+            }
+        },
+        "sensor": {
+            "air_quality_index": {
+                "name": "Δείκτης ποιότητας αέρα",
+                "state": {
+                    "excellent": "Άριστη",
+                    "fair": "Μέτρια",
+                    "good": "Καλή",
+                    "harmful": "Επιβλαβής",
+                    "poor": "Κακή",
+                    "very_good": "Πολύ καλή"
+                }
+            },
+            "connection_type": {
+                "name": "Τύπος σύνδεσης",
+                "state": {
+                    "mqtt": "MQTT",
+                    "tcp": "TCP"
+                }
+            },
+            "error_message": {
+                "name": "Μήνυμα σφάλματος"
+            },
+            "filter_life": {
+                "name": "Υπολειπόμενη διάρκεια ζωής φίλτρου HEPA"
+            },
+            "pm25": {
+                "name": "PM2.5"
+            },
+            "time_remaining": {
+                "name": "Υπολειπόμενος χρόνος"
+            },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "acceptable": "Αποδεκτή",
+                    "harmful": "Επικίνδυνη",
+                    "healthy": "Καλή",
+                    "polluted": "Μολυσμένη"
+                }
+            }
+        },
+        "switch": {
+            "child_lock": {
+                "name": "Κλείδωμα ασφαλείας"
+            },
+            "cleaning_mode": {
+                "name": "Λειτουργία καθαρισμού"
+            },
+            "ionizer": {
+                "name": "Ιονιστής"
+            },
+            "laundry_mode": {
+                "name": "Λειτουργία στεγνώματος ρούχων"
+            },
+            "night_mode": {
+                "name": "Νυχτερινή λειτουργία"
+            },
+            "sleep_mode": {
+                "name": "Λειτουργία ύπνου"
+            }
+        }
+    },
+    "issues": {
+        "device_not_mqtt": {
+            "description": "Η Duux εντόπισε μια συσκευή που δεν είναι συνδεδεμένη μέσω MQTT. \n\rΟρισμένες λειτουργίες ενδέχεται να μην δουλεύουν.\n\rΑυτό μπορεί να διορθωθεί αποσυνδέοντας τη συσκευή από το ρεύμα για 10 δευτερόλεπτα. \n\rΌνομα συσκευής: {device_name}",
+            "title": "Η συσκευή δεν είναι συνδεδεμένη μέσω MQTT"
+        },
+        "device_not_recognised": {
+            "description": "Η Duux εντόπισε μια συσκευή που δεν υποστηρίζεται επίσημα. \n\rΕλέγξτε τον τύπο της συσκευής και αναφέρετέ το στον προγραμματιστή της ενσωμάτωσης. \n\rΤα απαραίτητα στοιχεία είναι: \n\rΌνομα συσκευής: {device_name}\n\rDevice Type ID: {device_type_id}\n\rSensor Type ID: {sensor_type_id}\n\rΤύπος συσκευής: {reported_type}.",
+            "title": "Η συσκευή δεν αναγνωρίστηκε"
+        }
+    }
+}

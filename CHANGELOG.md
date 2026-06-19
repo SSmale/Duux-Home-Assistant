@@ -2,6 +2,62 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.13.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.1...v2.13.2) (2026-06-19)
+
+### Fixed
+
+* rename min/max params in set_speed to avoid shadowing builtins ([#101](https://github.com/SSmale/Duux-Home-Assistant/issues/101)) ([a39bea8](https://github.com/SSmale/Duux-Home-Assistant/commit/a39bea8592a25a976fc6bc8fb47f14d538c04e1c)), closes [#100](https://github.com/SSmale/Duux-Home-Assistant/issues/100)
+
+## [2.13.2-pre-100.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.1...v2.13.2-pre-100.1) (2026-06-19)
+
+### Fixed
+
+* rename min/max params in set_speed to avoid shadowing builtins ([#100](https://github.com/SSmale/Duux-Home-Assistant/issues/100)) ([a2b7db8](https://github.com/SSmale/Duux-Home-Assistant/commit/a2b7db812dac14e9a669f17b2289c07a56b01cc6))
+
+## [2.13.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.0...v2.13.1) (2026-06-19)
+
+### Fixed
+
+* handle null googleDeviceType during device discovery ([#96](https://github.com/SSmale/Duux-Home-Assistant/issues/96)) ([#99](https://github.com/SSmale/Duux-Home-Assistant/issues/99)) ([f77b0bc](https://github.com/SSmale/Duux-Home-Assistant/commit/f77b0bc9e01424aebde3c22acce2e001fce894ac))
+
+## [2.13.1-pre-96.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.0...v2.13.1-pre-96.1) (2026-06-19)
+
+### Fixed
+
+* handle null googleDeviceType during device discovery ([#96](https://github.com/SSmale/Duux-Home-Assistant/issues/96)) ([537cef3](https://github.com/SSmale/Duux-Home-Assistant/commit/537cef3ac9d2796fcc01bbf3f27918eac8757060))
+
+## [2.13.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0...v2.13.0) (2026-06-19)
+
+### Added
+
+* add Greek translations ([#97](https://github.com/SSmale/Duux-Home-Assistant/issues/97)) ([#98](https://github.com/SSmale/Duux-Home-Assistant/issues/98)) ([f3fce19](https://github.com/SSmale/Duux-Home-Assistant/commit/f3fce198f8719f605d09c99edd24aaf1566006d2))
+
+## [2.13.0-pre-97.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0...v2.13.0-pre-97.1) (2026-06-19)
+
+### Added
+
+* add Greek translations ([#97](https://github.com/SSmale/Duux-Home-Assistant/issues/97)) ([ea07503](https://github.com/SSmale/Duux-Home-Assistant/commit/ea07503904600c02c65f839b62f691f65850d72f))
+
+## [2.12.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.2...v2.12.0) (2026-06-19)
+
+### Added
+
+* adds swing for fans, connection type and translations ([#82](https://github.com/SSmale/Duux-Home-Assistant/issues/82)) ([4f248a2](https://github.com/SSmale/Duux-Home-Assistant/commit/4f248a2706577f743a3f92860fbdfc2125b9f47e))
+
+## [2.12.0-pre-81.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0-pre-81.1...v2.12.0-pre-81.2) (2026-06-19)
+
+### Fixed
+
+* fixes translations ([7e20acc](https://github.com/SSmale/Duux-Home-Assistant/commit/7e20accb9391d0ac86d5bbb7713f9cec49b6e9fb))
+
+## [2.12.0-pre-81.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.2...v2.12.0-pre-81.1) (2026-06-17)
+
+### Added
+
+* adds connection type sensor ([2d70138](https://github.com/SSmale/Duux-Home-Assistant/commit/2d701380ad2bc6eec23085ef0a9380a87e291d35))
+* adds swing to the integration ([ec47b85](https://github.com/SSmale/Duux-Home-Assistant/commit/ec47b851c1f79c1cea83a8a414213bbfa28aff72))
+* adds translations for the select and a warning if the mode is set wrong ([f567051](https://github.com/SSmale/Duux-Home-Assistant/commit/f567051d38e37e257d5cec916e2c2a4314bde9ea))
+
 ## [2.11.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.1...v2.11.2) (2026-06-16)
 
 ### Fixed
@@ -238,8 +294,6 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
-
-
 
 
 
