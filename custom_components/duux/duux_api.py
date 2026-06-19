@@ -112,8 +112,9 @@ class DuuxAPI:
         """Set purifier speed (0=Auto, 1-4=Speed)."""
         return self.set_speed(device_mac, speed, 0, 4)
 
-    def set_speed(self, device_mac, speed, min, max):
-        speed = max(min, min(max, int(speed)))
+    def set_speed(self, device_mac, speed, min_speed, max_speed):
+        """Set device speed, clamped to [min_speed, max_speed]."""
+        speed = max(min_speed, min(max_speed, int(speed)))
         return self.send_command(device_mac, f"tune set speed {speed}")
 
     def set_humidity(self, device_mac, humidity):
