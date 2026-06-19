@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.13.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0...v2.13.0) (2026-06-19)
+
+### Added
+
+* add Greek translations ([#97](https://github.com/SSmale/Duux-Home-Assistant/issues/97)) ([#98](https://github.com/SSmale/Duux-Home-Assistant/issues/98)) ([f3fce19](https://github.com/SSmale/Duux-Home-Assistant/commit/f3fce198f8719f605d09c99edd24aaf1566006d2))
+
 ## [2.13.0-pre-97.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0...v2.13.0-pre-97.1) (2026-06-19)
 
 ### Added
@@ -264,6 +270,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
