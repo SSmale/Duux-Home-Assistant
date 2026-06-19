@@ -14,6 +14,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.const import (
+    EntityCategory,
     PERCENTAGE,
     UnitOfTemperature,
     UnitOfTime,
@@ -74,6 +75,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxTempSensor(coordinator, api, device))
 
         entities.append(DuuxErrorSensor(coordinator, api, device))
+        entities.append(DuuxConnectionTypeSensor(coordinator, api, device))
 
     async_add_entities(entities)
 
@@ -288,6 +290,38 @@ class DuuxErrorSensor(DuuxSensor):
         return DUUX_ERRID(
             self.coordinator.data.get(self.entity_description.key)
         ).name.replace("_", " ")
+
+
+class DuuxConnectionTypeSensor(DuuxSensor):
+    """Enum sensor reporting whether the device is connected via MQTT or TCP.
+
+    'connectionType' lives on the device envelope returned by /smarthome/sensors
+    rather than in the polled status payload, but DuuxAPI.get_device_status()
+    stitches it into the coordinator data (the same way it already does for
+    'online'), so this updates on every coordinator refresh rather than being
+    frozen at integration setup.
+    """
+
+    def __init__(self, coordinator, api, device):
+        super().__init__(
+            coordinator,
+            api,
+            device,
+            DuuxSensorEntityDescription(
+                key="connectionType",
+                translation_key="connection_type",
+                device_class=SensorDeviceClass.ENUM,
+                options=["mqtt", "tcp"],
+                entity_category=EntityCategory.DIAGNOSTIC,
+                icon="mdi:wan",
+            ),
+        )
+
+    @property
+    def native_value(self):
+        """Return the connection type, normalised to match the declared options."""
+        value = (self.coordinator.data or {}).get(self.entity_description.key)
+        return value.lower() if isinstance(value, str) else None
 
 
 class DuuxBora2024TimeRemainingSensor(DuuxTimeRemainingSensor):

@@ -1,48 +1,98 @@
 {
+    "config": {
+        "abort": {
+            "already_configured": "This Duux account is already configured."
+        },
+        "error": {
+            "invalid_auth": "Invalid credentials. Please check your email and password."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Email address",
+                    "password": "Password"
+                },
+                "description": "Enter your Duux account credentials.",
+                "title": "Duux Login"
+            }
+        }
+    },
     "entity": {
+        "binary_sensor": {
+            "connected": {
+                "name": "Connected"
+            },
+            "problem": {
+                "name": "Problem"
+            }
+        },
+        "select": {
+            "fan_speed": {
+                "name": "Fan Speed"
+            },
+            "horizontal_swing": {
+                "name": "Horizontal Swing"
+            },
+            "spray_volume": {
+                "name": "Spray Volume"
+            },
+            "timer": {
+                "name": "Timer"
+            },
+            "vertical_swing": {
+                "name": "Vertical Swing"
+            }
+        },
         "sensor": {
-            "pm25": {
-                "name": "PM2.5"
-            },
-            "tvoc": {
-                "name": "TVOC",
-                "state": {
-                    "healthy": "Healthy",
-                    "acceptable": "Acceptable",
-                    "polluted": "Polluted",
-                    "harmful": "Harmful"
-                }
-            },
-            "filter_life": {
-                "name": "HEPA Filter remaining lifespan"
-            },
-            "time_remaining": {
-                "name": "Time Remaining"
-            },
             "air_quality_index": {
                 "name": "Air Quality Index",
                 "state": {
                     "excellent": "Excellent",
-                    "very_good": "Very Good",
-                    "good": "Good",
                     "fair": "Fair",
+                    "good": "Good",
+                    "harmful": "Harmful",
                     "poor": "Poor",
-                    "harmful": "Harmful"
+                    "very_good": "Very Good"
+                }
+            },
+            "connection_type": {
+                "name": "Connection Type",
+                "state": {
+                    "mqtt": "MQTT",
+                    "tcp": "TCP"
                 }
             },
             "error_message": {
                 "name": "Error Message"
+            },
+            "filter_life": {
+                "name": "HEPA Filter remaining lifespan"
+            },
+            "pm25": {
+                "name": "PM2.5"
+            },
+            "time_remaining": {
+                "name": "Time Remaining"
+            },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "acceptable": "Acceptable",
+                    "harmful": "Harmful",
+                    "healthy": "Healthy",
+                    "polluted": "Polluted"
+                }
             }
         },
         "switch": {
             "child_lock": {
                 "name": "Child Lock"
             },
-            "sleep_mode": {
-                "name": "Sleep Mode"
-            },
             "cleaning_mode": {
                 "name": "Cleaning Mode"
+            },
+            "ionizer": {
+                "name": "Ionizer"
             },
             "laundry_mode": {
                 "name": "Laundry Mode"
@@ -50,49 +100,16 @@
             "night_mode": {
                 "name": "Night Mode"
             },
-            "ionizer": {
-                "name": "Ionizer"
+            "sleep_mode": {
+                "name": "Sleep Mode"
             }
-        },
-        "select": {
-            "fan_speed": {
-                "name": "Fan Speed"
-            },
-            "timer": {
-                "name": "Timer"
-            },
-            "spray_volume": {
-                "name": "Spray Volume"
-            }
-        },
-        "binary_sensor": {
-            "problem": {
-                "name": "Problem"
-            },
-            "connected": {
-                "name": "Connected"
-            }
-        }
-    },
-    "config": {
-        "step": {
-            "user": {
-                "title": "Duux Login",
-                "description": "Enter your Duux account credentials.",
-                "data": {
-                    "email": "Email address",
-                    "password": "Password"
-                }
-            }
-        },
-        "error": {
-            "invalid_auth": "Invalid credentials. Please check your email and password."
-        },
-        "abort": {
-            "already_configured": "This Duux account is already configured."
         }
     },
     "issues": {
+        "device_not_mqtt": {
+            "description": "Duux has detected a device that is not connected via MQTT. \n\rSome features may not work.\n\rThis maybe fixed by power cycling the device for 10s \n\rDevice Name: {device_name}",
+            "title": "Device not connected via MQTT"
+        },
         "device_not_recognised": {
             "description": "Duux has detected a device that is not officially supported. \n\rPlease check the device type and report it to the integration developer. \n\rDetails needed are: \n\rDevice Name: {device_name}\n\rDevice Type ID: {device_type_id}\n\rSensor Type ID: {sensor_type_id}\n\rDevice Type: {reported_type}.",
             "title": "Device not recognised"

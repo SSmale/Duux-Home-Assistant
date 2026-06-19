@@ -1,48 +1,98 @@
 {
+    "config": {
+        "abort": {
+            "already_configured": "Esta cuenta Duux ya está configurada."
+        },
+        "error": {
+            "invalid_auth": "Credenciales incorrectas. Verifique su correo y contraseña."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "Correo electrónico",
+                    "password": "Contraseña"
+                },
+                "description": "Introduzca las credenciales de su cuenta Duux.",
+                "title": "Inicio de sesión Duux"
+            }
+        }
+    },
     "entity": {
+        "binary_sensor": {
+            "connected": {
+                "name": "Conectado"
+            },
+            "problem": {
+                "name": "Problema"
+            }
+        },
+        "select": {
+            "fan_speed": {
+                "name": "Velocidad del ventilador"
+            },
+            "horizontal_swing": {
+                "name": "Oscilación horizontal"
+            },
+            "spray_volume": {
+                "name": "Volumen de nebulización"
+            },
+            "timer": {
+                "name": "Temporizador"
+            },
+            "vertical_swing": {
+                "name": "Oscilación vertical"
+            }
+        },
         "sensor": {
-            "pm25": {
-                "name": "PM2.5"
-            },
-            "tvoc": {
-                "name": "TVOC",
-                "state": {
-                    "healthy": "Saludable",
-                    "acceptable": "Aceptable",
-                    "polluted": "Contaminado",
-                    "harmful": "Nocivo"
-                }
-            },
-            "filter_life": {
-                "name": "Vida del filtro HEPA"
-            },
-            "time_remaining": {
-                "name": "Tiempo restante"
-            },
             "air_quality_index": {
                 "name": "Índice de calidad del aire",
                 "state": {
                     "excellent": "Excelente",
-                    "very_good": "Muy bueno",
-                    "good": "Bueno",
                     "fair": "Regular",
+                    "good": "Bueno",
+                    "harmful": "Nocivo",
                     "poor": "Deficiente",
-                    "harmful": "Nocivo"
+                    "very_good": "Muy bueno"
+                }
+            },
+            "connection_type": {
+                "name": "Tipo de conexión",
+                "state": {
+                    "mqtt": "MQTT",
+                    "tcp": "TCP"
                 }
             },
             "error_message": {
                 "name": "Mensaje de error"
+            },
+            "filter_life": {
+                "name": "Vida del filtro HEPA"
+            },
+            "pm25": {
+                "name": "PM2.5"
+            },
+            "time_remaining": {
+                "name": "Tiempo restante"
+            },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "acceptable": "Aceptable",
+                    "harmful": "Nocivo",
+                    "healthy": "Saludable",
+                    "polluted": "Contaminado"
+                }
             }
         },
         "switch": {
             "child_lock": {
                 "name": "Bloqueo infantil"
             },
-            "sleep_mode": {
-                "name": "Modo sueño"
-            },
             "cleaning_mode": {
                 "name": "Modo limpieza"
+            },
+            "ionizer": {
+                "name": "Ionizador"
             },
             "laundry_mode": {
                 "name": "Modo lavandería"
@@ -50,49 +100,16 @@
             "night_mode": {
                 "name": "Modo noche"
             },
-            "ionizer": {
-                "name": "Ionizador"
+            "sleep_mode": {
+                "name": "Modo sueño"
             }
-        },
-        "select": {
-            "fan_speed": {
-                "name": "Velocidad del ventilador"
-            },
-            "timer": {
-                "name": "Temporizador"
-            },
-            "spray_volume": {
-                "name": "Volumen de nebulización"
-            }
-        },
-        "binary_sensor": {
-            "problem": {
-                "name": "Problema"
-            },
-            "connected": {
-                "name": "Conectado"
-            }
-        }
-    },
-    "config": {
-        "step": {
-            "user": {
-                "title": "Inicio de sesión Duux",
-                "description": "Introduzca las credenciales de su cuenta Duux.",
-                "data": {
-                    "email": "Correo electrónico",
-                    "password": "Contraseña"
-                }
-            }
-        },
-        "error": {
-            "invalid_auth": "Credenciales incorrectas. Verifique su correo y contraseña."
-        },
-        "abort": {
-            "already_configured": "Esta cuenta Duux ya está configurada."
         }
     },
     "issues": {
+        "device_not_mqtt": {
+            "description": "Duux ha detectado un dispositivo que no está conectado a través de MQTT. \n\rAlgunas funciones pueden no funcionar. \n\rEste problema puede resolverse desconectando el dispositivo de la corriente durante 10 segundos. \n\rNombre del dispositivo: {device_name}",
+            "title": "Dispositivo no conectado a través de MQTT"
+        },
         "device_not_recognised": {
             "description": "Duux ha detectado un dispositivo que no es oficialmente compatible. \n\rPor favor, verifique el tipo de dispositivo e infórmelo al desarrollador de la integración. \n\rLos detalles necesarios son: \n\rNombre del dispositivo: {device_name}\n\rID del tipo de dispositivo: {device_type_id}\n\rID del tipo de sensor: {sensor_type_id}\n\rTipo de dispositivo: {reported_type}.",
             "title": "Dispositivo no reconocido"

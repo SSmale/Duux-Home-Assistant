@@ -60,6 +60,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         device_name = device.get("displayName") or device.get("name")
         model = device.get("sensorType", {}).get("name", "Unknown")
 
+        if device.get("connectionType") != "mqtt":
+            _LOGGER.warning(
+                f"Device {device_name} (ID: {device.get('deviceId')}) is not connected via MQTT. Some features may not work.",
+            )
+            ir.async_create_issue(
+                hass,
+                DOMAIN,
+                "device_not_mqtt",
+                is_fixable=False,
+                severity=ir.IssueSeverity.WARNING,
+                translation_key="device_not_mqtt",
+                learn_more_url="https://github.com/SSmale/Duux-Home-Assistant/discussions/81",
+                translation_placeholders={"device_name": model},
+            )
+
         if device_type_id not in [
             *DUUX_DTID_HEATER,
             *DUUX_DTID_THERMOSTAT,

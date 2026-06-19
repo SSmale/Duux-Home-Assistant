@@ -128,6 +128,7 @@ Every supported device also gets:
 
 - 🔴 **Problem Sensor**: Fires when the device reports an error code (ice detected, water tank full, etc.)
 - 🟢 **Connectivity Sensor**: Shows whether the device is online or offline, with last-seen timestamp
+- 📡 **Connection Type Sensor**: Reports whether the device is connected via MQTT or TCP
 
 ---
 
@@ -360,6 +361,21 @@ Thanks to:
 
 - [Noah Evans](https://github.com/ThisIsNoahEvans/DuuxAPI) for the DuuxAPI reference implementation
 - The Home Assistant community
+
+## Translations
+
+A big thank you to @Anokino for the translation work.
+
+Currently the project has translations for:
+
+- English
+- French
+- German
+- Italian
+- Dutch
+- Spanish
+
+If you spot an issue with the translations, or want to create one for another language please open an issue!
 
 ## Contributing
 
