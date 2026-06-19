@@ -187,3 +187,13 @@ class DuuxAPI:
         """Set vertical oscillation (0=off, 1=45°, 2=100°)."""
         value = max(0, min(2, int(value)))
         return self.send_command(device_mac, f"tune set verosc {value}")
+
+    def set_swing(self, device_mac, value):
+        """Set swing level (0=off, 1=30°, 2=60°, 3=90°)."""
+        value = max(0, min(3, int(value)))
+        return self.send_command(device_mac, f"tune set swing {value}")
+
+    def set_tilt(self, device_mac, value):
+        """Set vertical tilt (0=off, 1=45°, 2=100°)."""
+        value = max(0, min(2, int(value)))
+        return self.send_command(device_mac, f"tune set tilt {value}")
