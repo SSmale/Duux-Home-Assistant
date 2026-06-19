@@ -374,6 +374,7 @@ Currently the project has translations for:
 - Italian
 - Dutch
 - Spanish
+- Greek
 
 If you spot an issue with the translations, or want to create one for another language please open an issue!
 
