@@ -362,6 +362,21 @@ Thanks to:
 - [Noah Evans](https://github.com/ThisIsNoahEvans/DuuxAPI) for the DuuxAPI reference implementation
 - The Home Assistant community
 
+## Translations
+
+A big thank you to @Anokino for the translation work.
+
+Currently the project has translations for:
+
+- English
+- French
+- German
+- Italian
+- Dutch
+- Spanish
+
+If you spot an issue with the translations, or want to create one for another language please open an issue!
+
 ## Contributing
 
 Contributions are welcome! Please:
