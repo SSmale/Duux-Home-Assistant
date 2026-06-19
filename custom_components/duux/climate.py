@@ -45,19 +45,18 @@ async def async_setup_entry(
 
     entities = []
     for device in devices:
-        sensor_type = device.get("sensorType") or {}
-        device_type_id = sensor_type.get("type")
-        google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
+        device_type_id = device.get("sensorType").get("type")
+        google_type = device.get("sensorType").get("googleDeviceType")
+        last_word = google_type.split(".")[-1]  # "HEATER" OR ""THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinators.get(device_id)
+        coordinator = coordinator = coordinators.get(device_id)
 
         # Skip devices that have no coordinator (were filtered out in __init__)
         if coordinator is None:
             continue
 
-        model = sensor_type.get("name", "Unknown")
+        model = device.get("sensorType", {}).get("name", "Unknown")
 
         if device_type_id not in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
             if last_word in DUUX_CLIMATE_TYPES:
@@ -320,13 +319,17 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
-        for preset in self._presets:
-            if preset["name"] == preset_mode:
-                mode_command = preset["command"]
-                break
+        preset = next(
+            (p for p in self._presets if p["name"] == preset_mode), None
+        )
+        if preset is None:
+            _LOGGER.warning(
+                "%s: unknown preset mode '%s'", self._attr_name, preset_mode
+            )
+            return
 
         await self.hass.async_add_executor_job(
-            self._api.send_command, self._device_mac, f"tune set {mode_command}"
+            self._api.send_command, self._device_mac, f"tune set {preset['command']}"
         )
         await self.coordinator.async_request_refresh()
 
