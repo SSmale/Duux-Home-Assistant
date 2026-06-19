@@ -56,7 +56,7 @@ async def async_setup_entry(
         sensor_type = device.get("sensorType") or {}
         device_type_id = sensor_type.get("type")
         google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1]  # "FAN", "HEATER", etc.
+        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device.get("deviceId")
         coordinator = coordinators.get(device_id)
