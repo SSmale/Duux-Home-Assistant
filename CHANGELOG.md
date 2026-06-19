@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.12.1-pre-95.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.1-pre-95.1...v2.12.1-pre-95.2) (2026-06-19)
+
+### Fixed
+
+* fixes variable type for power controls ([52fb0ed](https://github.com/SSmale/Duux-Home-Assistant/commit/52fb0ed7031bf5bcab4edde7bdb22cfea5796b54))
+
 ## [2.12.1-pre-95.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0...v2.12.1-pre-95.1) (2026-06-19)
 
 ### Fixed
@@ -264,6 +270,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
