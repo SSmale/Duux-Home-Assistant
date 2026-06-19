@@ -107,7 +107,7 @@
     },
     "issues": {
         "device_not_mqtt": {
-            "description": "Duux ha detectado un dispositivo que no está conectado a través de MQTT. \n\rAlgunas funciones pueden no funcionar. \n\rEste problema puede resolverse reiniciando el dispositivo durante 10 segundos. \n\rNombre del dispositivo: {device_name}",
+            "description": "Duux ha detectado un dispositivo que no está conectado a través de MQTT. \n\rAlgunas funciones pueden no funcionar. \n\rEste problema puede resolverse desconectando el dispositivo de la corriente durante 10 segundos. \n\rNombre del dispositivo: {device_name}",
             "title": "Dispositivo no conectado a través de MQTT"
         },
         "device_not_recognised": {

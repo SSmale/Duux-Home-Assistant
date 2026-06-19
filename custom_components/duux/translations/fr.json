@@ -31,7 +31,7 @@
                 "name": "Vitesse du ventilateur"
             },
             "horizontal_swing": {
-                "name": "Balayage horizontal"
+                "name": "Oscillation horizontale"
             },
             "spray_volume": {
                 "name": "Volume de pulvérisation"
@@ -40,7 +40,7 @@
                 "name": "Minuteur"
             },
             "vertical_swing": {
-                "name": "Balayage vertical"
+                "name": "Oscillation verticale"
             }
         },
         "sensor": {
@@ -107,7 +107,7 @@
     },
     "issues": {
         "device_not_mqtt": {
-            "description": "Duux a détecté un appareil qui n'est pas connecté via MQTT. \n\rCertaines fonctionnalités peuvent ne pas fonctionner. \n\rCela peut être corrigé en redémarrant l'appareil pendant 10 secondes. \n\rNom de l'appareil : {device_name}",
+            "description": "Duux a détecté un appareil qui n'est pas connecté via MQTT. \n\rCertaines fonctionnalités peuvent ne pas fonctionner. \n\rCela peut être corrigé en débranchant l'appareil pendant 10 secondes. \n\rNom de l'appareil : {device_name}",
             "title": "Appareil non connecté via MQTT"
         },
         "device_not_recognised": {

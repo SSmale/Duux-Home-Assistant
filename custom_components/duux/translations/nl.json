@@ -107,7 +107,7 @@
     },
     "issues": {
         "device_not_mqtt": {
-            "description": "Duux heeft een apparaat gedetecteerd dat niet via MQTT is verbonden. \n\rSommige functies werken mogelijk niet.\n\nDit kan worden verholpen door het apparaat 10 seconden uit en opnieuw in te schakelen.\n\rApparaatnaam: {device_name}",
+            "description": "Duux heeft een apparaat gedetecteerd dat niet via MQTT niet verbonden. \n\rSommige functies werken mogelijk niet.\n\rDit kan worden verholpen door het apparaat 10 seconden uit en opnieuw in te schakelen.\n\rApparaatnaam: {device_name}",
             "title": "Apparaat niet via MQTT verbonden"
         },
         "device_not_recognised": {

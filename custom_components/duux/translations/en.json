@@ -107,7 +107,7 @@
     },
     "issues": {
         "device_not_mqtt": {
-            "description": "Duux has detected a device that is not connected via MQTT. \n\rSome features may not work.\n\nThis maybe fixed by power cycling the device for 10s \n\rDevice Name: {device_name}",
+            "description": "Duux has detected a device that is not connected via MQTT. \n\rSome features may not work.\n\rThis maybe fixed by power cycling the device for 10s \n\rDevice Name: {device_name}",
             "title": "Device not connected via MQTT"
         },
         "device_not_recognised": {
