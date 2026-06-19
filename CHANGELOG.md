@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.12.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.11.2...v2.12.0) (2026-06-19)
+
+### Added
+
+* adds swing for fans, connection type and translations ([#82](https://github.com/SSmale/Duux-Home-Assistant/issues/82)) ([4f248a2](https://github.com/SSmale/Duux-Home-Assistant/commit/4f248a2706577f743a3f92860fbdfc2125b9f47e))
+
 ## [2.12.0-pre-81.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.12.0-pre-81.1...v2.12.0-pre-81.2) (2026-06-19)
 
 ### Fixed
@@ -252,6 +258,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
