@@ -6,6 +6,7 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from homeassistant.const import (
+    EntityCategory,
     UnitOfTime,
 )
 
@@ -19,6 +20,31 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+SWING_OFF = "Off"
+
+# Horizontal swing button cycles through 3 stripe icons on the device.
+# Levels are symmetric about centre (e.g. level 2 = 60 deg total = 30 deg
+# each side). Raw values are inferred to be sequential indices, matching
+# the pattern every other trait in this integration uses (mode/night/lock
+# are all small sequential ints) — NOT confirmed against a trait schema,
+# since horosc has no trait definition in the diagnostics sample.
+HORIZONTAL_SWING_OPTIONS: dict[str, int] = {
+    SWING_OFF: 0,
+    "30°": 1,
+    "60°": 2,
+    "90°": 3,
+}
+
+# Vertical swing button cycles through 2 stripe icons on the device.
+# Arc is NOT symmetric about horizontal (level 1 = 10 deg below to 35 deg
+# above; level 2 = 10 deg below to 90 deg above). Same caveat as above —
+# raw values are inferred, not confirmed.
+VERTICAL_SWING_OPTIONS: dict[str, int] = {
+    SWING_OFF: 0,
+    "45°": 1,
+    "100°": 2,
+}
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
@@ -51,7 +77,125 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxBright2TimerSelector(coordinator, api, device))
         elif sensor_type_id in [DUUX_STID_BEAM_MINI, DUUX_STID_EDGEHEATER_V2]:
             entities.append(DuuxTimerSelector(coordinator, api, device))
+
+        if coordinator.data.get("horosc") is not None:
+            entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
+
+        if coordinator.data.get("verosc") is not None:
+            entities.append(DuuxVerticalSwingSelect(coordinator, api, device))
     async_add_entities(entities)
+
+
+class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
+    """Base class for a DUUX swing-level select entity.
+
+    Subclasses only need to set `_options_map` and `_data_key`, override
+    `_set_value` to call the matching duux_api method, and set a
+    name/icon — everything else (device linkage, availability, refresh)
+    lives here. To attach a swing select to another fan model,
+    instantiate the relevant subclass with that device's
+    (coordinator, api, device), the same way entities are added in
+    fan.py.
+    """
+
+    _options_map: dict[str, int] = {}
+    _data_key: str = ""
+
+    def _set_value(self, device_mac: str, value: int):
+        """Call the duux_api method for this axis. Override in subclasses."""
+        raise NotImplementedError
+
+    def __init__(self, coordinator, api, device) -> None:
+        """Initialize the select entity."""
+        super().__init__(coordinator)
+        self._api = api
+        self._device = device
+        self._device_id = device["id"]
+        self._device_mac = device["deviceId"]  # MAC address
+        self._attr_has_entity_name = True
+        self._attr_entity_category = EntityCategory.CONFIG
+        self._attr_options = list(self._options_map.keys())
+
+    @property
+    def available(self) -> bool:
+        """Return True if entity is available."""
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
+
+    @property
+    def device_info(self):
+        """Return device information, linking this select to its fan device."""
+        return {
+            "identifiers": {(DOMAIN, str(self._device_id))},
+            "name": self._device.get("displayName") or self._device.get("name"),
+            "manufacturer": self._device.get("manufacturer", "Duux"),
+            "model": self._device.get("sensorType", {}).get("name", "Unknown"),
+        }
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the currently selected swing level."""
+        raw_value = (self.coordinator.data or {}).get(self._data_key)
+        if raw_value is None:
+            return None
+
+        for label, value in self._options_map.items():
+            if value == raw_value:
+                return label
+
+        _LOGGER.debug(
+            "%s: raw value %s for '%s' doesn't match any known option",
+            self._attr_name,
+            raw_value,
+            self._data_key,
+        )
+        return None
+
+    async def async_select_option(self, option: str) -> None:
+        """Set the swing level, or turn swing off if 'Off' is selected."""
+        if option not in self._options_map:
+            _LOGGER.warning("%s: unknown swing option '%s'", self._attr_name, option)
+            return
+
+        value = self._options_map[option]
+
+        await self.hass.async_add_executor_job(self._set_value, self._device_mac, value)
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxHorizontalSwingSelect(DuuxSwingSelect):
+    """Select entity controlling horizontal swing level."""
+
+    _options_map = HORIZONTAL_SWING_OPTIONS
+    _data_key = "horosc"
+
+    def _set_value(self, device_mac: str, value: int):
+        return self._api.set_horosc(device_mac, value)
+
+    def __init__(self, coordinator, api, device) -> None:
+        """Initialize the horizontal swing select."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_horizontal_swing"
+        self._attr_translation_key = "horizontal_swing"
+        self._attr_icon = "mdi:arrow-left-right"
+
+
+class DuuxVerticalSwingSelect(DuuxSwingSelect):
+    """Select entity controlling vertical swing level."""
+
+    _options_map = VERTICAL_SWING_OPTIONS
+    _data_key = "verosc"
+
+    def _set_value(self, device_mac: str, value: int):
+        return self._api.set_verosc(device_mac, value)
+
+    def __init__(self, coordinator, api, device) -> None:
+        """Initialize the vertical swing select."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_vertical_swing"
+        self._attr_translation_key = "vertical_swing"
+        self._attr_icon = "mdi:arrow-up-down"
 
 
 class DuuxSelector(CoordinatorEntity, SelectEntity):
@@ -205,6 +349,6 @@ class DuuxNeoSpeedSelector(DuuxSelector):
         mode = mode_map.get(option, "0")
 
         await self.hass.async_add_executor_job(
-            self._api.set_speed, self._device_mac, mode
+            self._api.set_speed, self._device_mac, mode, 0, 2
         )
         await self.coordinator.async_request_refresh()
