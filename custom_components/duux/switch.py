@@ -124,14 +124,18 @@ class DuuxChildLockSwitch(DuuxSwitch):
         await self.hass.async_add_executor_job(
             self._api.set_lock, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["lock"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         """Turn off child lock."""
         await self.hass.async_add_executor_job(
             self._api.set_lock, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["lock"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxNightModeSwitch(DuuxSwitch):
@@ -154,14 +158,18 @@ class DuuxNightModeSwitch(DuuxSwitch):
         await self.hass.async_add_executor_job(
             self._api.set_night_mode, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["night"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         """Turn off night mode."""
         await self.hass.async_add_executor_job(
             self._api.set_night_mode, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["night"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxSleepModeSwitch(DuuxSwitch):
@@ -184,14 +192,18 @@ class DuuxSleepModeSwitch(DuuxSwitch):
         await self.hass.async_add_executor_job(
             self._api.set_sleep_mode, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["sleep"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         """Turn off sleep mode."""
         await self.hass.async_add_executor_job(
             self._api.set_sleep_mode, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["sleep"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxCleaningModeSwitch(DuuxSwitch):
@@ -214,14 +226,18 @@ class DuuxCleaningModeSwitch(DuuxSwitch):
         await self.hass.async_add_executor_job(
             self._api.set_cleaning_mode, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["dry"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         """Turn off cleaning mode."""
         await self.hass.async_add_executor_job(
             self._api.set_cleaning_mode, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["dry"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxLaundryModeSwitch(DuuxSwitch):
@@ -244,14 +260,18 @@ class DuuxLaundryModeSwitch(DuuxSwitch):
         await self.hass.async_add_executor_job(
             self._api.set_laundry_mode, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["laundr"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         """Turn off Laundry mode."""
         await self.hass.async_add_executor_job(
             self._api.set_laundry_mode, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["laundr"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxIonizerSwitch(DuuxSwitch):
@@ -298,11 +318,15 @@ class DuuxIonizerSwitch(DuuxSwitch):
         await self.hass.async_add_executor_job(
             self._api.set_ionizer, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["ion"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         """Turn off ionizer."""
         await self.hass.async_add_executor_job(
             self._api.set_ionizer, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["ion"] = 0
+        self.coordinator.async_set_updated_data(newData)
