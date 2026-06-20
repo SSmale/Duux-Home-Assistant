@@ -17,6 +17,7 @@ from .const import (
     DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_NEO,
+    DUUX_STID_NORTH,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -77,6 +78,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxBright2TimerSelector(coordinator, api, device))
         elif sensor_type_id in [DUUX_STID_BEAM_MINI, DUUX_STID_EDGEHEATER_V2]:
             entities.append(DuuxTimerSelector(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_NORTH:
+            entities.append(DuuxNorthFanSpeedSelector(coordinator, api, device))
+            # North specific Timer: also powers the unit on (matches the
+            # real app), unlike the shared DuuxTimerSelector used elsewhere.
+            entities.append(DuuxNorthTimerSelector(coordinator, api, device))
 
         if coordinator.data.get("horosc") is not None:
             entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
@@ -350,5 +356,66 @@ class DuuxNeoSpeedSelector(DuuxSelector):
 
         await self.hass.async_add_executor_job(
             self._api.set_speed, self._device_mac, mode, 0, 2
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxNorthTimerSelector(DuuxTimerSelector):
+    """North-specific Timer: also powers the unit on for non-zero
+    values, matching the real app. Kept as a subclass rather than
+    changing the shared DuuxTimerSelector, since this behaviour isn't
+    confirmed for the other devices that use it (Bora/Neo/BeamMini/
+    Bright2/Edge).
+    """
+
+    async def async_select_option(self, option):
+        """Set timer amount, turning the unit on first if non-zero."""
+        try:
+            amount = max(0, min(24, int(option)))
+        except (TypeError, ValueError):
+            amount = 0
+
+        if amount > 0:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+
+        await self.hass.async_add_executor_job(
+            self._api.set_timer, self._device_mac, str(amount)
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxNorthFanSpeedSelector(DuuxSelector):
+    """Duux North AC fan speed selector. Raw "fan" values 1/2/3 map
+    directly to I/II/III, sent via set_north_fan_speed().
+    """
+
+    SPEED_I = "I"
+    SPEED_II = "II"
+    SPEED_III = "III"
+
+    _SPEED_MAP = {1: SPEED_I, 2: SPEED_II, 3: SPEED_III}
+    _LABEL_TO_RAW = {v: k for k, v in _SPEED_MAP.items()}
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the fan speed selector."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_fan_speed"
+        self._attr_name = "Fan Speed"
+        self._attr_icon = "mdi:fan"
+        self._attr_options = [self.SPEED_I, self.SPEED_II, self.SPEED_III]
+
+    @property
+    def current_option(self):
+        """Return current fan speed label."""
+        fan = (self.coordinator.data or {}).get("fan")
+        return self._SPEED_MAP.get(fan)
+
+    async def async_select_option(self, option):
+        """Set fan speed."""
+        raw = self._LABEL_TO_RAW.get(option, 1)
+        await self.hass.async_add_executor_job(
+            self._api.set_north_fan_speed, self._device_mac, raw
         )
         await self.coordinator.async_request_refresh()

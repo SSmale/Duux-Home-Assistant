@@ -21,12 +21,14 @@ from .const import (
     DUUX_CLIMATE_TYPES,
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HEATER,
+    DUUX_DTID_AIR_CONDITIONER,
     DOMAIN,
     DUUX_STID_THREESIXTY_2023,
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_THREESIXTY_TWO,
+    DUUX_STID_NORTH,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -59,7 +61,11 @@ async def async_setup_entry(
 
         model = sensor_type.get("name", "Unknown")
 
-        if device_type_id not in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
+        if device_type_id not in [
+            *DUUX_DTID_HEATER,
+            *DUUX_DTID_THERMOSTAT,
+            *DUUX_DTID_AIR_CONDITIONER,
+        ]:
             if last_word in DUUX_CLIMATE_TYPES:
                 _LOGGER.warning(
                     "Your device has not been officially catagorised as supporting the climate platform."
@@ -89,6 +95,10 @@ async def async_setup_entry(
             entities.append(DuuxEdgeClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_NORTH:
+            # Reports via a "Traits" schema, not "availableModes", so it
+            # can't use the generic DuuxClimateAutoDiscovery fallback below.
+            entities.append(DuuxNorthClimate(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
             entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
@@ -214,6 +224,78 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
 
     async def async_update(self):
         """Update the entity."""
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxNorthClimate(DuuxClimate):
+    """Duux North AC (device_type_id=28, sensor_type_id=42).
+
+    Mode mapping:
+      - mode 1 -> Cool
+      - mode 3 -> Dry
+      - mode 4 -> Fan-only
+      - mode 2: unused, shows no icon at all
+      - 5/6/7: unused, the firmware just shows the Cool icon for any
+        unrecognised code
+
+    Night-mode and Fan Speed (I/II/III) are separate entities.
+    """
+
+    _MODE_TO_HVAC = {
+        1: HVACMode.COOL,
+        3: HVACMode.DRY,
+        4: HVACMode.FAN_ONLY,
+    }
+    _HVAC_TO_MODE = {v: k for k, v in _MODE_TO_HVAC.items()}
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the North climate device."""
+        super().__init__(coordinator, api, device)
+        # The Traits schema says 18-30; the real app shows 16-31 instead.
+        self._attr_min_temp = 16
+        self._attr_max_temp = 31
+        self._attr_target_temperature_step = 1
+        self._attr_supported_features = (
+            ClimateEntityFeature.TARGET_TEMPERATURE
+            | ClimateEntityFeature.TURN_OFF
+            | ClimateEntityFeature.TURN_ON
+        )
+        # Override base class's HEAT-based modes: no heating function,
+        # use Cool/Dry/Fan-only instead.
+        self._attr_hvac_modes = [
+            HVACMode.OFF,
+            HVACMode.COOL,
+            HVACMode.DRY,
+            HVACMode.FAN_ONLY,
+        ]
+
+    @property
+    def hvac_mode(self):
+        """Return current operation based on power + the confirmed mode mapping."""
+        data = self.coordinator.data or {}
+        if data.get("power", 0) != 1:
+            return HVACMode.OFF
+        mode = data.get("mode")
+        # Unrecognised codes fall back to Cool, matching the firmware.
+        return self._MODE_TO_HVAC.get(mode, HVACMode.COOL)
+
+    async def async_set_hvac_mode(self, hvac_mode):
+        """Turn off, or turn on + set mode together (mirrors the app's flow)."""
+        if hvac_mode == HVACMode.OFF:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, False
+            )
+        else:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+            mode_value = self._HVAC_TO_MODE.get(hvac_mode)
+            if mode_value is not None:
+                await self.hass.async_add_executor_job(
+                    self._api.send_command,
+                    self._device_mac,
+                    f"tune set mode {mode_value}",
+                )
         await self.coordinator.async_request_refresh()
 
 

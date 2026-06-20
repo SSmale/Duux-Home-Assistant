@@ -15,6 +15,7 @@ from custom_components.duux.const import (
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_NEO,
+    DUUX_STID_NORTH,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -68,6 +69,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
             entities.append(DuuxIonizerSwitch(coordinator, api, device))
+
+        # North: "swing" is confirmed present in the raw status payload
+        # but parked for a future PR
+        elif sensor_type_id == DUUX_STID_NORTH:
+            entities.append(DuuxNightModeSwitch(coordinator, api, device))
 
     async_add_entities(entities)
 

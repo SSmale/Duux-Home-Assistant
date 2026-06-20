@@ -12,6 +12,10 @@ Control your Duux devices directly from Home Assistant!
 - **Threesixty 2** — Temperature control, Eco/Comfort/Boost modes
 - **Threesixty 2023** — Temperature control, Eco/Comfort/Boost modes
 
+### ❄️ Air Conditioners
+
+- **North** — Temperature control, Cool/Dry/Fan-only modes, 3-speed fan, Night mode, Timer
+
 ### 💨 Fans
 
 - **Whisper Flex Ultimate** — 30-speed fan, Normal/Natural/Night modes
