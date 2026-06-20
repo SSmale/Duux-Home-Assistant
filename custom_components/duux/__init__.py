@@ -6,18 +6,19 @@ from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers import issue_registry as ir
-
+from homeassistant.helpers.device_registry import DeviceEntry
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
     DOMAIN,
     DUUX_DTID_FAN,
     DUUX_DTID_HEATER,
-    DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HUMIDIFIER,
     DUUX_DTID_AIR_PURIFIER,
     DUUX_DTID_OTHER_HEATER,
+    DUUX_DTID_THERMOSTAT,
     DUUX_SUPPORTED_TYPES,
 )
 from .duux_api import DuuxAPI
@@ -57,7 +58,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         sensor_type_id = device.get("sensorTypeId")
         device_type_id = sensor_type.get("type")
         google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
+        last_word = (
+            google_type.split(".")[-1] if google_type else ""
+        )  # "HEATER" OR "THERMOSTAT"
         device_name = device.get("displayName") or device.get("name")
         model = sensor_type.get("name", "Unknown")
 
@@ -94,8 +97,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 learn_more_url=f"https://github.com/SSmale/Duux-Home-Assistant/issues/new?template=device_not_supported.yaml&title=Device+not+recognised+-+{model}&device_name={model}&device_type_id={device_type_id}&sensor_type_id={sensor_type_id}&reported_type={google_type}",
                 translation_placeholders={
                     "device_name": model,
-                    "device_type_id": device_type_id,
-                    "sensor_type_id": sensor_type_id,
+                    "device_type_id": str(device_type_id),
+                    "sensor_type_id": str(sensor_type_id),
                     "reported_type": google_type,
                 },
             )
@@ -146,6 +149,37 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant, config_entry: ConfigEntry, device_entry: DeviceEntry
+) -> bool:
+    """Remove a config entry from a device."""
+    # Get the entity registry
+    entity_registry = er.async_get(hass)
+
+    # Get all entities for this config entry
+    entities = er.async_entries_for_config_entry(entity_registry, config_entry.entry_id)
+
+    # Filter entities for this specific device
+    device_entities = [
+        entity for entity in entities if entity.device_id == device_entry.id
+    ]
+
+    for entity in device_entities:
+        _LOGGER.debug(
+            f"Removing entity {entity.entity_id} for device {device_entry.id}"
+        )
+        entity_registry.async_remove(entity.entity_id)
+
+    entities = er.async_entries_for_config_entry(entity_registry, config_entry.entry_id)
+
+    # Filter entities for this specific device
+    device_entities = [
+        entity for entity in entities if entity.device_id == device_entry.id
+    ]
+    # Allow removal only if no entities remain for this device
+    return len(device_entities) == 0
 
 
 class DuuxDataUpdateCoordinator(DataUpdateCoordinator):

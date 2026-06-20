@@ -79,10 +79,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxTimerSelector(coordinator, api, device))
 
         if coordinator.data.get("horosc") is not None:
-            entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
+            entities.append(DuuxHorizontalOscillationSelect(coordinator, api, device))
 
         if coordinator.data.get("verosc") is not None:
-            entities.append(DuuxVerticalSwingSelect(coordinator, api, device))
+            entities.append(DuuxVerticalOscillationSelect(coordinator, api, device))
+        if coordinator.data.get("swing") is not None:
+            entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
+
+        if coordinator.data.get("tilt") is not None:
+            entities.append(DuuxVerticalTiltSelect(coordinator, api, device))
     async_add_entities(entities)
 
 
@@ -161,11 +166,13 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
         value = self._options_map[option]
 
         await self.hass.async_add_executor_job(self._set_value, self._device_mac, value)
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData[self._data_key] = value
+        self.coordinator.async_set_updated_data(newData)
 
 
-class DuuxHorizontalSwingSelect(DuuxSwingSelect):
-    """Select entity controlling horizontal swing level."""
+class DuuxHorizontalOscillationSelect(DuuxSwingSelect):
+    """Select entity controlling horizontal oscillation level."""
 
     _options_map = HORIZONTAL_SWING_OPTIONS
     _data_key = "horosc"
@@ -181,7 +188,7 @@ class DuuxHorizontalSwingSelect(DuuxSwingSelect):
         self._attr_icon = "mdi:arrow-left-right"
 
 
-class DuuxVerticalSwingSelect(DuuxSwingSelect):
+class DuuxVerticalOscillationSelect(DuuxSwingSelect):
     """Select entity controlling vertical swing level."""
 
     _options_map = VERTICAL_SWING_OPTIONS
@@ -192,6 +199,40 @@ class DuuxVerticalSwingSelect(DuuxSwingSelect):
 
     def __init__(self, coordinator, api, device) -> None:
         """Initialize the vertical swing select."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_vertical_swing"
+        self._attr_translation_key = "vertical_swing"
+        self._attr_icon = "mdi:arrow-up-down"
+
+
+class DuuxHorizontalSwingSelect(DuuxSwingSelect):
+    """Select entity controlling horizontal swing level."""
+
+    _options_map = HORIZONTAL_SWING_OPTIONS
+    _data_key = "swing"
+
+    def _set_value(self, device_mac: str, value: int):
+        return self._api.set_swing(device_mac, value)
+
+    def __init__(self, coordinator, api, device) -> None:
+        """Initialize the horizontal swing select."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_horizontal_swing"
+        self._attr_translation_key = "horizontal_swing"
+        self._attr_icon = "mdi:arrow-left-right"
+
+
+class DuuxVerticalTiltSelect(DuuxSwingSelect):
+    """Select entity controlling vertical tilt level."""
+
+    _options_map = VERTICAL_SWING_OPTIONS
+    _data_key = "tilt"
+
+    def _set_value(self, device_mac: str, value: int):
+        return self._api.set_tilt(device_mac, value)
+
+    def __init__(self, coordinator, api, device) -> None:
+        """Initialize the vertical tilt select."""
         super().__init__(coordinator, api, device)
         self._attr_unique_id = f"duux_{self._device_id}_vertical_swing"
         self._attr_translation_key = "vertical_swing"
@@ -270,7 +311,9 @@ class DuuxFanSpeedSelector(DuuxSelector):
         await self.hass.async_add_executor_job(
             self._api.set_fan, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["fan"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxTimerSelector(DuuxSelector):
@@ -301,7 +344,9 @@ class DuuxTimerSelector(DuuxSelector):
         await self.hass.async_add_executor_job(
             self._api.set_timer, self._device_mac, str(amount)
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["timer"] = amount
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxBright2TimerSelector(DuuxTimerSelector):
@@ -352,4 +397,6 @@ class DuuxNeoSpeedSelector(DuuxSelector):
         await self.hass.async_add_executor_job(
             self._api.set_speed, self._device_mac, mode, 0, 2
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["speed"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)

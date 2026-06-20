@@ -71,7 +71,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         elif sensor_type_id == DUUX_STID_BEAM_MINI:
             entities.append(DuuxHumiditySensor(coordinator, api, device))
             entities.append(DuuxTempSensor(coordinator, api, device))
-        else:
+        elif coordinator.data.get("temp") is not None:
             entities.append(DuuxTempSensor(coordinator, api, device))
 
         entities.append(DuuxErrorSensor(coordinator, api, device))
@@ -122,6 +122,7 @@ class DuuxSensor(CoordinatorEntity, SensorEntity):
         self._attr_native_value = data.get(self.entity_description.key)
         self._attr_extra_state_attributes = self.entity_description.attrs(data)
         self.async_write_ha_state()
+
 
 class DuuxTempSensor(DuuxSensor):
     def __init__(self, coordinator, api, device):
