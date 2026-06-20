@@ -125,6 +125,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             api=api,
             device_id=device.get("deviceId"),
             device_name=device_name,
+            config_entry=entry,
         )
 
         await coordinator.async_config_entry_first_refresh()
@@ -185,7 +186,7 @@ async def async_remove_config_entry_device(
 class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
     """Class to manage fetching Duux data."""
 
-    def __init__(self, hass, api, device_id, device_name):
+    def __init__(self, hass, api, device_id, device_name, config_entry=None):
         """Initialize."""
         self.api = api
         self.device_id = device_id
@@ -196,6 +197,7 @@ class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
             _LOGGER,
             name=f"Duux {device_name}",
             update_interval=timedelta(seconds=30),
+            config_entry=config_entry,
         )
 
     async def _async_update_data(self):

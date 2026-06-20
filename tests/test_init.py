@@ -32,7 +32,7 @@ class FakeCoordinatorForSetup:
 
     instances = []
 
-    def __init__(self, hass, api, device_id, device_name):
+    def __init__(self, hass, api, device_id, device_name, config_entry=None):
         self.hass = hass
         self.api = api
         self.device_id = device_id
@@ -210,7 +210,8 @@ async def test_coordinator_update_data_returns_api_payload(fake_hass):
     api.get_device_status.return_value = {"power": 1, "sp": 21}
 
     coordinator = DuuxDataUpdateCoordinator(
-        fake_hass, api=api, device_id="AA:BB", device_name="Test Device"
+        fake_hass, api=api, device_id="AA:BB", device_name="Test Device",
+        config_entry=MagicMock(),
     )
 
     data = await coordinator._async_update_data()
@@ -224,7 +225,8 @@ async def test_coordinator_update_data_wraps_errors_in_update_failed(fake_hass):
     api.get_device_status.side_effect = RuntimeError("connection reset")
 
     coordinator = DuuxDataUpdateCoordinator(
-        fake_hass, api=api, device_id="AA:BB", device_name="Test Device"
+        fake_hass, api=api, device_id="AA:BB", device_name="Test Device",
+        config_entry=MagicMock(),
     )
 
     with pytest.raises(UpdateFailed):

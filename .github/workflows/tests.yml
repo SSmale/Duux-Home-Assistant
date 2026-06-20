@@ -25,6 +25,14 @@ jobs:
       - name: Run tests
         run: pytest -q --cov=. --cov-report=xml
 
+      - name: Debug coverage file
+        run: |
+          echo "Working directory: $(pwd)"
+          echo "Files:"
+          ls -al
+          echo "Searching for coverage.xml:"
+          find . -name "coverage.xml" -maxdepth 3
+
       - name: Upload coverage report
         uses: actions/upload-code-coverage@v1
         with:
