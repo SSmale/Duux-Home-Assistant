@@ -36,6 +36,6 @@ jobs:
       - name: Upload coverage report
         uses: actions/upload-code-coverage@v1
         with:
-          file: coverage.xml
+          file: ./coverage.xml
           language: python
           label: pytest
