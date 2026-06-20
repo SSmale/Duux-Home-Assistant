@@ -56,7 +56,9 @@ async def async_setup_entry(
         sensor_type = device.get("sensorType") or {}
         device_type_id = sensor_type.get("type")
         google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
+        last_word = (
+            google_type.split(".")[-1] if google_type else ""
+        )  # "HEATER" OR "THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device.get("deviceId")
         coordinator = coordinators.get(device_id)
@@ -183,9 +185,11 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         **kwargs: Any,
     ) -> None:
         """Turn on the fan."""
-        await self.hass.async_add_executor_job(self._api.set_power, self._device_mac, 1)
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, True
+        )
         newData = self.coordinator.data
-        newData["power"] = 1
+        newData["power"] = True
         self.coordinator.async_set_updated_data(newData)
 
         if percentage is not None:
@@ -196,9 +200,11 @@ class DuuxFan(CoordinatorEntity, FanEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the fan off."""
-        await self.hass.async_add_executor_job(self._api.set_power, self._device_mac, 0)
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, False
+        )
         newData = self.coordinator.data
-        newData["power"] = 0
+        newData["power"] = False
         self.coordinator.async_set_updated_data(newData)
 
     async def async_set_percentage(self, percentage: int) -> None:
