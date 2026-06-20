@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.14.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.1...v2.14.2) (2026-06-20)
+
+### Fixed
+
+* adds in swing and tilt for ultimate fan ([#95](https://github.com/SSmale/Duux-Home-Assistant/issues/95)) ([8a6d288](https://github.com/SSmale/Duux-Home-Assistant/commit/8a6d2883f1f9b5f76b647e0ec7bb13e5b7267975))
+
 ## [2.14.2-pre-95.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.1...v2.14.2-pre-95.1) (2026-06-20)
 
 ### Fixed
@@ -319,6 +325,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
