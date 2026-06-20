@@ -251,12 +251,12 @@ class DuuxFanSpeedSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current fan mode."""
-        mode = (self.coordinator.data or {}).get("fan", self.FAN_LOW)
+        mode = (self.coordinator.data or {}).get("fan")
         mode_map = {
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
         }
-        return mode_map.get(mode)
+        return mode_map.get(mode, self.FAN_LOW)
 
     async def async_select_option(self, option):
         """Set fan speed mode."""
@@ -288,7 +288,8 @@ class DuuxTimerSelector(DuuxSelector):
     @property
     def current_option(self):
         """Return current timer."""
-        return str((self.coordinator.data or {}).get("timer"))
+        timer = (self.coordinator.data or {}).get("timer")
+        return str(timer) if timer is not None else None
 
     async def async_select_option(self, option):
         """Set timer amount."""
