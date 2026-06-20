@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.14.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.0...v2.14.1) (2026-06-20)
+
+### Fixed
+
+* fixes the flashing of the cards ([#84](https://github.com/SSmale/Duux-Home-Assistant/issues/84)) ([#103](https://github.com/SSmale/Duux-Home-Assistant/issues/103)) ([4461577](https://github.com/SSmale/Duux-Home-Assistant/commit/446157781287dd70b6efe3a6265eda1c84722747))
+
 ## [2.14.1-beta.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.0...v2.14.1-beta.1) (2026-06-20)
 
 ### Fixed
@@ -306,6 +312,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Support for Duux fans
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
