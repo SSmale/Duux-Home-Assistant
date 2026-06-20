@@ -4,10 +4,6 @@ on:
   push:
   pull_request:
 
-permissions:
-  contents: read
-  code-quality: write
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -29,13 +25,7 @@ jobs:
       - name: Run tests with coverage
         run: pytest -q --cov=. --cov-report=xml:coverage.xml
 
-      - name: Gzip coverage file
-        run: gzip -f coverage.xml
-
-      - name: Upload gzipped coverage report
-        uses: actions/upload-code-coverage@v1
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          file: coverage.xml.gz
-          language: python
-          label: pytest
-          fail-on-error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
