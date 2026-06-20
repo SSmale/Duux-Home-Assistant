@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.13.3-beta.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.2...v2.13.3-beta.1) (2026-06-19)
+## [2.14.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.2...v2.14.0) (2026-06-19)
 
-### Fixed
+### Added
 
-* fixes the flashing of the cards ([#84](https://github.com/SSmale/Duux-Home-Assistant/issues/84)) ([df9c3bd](https://github.com/SSmale/Duux-Home-Assistant/commit/df9c3bde4739daa95c7657988b1c79ef3eedc03f))
+* allows users to delete devices ([#85](https://github.com/SSmale/Duux-Home-Assistant/issues/85)) ([9503930](https://github.com/SSmale/Duux-Home-Assistant/commit/9503930ff4390ae4865b69a1a26321fa1b2f15c1))
 
 ## [2.13.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.1...v2.13.2) (2026-06-19)
 
