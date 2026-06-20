@@ -48,7 +48,9 @@ async def async_setup_entry(
         sensor_type = device.get("sensorType") or {}
         device_type_id = sensor_type.get("type")
         google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
+        last_word = (
+            google_type.split(".")[-1] if google_type else ""
+        )  # "HEATER" OR "THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
         coordinator = coordinators.get(device_id)
@@ -174,7 +176,9 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             await self.hass.async_add_executor_job(
                 self._api.set_temperature, self._device_mac, temperature
             )
-            await self.coordinator.async_request_refresh()
+            newData = self.coordinator.data
+            newData["sp"] = temperature
+            self.coordinator.async_set_updated_data(newData)
 
     async def async_set_hvac_mode(self, hvac_mode):
         """Set new HVAC mode."""
@@ -187,7 +191,9 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             await self.hass.async_add_executor_job(
                 self._api.set_power, self._device_mac, False
             )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["power"] = 1 if hvac_mode == HVACMode.HEAT else 0
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
@@ -320,15 +326,19 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
+        mode_value = None
         for preset in self._presets:
             if preset["name"] == preset_mode:
                 mode_command = preset["command"]
+                mode_value = preset["value"]
                 break
 
         await self.hass.async_add_executor_job(
             self._api.send_command, self._device_mac, f"tune set {mode_command}"
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["mode"] = mode_value
+        self.coordinator.async_set_updated_data(newData)
 
     @staticmethod
     def _deep_find(obj: Any, key: str) -> Iterator[Any]:
@@ -412,7 +422,9 @@ class DuuxEdgeTwoClimate(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["heatin"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxEdgeClimate(DuuxClimate):
@@ -455,4 +467,6 @@ class DuuxEdgeClimate(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["heatin"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)

@@ -58,7 +58,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         sensor_type_id = device.get("sensorTypeId")
         device_type_id = sensor_type.get("type")
         google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
+        last_word = (
+            google_type.split(".")[-1] if google_type else ""
+        )  # "HEATER" OR "THERMOSTAT"
         device_name = device.get("displayName") or device.get("name")
         model = sensor_type.get("name", "Unknown")
 
@@ -95,8 +97,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 learn_more_url=f"https://github.com/SSmale/Duux-Home-Assistant/issues/new?template=device_not_supported.yaml&title=Device+not+recognised+-+{model}&device_name={model}&device_type_id={device_type_id}&sensor_type_id={sensor_type_id}&reported_type={google_type}",
                 translation_placeholders={
                     "device_name": model,
-                    "device_type_id": device_type_id,
-                    "sensor_type_id": sensor_type_id,
+                    "device_type_id": str(device_type_id),
+                    "sensor_type_id": str(sensor_type_id),
                     "reported_type": google_type,
                 },
             )
