@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # pytest-homeassistant-custom-component currently pulls in pytest 9 +
+      # pytest-asyncio 1.x by default, but those two are incompatible with
+      # each other (pytest-asyncio removed the 'event_loop' fixture in 1.x
+      # that pytest-homeassistant-custom-component still relies on
+      # internally). Pinning both back avoids that until upstream catches up.
+      - name: Install test dependencies
+        run: pip install pytest-homeassistant-custom-component "pytest<9" "pytest-asyncio<1"
+
+      - name: Run tests
+        run: pytest tests/ -v
