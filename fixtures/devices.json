@@ -1,0 +1,289 @@
+{
+    "data": [
+        {
+            "id": 100001,
+            "deviceId": "AA:00:00:00:00:01",
+            "name": "DUUX.EDGE2.100001",
+            "displayName": "Edge Heater V2",
+            "sensorTypeId": 50,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 51,
+                "name": "DUUX Edge heater v2",
+                "googleDeviceType": "action.devices.types.HEATER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 21,
+                    "temp": 19,
+                    "heatin": 2
+                }
+            }
+        },
+        {
+            "id": 100002,
+            "deviceId": "AA:00:00:00:00:02",
+            "name": "DUUX.EDGE23.100002",
+            "displayName": "Edge Heater 2023",
+            "sensorTypeId": 51,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 51,
+                "name": "DUUX Edge heater 2023",
+                "googleDeviceType": "action.devices.types.HEATER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 0,
+                    "sp": 22,
+                    "temp": 18,
+                    "heatin": 1
+                }
+            }
+        },
+        {
+            "id": 100003,
+            "deviceId": "AA:00:00:00:00:03",
+            "name": "DUUX.360.100003",
+            "displayName": "Threesixty 2023",
+            "sensorTypeId": 49,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 50,
+                "name": "DUUX Threesixty 2023",
+                "googleDeviceType": "action.devices.types.THERMOSTAT"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 20,
+                    "temp": 17,
+                    "mode": "2",
+                    "availableModes": {
+                        "command_key": "heating",
+                        "settings": [
+                            {"setting_name": "Eco", "setting_value": "2"},
+                            {"setting_name": "Comfort", "setting_value": "1"},
+                            {"setting_name": "Boost", "setting_value": "0"}
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": 100004,
+            "deviceId": "AA:00:00:00:00:04",
+            "name": "DUUX.360TWO.100004",
+            "displayName": "Threesixty Two",
+            "sensorTypeId": 31,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 21,
+                "name": "DUUX Threesixty 2",
+                "googleDeviceType": "action.devices.types.HEATER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 23,
+                    "temp": 21,
+                    "mode": "1",
+                    "availableModes": {
+                        "command_key": "heating",
+                        "settings": [
+                            {"setting_name": "Eco", "setting_value": "2"},
+                            {"setting_name": "Comfort", "setting_value": "1"},
+                            {"setting_name": "Boost", "setting_value": "0"}
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "id": 100005,
+            "deviceId": "AA:00:00:00:00:05",
+            "name": "DUUX.BORA.100005",
+            "displayName": "Bora 2024",
+            "sensorTypeId": 62,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 56,
+                "name": "DUUX Bora 2024",
+                "googleDeviceType": "action.devices.types.DEHUMIDIFIER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 55,
+                    "hum": 52,
+                    "mode": 0,
+                    "lock": 0,
+                    "sleep": 0,
+                    "dry": 0,
+                    "laundr": 0,
+                    "fan": 1,
+                    "timer": 4
+                }
+            }
+        },
+        {
+            "id": 100006,
+            "deviceId": "AA:00:00:00:00:06",
+            "name": "DUUX.BEAMMINI.100006",
+            "displayName": "Beam Mini",
+            "sensorTypeId": 35,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 25,
+                "name": "DUUX Beam Mini",
+                "googleDeviceType": "action.devices.types.HUMIDIFIER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 50,
+                    "hum": 48,
+                    "mode": 1,
+                    "timer": 2
+                }
+            }
+        },
+        {
+            "id": 100007,
+            "deviceId": "AA:00:00:00:00:07",
+            "name": "DUUX.NEO.100007",
+            "displayName": "Neo Humidifier",
+            "sensorTypeId": 47,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 25,
+                "name": "DUUX Neo",
+                "googleDeviceType": "action.devices.types.HUMIDIFIER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 60,
+                    "hum": 55,
+                    "mode": "1",
+                    "speed": 1,
+                    "night": 0
+                }
+            }
+        },
+        {
+            "id": 100008,
+            "deviceId": "AA:00:00:00:00:08",
+            "name": "DUUX.WFLEX.100008",
+            "displayName": "Whisper Flex",
+            "sensorTypeId": 36,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 26,
+                "name": "DUUX Whisper Flex",
+                "googleDeviceType": "action.devices.types.FAN"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "speed": 10,
+                    "mode": 0
+                }
+            }
+        },
+        {
+            "id": 100009,
+            "deviceId": "AA:00:00:00:00:09",
+            "name": "DUUX.WFLEX2.100009",
+            "displayName": "Whisper Flex 2",
+            "sensorTypeId": 67,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 58,
+                "name": "DUUX Whisper Flex 2",
+                "googleDeviceType": "action.devices.types.FAN"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "speed": 15,
+                    "mode": 1,
+                    "lock": 0,
+                    "night": 0
+                }
+            }
+        },
+        {
+            "id": 100010,
+            "deviceId": "AA:00:00:00:00:10",
+            "name": "DUUX.BRIGHT2.100010",
+            "displayName": "Bright 2",
+            "sensorTypeId": 61,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 55,
+                "name": "DUUX Bright 2",
+                "googleDeviceType": "action.devices.types.AIRPURIFIER"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "speed": 2,
+                    "ion": 1,
+                    "night": 0,
+                    "ppm": 5,
+                    "tvoc": 0,
+                    "filter": 80,
+                    "aq": 1,
+                    "timerr": 120,
+                    "err": 0
+                }
+            }
+        },
+        {
+            "id": 100011,
+            "deviceId": "AA:00:00:00:00:11",
+            "name": "DUUX.WFLEXULT.100011",
+            "displayName": "Whisper Flex Ultimate",
+            "sensorTypeId": 40,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 26,
+                "name": "DUUX Whisper Flex Ultimate",
+                "googleDeviceType": "action.devices.types.FAN"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "speed": 12,
+                    "mode": 1,
+                    "swing": 2,
+                    "tilt": 1
+                }
+            }
+        }
+    ]
+}

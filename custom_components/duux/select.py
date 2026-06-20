@@ -151,7 +151,7 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
 
         _LOGGER.debug(
             "%s: raw value %s for '%s' doesn't match any known option",
-            self._attr_name,
+            getattr(self, "_attr_name", None),
             raw_value,
             self._data_key,
         )
@@ -160,7 +160,11 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         """Set the swing level, or turn swing off if 'Off' is selected."""
         if option not in self._options_map:
-            _LOGGER.warning("%s: unknown swing option '%s'", self._attr_name, option)
+            _LOGGER.warning(
+                "%s: unknown swing option '%s'",
+                getattr(self, "_attr_name", None),
+                option,
+            )
             return
 
         value = self._options_map[option]
