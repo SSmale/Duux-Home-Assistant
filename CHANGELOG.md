@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.15.0-pre-109.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.15.0-pre-109.1...v2.15.0-pre-109.2) (2026-06-20)
+
+### Fixed
+
+* fixes code issues with select ([280bf29](https://github.com/SSmale/Duux-Home-Assistant/commit/280bf29f58a73ce205e85261f2680bbd658b9273))
+
+## [2.15.0-pre-109.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.3...v2.15.0-pre-109.1) (2026-06-20)
+
+### Added
+
+* adds tests for the project ([a35fff8](https://github.com/SSmale/Duux-Home-Assistant/commit/a35fff851cff4bf7f46a89394db20fefbe137e20))
+
 ## [2.14.3](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.2...v2.14.3) (2026-06-20)
 
 ### Fixed
@@ -335,5 +347,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
+
 
 

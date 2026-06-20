@@ -151,7 +151,7 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
 
         _LOGGER.debug(
             "%s: raw value %s for '%s' doesn't match any known option",
-            self._attr_name,
+            getattr(self, "_attr_name", None),
             raw_value,
             self._data_key,
         )
@@ -160,7 +160,11 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         """Set the swing level, or turn swing off if 'Off' is selected."""
         if option not in self._options_map:
-            _LOGGER.warning("%s: unknown swing option '%s'", self._attr_name, option)
+            _LOGGER.warning(
+                "%s: unknown swing option '%s'",
+                getattr(self, "_attr_name", None),
+                option,
+            )
             return
 
         value = self._options_map[option]
@@ -297,7 +301,7 @@ class DuuxFanSpeedSelector(DuuxSelector):
             1: self.FAN_LOW,
             0: self.FAN_HIGH,
         }
-        return mode_map.get(mode, self.FAN_LOW)
+        return mode_map.get(int(mode) if mode is not None else 1, self.FAN_LOW)
 
     async def async_select_option(self, option):
         """Set fan speed mode."""
@@ -338,7 +342,7 @@ class DuuxTimerSelector(DuuxSelector):
         """Set timer amount."""
         try:
             amount = max(0, min(24, int(option)))
-        except:
+        except (ValueError, TypeError):
             amount = 0
 
         await self.hass.async_add_executor_job(
