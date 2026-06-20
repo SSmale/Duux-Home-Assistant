@@ -22,20 +22,16 @@ jobs:
       - name: Install test dependencies
         run: pip install -r tests/requirements.txt
 
-      - name: Run tests
-        run: pytest -q --cov=. --cov-report=xml
+      - name: Run tests with coverage
+        run: pytest -q --cov=. --cov-report=xml:coverage.xml
 
-      - name: Debug coverage file
-        run: |
-          echo "Working directory: $(pwd)"
-          echo "Files:"
-          ls -al
-          echo "Searching for coverage.xml:"
-          find . -name "coverage.xml" -maxdepth 3
+      - name: Gzip coverage file
+        run: gzip -f coverage.xml
 
-      - name: Upload coverage report
+      - name: Upload gzipped coverage report
         uses: actions/upload-code-coverage@v1
         with:
-          file: ./coverage.xml
+          file: coverage.xml.gz
           language: python
           label: pytest
+          fail-on-error: false
