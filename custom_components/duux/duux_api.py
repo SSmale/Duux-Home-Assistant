@@ -196,3 +196,10 @@ class DuuxAPI:
         """
         speed = max(1, min(3, int(speed)))
         return self.send_command(device_mac, f"tune set fan {speed}")
+
+    def set_louver_swing(self, device_mac, swing_on):
+        """Set the North AC's louver swing on/off via the "tilt" field
+        (not "swing", which stays unused/null on this device).
+        """
+        value = "1" if swing_on else "0"
+        return self.send_command(device_mac, f"tune set tilt {value}")

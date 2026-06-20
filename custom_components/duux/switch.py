@@ -70,10 +70,10 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
             entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
-        # North: "swing" is confirmed present in the raw status payload
-        # but parked for a future PR
+        # North
         elif sensor_type_id == DUUX_STID_NORTH:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
+            entities.append(DuuxLouverSwingSwitch(coordinator, api, device))
 
     async_add_entities(entities)
 
@@ -166,6 +166,38 @@ class DuuxNightModeSwitch(DuuxSwitch):
         """Turn off night mode."""
         await self.hass.async_add_executor_job(
             self._api.set_night_mode, self._device_mac, False
+        )
+        await self.coordinator.async_request_refresh()
+
+
+class DuuxLouverSwingSwitch(DuuxSwitch):
+    """Duux North louver swing switch. Controlled via the "tilt" field
+    (not "swing", which stays unused/null on this device)
+    """
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the louver swing switch."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_louver_swing"
+        self._attr_name = "Louver Swing"
+        self._attr_icon = "mdi:arrow-left-right"
+
+    @property
+    def is_on(self):
+        """Return true if louver swing is on."""
+        return (self.coordinator.data or {}).get("tilt") == 1
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on louver swing."""
+        await self.hass.async_add_executor_job(
+            self._api.set_louver_swing, self._device_mac, True
+        )
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off louver swing."""
+        await self.hass.async_add_executor_job(
+            self._api.set_louver_swing, self._device_mac, False
         )
         await self.coordinator.async_request_refresh()
 
