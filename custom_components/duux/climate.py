@@ -234,9 +234,6 @@ class DuuxNorthClimate(DuuxClimate):
       - mode 1 -> Cool
       - mode 3 -> Dry
       - mode 4 -> Fan-only
-      - mode 2: unused, shows no icon at all
-      - 5/6/7: unused, the firmware just shows the Cool icon for any
-        unrecognised code
 
     Night-mode and Fan Speed (I/II/III) are separate entities.
     """

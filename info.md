@@ -14,7 +14,7 @@ Control your Duux devices directly from Home Assistant!
 
 ### ❄️ Air Conditioners
 
-- **North** — Temperature control, Cool/Dry/Fan-only modes, 3-speed fan, Night mode, Timer
+- **North** — Temperature control, Cool/Dry/Fan-only modes, 3-speed fan, Louver swing, Night mode, Timer
 
 ### 💨 Fans
 

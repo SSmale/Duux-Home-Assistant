@@ -61,6 +61,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 - 🌡️ **Temperature Control**: Set target temperature (16–31°C)
 - ❄️ **Three Modes**: Cool, Dry and Fan-only
 - 💨 **Three Fan Speeds**: I, II and III
+- 🔄 **Louver Swing**: On/off control
 - 🌙 **Night Mode**: Dim the display
 - ⏲️ **Timer**: Set a shutdown timer (0–24 hours)
 
