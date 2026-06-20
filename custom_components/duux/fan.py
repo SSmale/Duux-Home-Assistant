@@ -56,7 +56,9 @@ async def async_setup_entry(
         sensor_type = device.get("sensorType") or {}
         device_type_id = sensor_type.get("type")
         google_type = sensor_type.get("googleDeviceType") or ""
-        last_word = google_type.split(".")[-1] if google_type else ""  # "HEATER" OR "THERMOSTAT"
+        last_word = (
+            google_type.split(".")[-1] if google_type else ""
+        )  # "HEATER" OR "THERMOSTAT"
         sensor_type_id = device.get("sensorTypeId")
         device_id = device.get("deviceId")
         coordinator = coordinators.get(device_id)
@@ -186,7 +188,9 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         await self.hass.async_add_executor_job(
             self._api.set_power, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["power"] = True
+        self.coordinator.async_set_updated_data(newData)
 
         if percentage is not None:
             await self.async_set_percentage(percentage)
@@ -194,14 +198,14 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         if preset_mode is not None:
             await self.async_set_preset_mode(preset_mode)
 
-        await self.coordinator.async_request_refresh()
-
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the fan off."""
         await self.hass.async_add_executor_job(
             self._api.set_power, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["power"] = False
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_set_percentage(self, percentage: int) -> None:
         """Set the speed percentage of the fan."""
@@ -218,7 +222,9 @@ class DuuxFan(CoordinatorEntity, FanEntity):
                 self._speed_range[0],
                 self._speed_range[-1],
             )
-            await self.coordinator.async_request_refresh()
+            newData = self.coordinator.data
+            newData["speed"] = speed
+            self.coordinator.async_set_updated_data(newData)
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set the preset mode of the fan."""
@@ -235,7 +241,9 @@ class DuuxFan(CoordinatorEntity, FanEntity):
             await self.hass.async_add_executor_job(
                 self._api.set_mode, self._device_mac, mode_value
             )
-            await self.coordinator.async_request_refresh()
+            newData = self.coordinator.data
+            newData["mode"] = mode_value
+            self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxWhisperFlexTwoFan(DuuxFan):
@@ -491,7 +499,9 @@ class DuuxFanAutoDiscovery(DuuxFan):
         await self.hass.async_add_executor_job(
             self._api.send_command, self._device_mac, command
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["speed"] = speed
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set preset mode by label."""
@@ -504,7 +514,9 @@ class DuuxFanAutoDiscovery(DuuxFan):
         await self.hass.async_add_executor_job(
             self._api.send_command, self._device_mac, preset["command"]
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["mode"] = preset["value"]
+        self.coordinator.async_set_updated_data(newData)
 
     @staticmethod
     def _deep_find(obj: Any, key: str) -> Iterator[Any]:
@@ -593,26 +605,33 @@ class DuuxAirPurifierFan(DuuxFan):
             self._api.set_purifier_speed, self._device_mac, speed
         )
 
+        newData = self.coordinator.data
+        newData["speed"] = speed
+
         # Constraint: Ionizer must be OFF if speed is at lowest (1)
-        if speed == 1 and (self.coordinator.data or {}).get("ion") == 1:
+        if speed == 1 and newData.get("ion") == 1:
             await self.hass.async_add_executor_job(
                 self._api.set_ionizer, self._device_mac, False
             )
+            newData["ion"] = 0
 
-        await self.coordinator.async_request_refresh()
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set the preset mode of the fan."""
         if preset_mode == "Auto":
+            newData = self.coordinator.data
             # Ensure power is ON before sending mode command
             if not self.is_on:
                 await self.hass.async_add_executor_job(
                     self._api.set_power, self._device_mac, True
                 )
+                newData["power"] = 1
             await self.hass.async_add_executor_job(
                 self._api.set_purifier_speed, self._device_mac, 0
             )
-        await self.coordinator.async_request_refresh()
+            newData["speed"] = 0
+            self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_on(
         self,
@@ -629,11 +648,15 @@ class DuuxAirPurifierFan(DuuxFan):
             await self.hass.async_add_executor_job(
                 self._api.set_power, self._device_mac, True
             )
-            await self.coordinator.async_request_refresh()
+            newData = self.coordinator.data
+            newData["power"] = 1
+            self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn off the fan."""
         await self.hass.async_add_executor_job(
             self._api.set_power, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["power"] = 0
+        self.coordinator.async_set_updated_data(newData)

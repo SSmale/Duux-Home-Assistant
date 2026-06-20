@@ -1,7 +1,6 @@
 """Support for Duux de/humidifier devices."""
 
 import logging
-import asyncio
 
 from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.components.humidifier.const import (
@@ -118,13 +117,17 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
         await self.hass.async_add_executor_job(
             self._api.set_power, self._device_mac, True
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["power"] = 1
+        self.coordinator.async_set_updated_data(newData)
 
     async def async_turn_off(self, **kwargs):
         await self.hass.async_add_executor_job(
             self._api.set_power, self._device_mac, False
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["power"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
     @property
     def is_on(self):
@@ -152,7 +155,9 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
         await self.hass.async_add_executor_job(
             self._api.set_humidity, self._device_mac, humidity
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["sp"] = humidity
+        self.coordinator.async_set_updated_data(newData)
 
     @property
     def should_poll(self):
@@ -247,7 +252,9 @@ class DuuxBoraDehumidifier(DuuxDehumidifier):
         await self.hass.async_add_executor_job(
             self._api.set_dry_mode, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["mode"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxBeamMiniDehumidifier(DuuxHumidifier):
@@ -288,7 +295,9 @@ class DuuxBeamMiniDehumidifier(DuuxHumidifier):
         await self.hass.async_add_executor_job(
             self._api.set_dry_mode, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["mode"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxNeoHumidifier(DuuxDehumidifier):
@@ -353,9 +362,9 @@ class DuuxNeoHumidifier(DuuxDehumidifier):
             self._device_mac,
             api_mode,
         )
-        # Pause to allow the Duux cloud to process the change
-        await asyncio.sleep(2)
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["mode"] = api_mode
+        self.coordinator.async_set_updated_data(newData)
 
     @property
     def extra_state_attributes(self):

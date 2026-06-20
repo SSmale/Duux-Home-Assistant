@@ -2,12 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.13.3-pre-95.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.2...v2.13.3-pre-95.1) (2026-06-19)
+## [2.14.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.0...v2.14.1) (2026-06-20)
 
 ### Fixed
 
-* adds in swing and tilt for ultimate fan ([d7c7e91](https://github.com/SSmale/Duux-Home-Assistant/commit/d7c7e91b8376390270ec440a6df0da86874bb3da))
-* fixes variable type for power controls ([52fb0ed](https://github.com/SSmale/Duux-Home-Assistant/commit/52fb0ed7031bf5bcab4edde7bdb22cfea5796b54))
+* fixes the flashing of the cards ([#84](https://github.com/SSmale/Duux-Home-Assistant/issues/84)) ([#103](https://github.com/SSmale/Duux-Home-Assistant/issues/103)) ([4461577](https://github.com/SSmale/Duux-Home-Assistant/commit/446157781287dd70b6efe3a6265eda1c84722747))
+
+## [2.14.1-beta.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.0...v2.14.1-beta.1) (2026-06-20)
+
+### Fixed
+
+* fixes the flashing of the cards ([#84](https://github.com/SSmale/Duux-Home-Assistant/issues/84)) ([df9c3bd](https://github.com/SSmale/Duux-Home-Assistant/commit/df9c3bde4739daa95c7657988b1c79ef3eedc03f))
+
+## [2.14.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.2...v2.14.0) (2026-06-19)
+
+### Added
+
+* allows users to delete devices ([#85](https://github.com/SSmale/Duux-Home-Assistant/issues/85)) ([9503930](https://github.com/SSmale/Duux-Home-Assistant/commit/9503930ff4390ae4865b69a1a26321fa1b2f15c1))
 
 ## [2.13.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.13.1...v2.13.2) (2026-06-19)
 

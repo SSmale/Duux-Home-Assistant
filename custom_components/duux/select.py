@@ -166,7 +166,9 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
         value = self._options_map[option]
 
         await self.hass.async_add_executor_job(self._set_value, self._device_mac, value)
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData[self._data_key] = value
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxHorizontalOscillationSelect(DuuxSwingSelect):
@@ -309,7 +311,9 @@ class DuuxFanSpeedSelector(DuuxSelector):
         await self.hass.async_add_executor_job(
             self._api.set_fan, self._device_mac, mode
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["fan"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxTimerSelector(DuuxSelector):
@@ -339,7 +343,9 @@ class DuuxTimerSelector(DuuxSelector):
         await self.hass.async_add_executor_job(
             self._api.set_timer, self._device_mac, str(amount)
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["timer"] = amount
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxBright2TimerSelector(DuuxTimerSelector):
@@ -390,4 +396,6 @@ class DuuxNeoSpeedSelector(DuuxSelector):
         await self.hass.async_add_executor_job(
             self._api.set_speed, self._device_mac, mode, 0, 2
         )
-        await self.coordinator.async_request_refresh()
+        newData = self.coordinator.data
+        newData["speed"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
