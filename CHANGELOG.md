@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.14.3-pre-102.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.2...v2.14.3-pre-102.1) (2026-06-20)
+
+### Fixed
+
+* correct default value handling in current_option ([#102](https://github.com/SSmale/Duux-Home-Assistant/issues/102)) ([8225faa](https://github.com/SSmale/Duux-Home-Assistant/commit/8225faa0828cea5a7566d969b76d1304723bccec))
+
 ## [2.14.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.1...v2.14.2) (2026-06-20)
 
 ### Fixed
@@ -323,3 +329,4 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
