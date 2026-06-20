@@ -8,6 +8,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 ![Install count](https://img.shields.io/badge/dynamic/json?color=41BDF5&logo=home-assistant&label=integration%20usage&suffix=%20installs&cacheSeconds=15600&url=https://analytics.home-assistant.io/custom_integrations.json&query=$.duux.total)
 [![GitHub release](https://img.shields.io/github/release/ssmale/Duux-Home-Assistant.svg)](https://github.com/ssmale/Duux-Home-Assistant/releases)
 [![License](https://img.shields.io/github/license/ssmale/Duux-Home-Assistant.svg)](LICENSE)
+[![codecov](https://codecov.io/github/SSmale/Duux-Home-Assistant/graph/badge.svg?token=UPWPNCH49V)](https://codecov.io/github/SSmale/Duux-Home-Assistant)
 
 ## Features
 
