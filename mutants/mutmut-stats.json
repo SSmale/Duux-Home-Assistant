@@ -1,0 +1,1010 @@
+{
+    "tests_by_mangled_function_name": {
+        "custom_components.duux.binary_sensor.x\u01c1DuuxBinarySensor\u01c1__init__": [
+            "tests/test_binary_sensor.py::test_async_setup_entry_adds_error_and_connectivity_for_every_device",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_on_when_error_present",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_missing",
+            "tests/test_binary_sensor.py::test_connectivity_sensor_reflects_device_online_flag",
+            "tests/test_binary_sensor.py::test_connectivity_sensor_off_when_device_offline",
+            "tests/test_binary_sensor.py::test_connectivity_sensor_off_when_online_key_missing",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_is_null",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_ok"
+        ],
+        "custom_components.duux.binary_sensor.x\u01c1DuuxErrorSensor\u01c1__init__": [
+            "tests/test_binary_sensor.py::test_async_setup_entry_adds_error_and_connectivity_for_every_device",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_on_when_error_present",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_missing",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_is_null",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_ok"
+        ],
+        "custom_components.duux.const.x\u01c1DUUX_ERRID\u01c1_missing_": [
+            "tests/test_const.py::test_unrecognised_error_code_falls_back_to_unknown_error",
+            "tests/test_sensor.py::test_error_sensor_null_api_value_is_ok",
+            "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_is_null",
+            "tests/test_const.py::test_known_error_codes_resolve_by_value",
+            "tests/test_sensor.py::test_error_sensor_unknown_code"
+        ],
+        "custom_components.duux.binary_sensor.x\u01c1DuuxConnectivitySensor\u01c1__init__": [
+            "tests/test_binary_sensor.py::test_async_setup_entry_adds_error_and_connectivity_for_every_device",
+            "tests/test_binary_sensor.py::test_connectivity_sensor_off_when_device_offline",
+            "tests/test_binary_sensor.py::test_connectivity_sensor_reflects_device_online_flag",
+            "tests/test_binary_sensor.py::test_connectivity_sensor_off_when_online_key_missing"
+        ],
+        "custom_components.duux.binary_sensor.x_async_setup_entry": [
+            "tests/test_binary_sensor.py::test_async_setup_entry_adds_error_and_connectivity_for_every_device"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimate\u01c1__init__": [
+            "tests/test_climate.py::test_edge_two_climate_properties",
+            "tests/test_climate.py::test_edge_two_climate_set_preset_mode_boost",
+            "tests/test_climate.py::test_threesixty_two_climate_also_discovers_presets",
+            "tests/test_climate.py::test_available_false_when_coordinator_update_failed",
+            "tests/test_climate.py::test_edge_two_climate_set_temperature",
+            "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command",
+            "tests/test_climate.py::test_edge_two_climate_set_hvac_mode_off_calls_set_power_false",
+            "tests/test_climate.py::test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid",
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_available_false_when_device_reports_offline",
+            "tests/test_climate.py::test_edge_climate_has_no_boost_preset",
+            "tests/test_climate.py::test_autodiscovery_with_no_modes_data_is_empty",
+            "tests/test_climate.py::test_threesixty_climate_discovers_presets_from_fixture"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxEdgeTwoClimate\u01c1__init__": [
+            "tests/test_climate.py::test_edge_two_climate_properties",
+            "tests/test_climate.py::test_edge_two_climate_set_preset_mode_boost",
+            "tests/test_climate.py::test_edge_two_climate_set_temperature",
+            "tests/test_climate.py::test_edge_two_climate_set_hvac_mode_off_calls_set_power_false",
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_available_false_when_device_reports_offline",
+            "tests/test_climate.py::test_available_false_when_coordinator_update_failed"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimate\u01c1async_set_temperature": [
+            "tests/test_climate.py::test_edge_two_climate_set_temperature"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimate\u01c1async_set_hvac_mode": [
+            "tests/test_climate.py::test_edge_two_climate_set_hvac_mode_off_calls_set_power_false"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxEdgeTwoClimate\u01c1async_set_preset_mode": [
+            "tests/test_climate.py::test_edge_two_climate_set_preset_mode_boost"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxEdgeClimate\u01c1__init__": [
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_edge_climate_has_no_boost_preset"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxThreesixtyBase\u01c1__init__": [
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command",
+            "tests/test_climate.py::test_threesixty_two_climate_also_discovers_presets",
+            "tests/test_climate.py::test_threesixty_climate_discovers_presets_from_fixture"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimateAutoDiscovery\u01c1__init__": [
+            "tests/test_climate.py::test_threesixty_two_climate_also_discovers_presets",
+            "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command",
+            "tests/test_climate.py::test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid",
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_autodiscovery_with_no_modes_data_is_empty",
+            "tests/test_climate.py::test_threesixty_climate_discovers_presets_from_fixture"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxThreesixtyBase\u01c1_normalize_mode_name": [
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command",
+            "tests/test_climate.py::test_threesixty_two_climate_also_discovers_presets",
+            "tests/test_climate.py::test_threesixty_climate_discovers_presets_from_fixture"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimateAutoDiscovery\u01c1presets_discovery": [
+            "tests/test_climate.py::test_threesixty_two_climate_also_discovers_presets",
+            "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command",
+            "tests/test_climate.py::test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid",
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_autodiscovery_with_no_modes_data_is_empty",
+            "tests/test_climate.py::test_threesixty_climate_discovers_presets_from_fixture"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimateAutoDiscovery\u01c1async_set_preset_mode": [
+            "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command"
+        ],
+        "custom_components.duux.climate.x\u01c1DuuxClimateAutoDiscovery\u01c1_deep_find": [
+            "tests/test_climate.py::test_autodiscovery_with_no_modes_data_is_empty",
+            "tests/test_climate.py::test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid"
+        ],
+        "custom_components.duux.climate.x_async_setup_entry": [
+            "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_climate.py::test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid"
+        ],
+        "custom_components.duux.config_flow.x\u01c1DuuxConfigFlow\u01c1async_step_user": [
+            "tests/test_config_flow.py::test_async_step_user_valid_credentials_creates_entry",
+            "tests/test_config_flow.py::test_async_step_user_no_input_shows_form",
+            "tests/test_config_flow.py::test_async_step_user_invalid_credentials_shows_error"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1__init__": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args29-tune set horosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args8-tune set heating 2]",
+            "tests/test_duux_api.py::test_login_http_error_returns_false",
+            "tests/test_config_flow.py::test_async_step_user_invalid_credentials_shows_error",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_sleep_mode-args17-tune set sleep 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args34-tune set tilt 1]",
+            "tests/test_duux_api.py::test_login_no_token_in_response_returns_false",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args14-tune set ion 0]",
+            "tests/test_init.py::test_async_setup_entry_login_failure_returns_false",
+            "tests/test_duux_api.py::test_login_success_sets_token_and_auth_header",
+            "tests/test_duux_api.py::test_get_device_status_latest_data_missing_entirely",
+            "tests/test_duux_api.py::test_send_command_http_error_returns_false",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args13-tune set ion 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args36-tune set speed 15]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args37-tune set speed 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args5-tune set sp 55]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_dry_mode-args11-tune set mode 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args33-tune set swing 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args35-tune set tilt 2]",
+            "tests/test_duux_api.py::test_get_device_status_fulldata_null_returns_online_and_type_only",
+            "tests/test_config_flow.py::test_async_step_user_valid_credentials_creates_entry",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args27-tune set horosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args6-tune set sp 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan-args12-tune set fan 0]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args30-tune set verosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args2-tune set sp 24]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args3-tune set sp 5]",
+            "tests/test_init.py::test_async_setup_entry_warns_on_non_mqtt_device",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args39-tune set speed 4]",
+            "tests/test_init.py::test_async_setup_entry_creates_coordinator_per_device",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args25-tune set horosc 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidifier_mode-args24-tune set mode 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args1-tune set power 00]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args18-tune set lock 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_laundry_mode-args21-tune set laundr 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args9-tune set heating 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args28-tune set horosc 0]",
+            "tests/test_init.py::test_async_setup_entry_no_devices_returns_false",
+            "tests/test_duux_api.py::test_get_devices_on_error_returns_empty_list",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args22-tune set timer 4]",
+            "tests/test_duux_api.py::test_get_device_status_does_not_mutate_source_data",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args4-tune set sp 36]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args15-tune set night 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args7-tune set sp 80]",
+            "tests/test_init.py::test_async_setup_entry_warns_on_unrecognised_device",
+            "tests/test_duux_api.py::test_get_device_status_merges_online_and_connection_type",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args10-tune set heating 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args31-tune set verosc 2]",
+            "tests/test_duux_api.py::test_get_device_status_unknown_device_returns_empty_dict",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args26-tune set horosc 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args16-tune set night 00]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_cleaning_mode-args20-tune set dry 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args38-tune set speed 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args19-tune set lock 0]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args32-tune set swing 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args0-tune set power 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args23-tune set timer 24]",
+            "tests/test_duux_api.py::test_send_command_posts_correct_url_and_payload",
+            "tests/test_duux_api.py::test_get_devices_returns_list"
+        ],
+        "custom_components.duux.diagnostics.x_async_get_config_entry_diagnostics": [
+            "tests/test_diagnostics.py::test_diagnostics_wraps_api_errors",
+            "tests/test_diagnostics.py::test_diagnostics_redacts_sensitive_fields"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1login": [
+            "tests/test_duux_api.py::test_login_no_token_in_response_returns_false",
+            "tests/test_duux_api.py::test_login_http_error_returns_false",
+            "tests/test_duux_api.py::test_login_success_sets_token_and_auth_header"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1get_devices": [
+            "tests/test_duux_api.py::test_get_devices_on_error_returns_empty_list",
+            "tests/test_duux_api.py::test_get_device_status_latest_data_missing_entirely",
+            "tests/test_duux_api.py::test_get_device_status_does_not_mutate_source_data",
+            "tests/test_duux_api.py::test_get_devices_returns_list",
+            "tests/test_duux_api.py::test_get_device_status_merges_online_and_connection_type",
+            "tests/test_duux_api.py::test_get_device_status_unknown_device_returns_empty_dict",
+            "tests/test_duux_api.py::test_get_device_status_fulldata_null_returns_online_and_type_only"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1get_device_status": [
+            "tests/test_duux_api.py::test_get_device_status_latest_data_missing_entirely",
+            "tests/test_duux_api.py::test_get_device_status_does_not_mutate_source_data",
+            "tests/test_duux_api.py::test_get_device_status_merges_online_and_connection_type",
+            "tests/test_duux_api.py::test_get_device_status_unknown_device_returns_empty_dict",
+            "tests/test_duux_api.py::test_get_device_status_fulldata_null_returns_online_and_type_only"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1send_command": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args29-tune set horosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args8-tune set heating 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_sleep_mode-args17-tune set sleep 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args34-tune set tilt 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args14-tune set ion 0]",
+            "tests/test_duux_api.py::test_send_command_http_error_returns_false",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args13-tune set ion 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args36-tune set speed 15]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args37-tune set speed 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args5-tune set sp 55]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_dry_mode-args11-tune set mode 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args33-tune set swing 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args35-tune set tilt 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args27-tune set horosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args6-tune set sp 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan-args12-tune set fan 0]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args30-tune set verosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args2-tune set sp 24]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args3-tune set sp 5]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args39-tune set speed 4]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args25-tune set horosc 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidifier_mode-args24-tune set mode 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args1-tune set power 00]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args18-tune set lock 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_laundry_mode-args21-tune set laundr 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args9-tune set heating 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args28-tune set horosc 0]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args22-tune set timer 4]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args4-tune set sp 36]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args15-tune set night 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args7-tune set sp 80]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args10-tune set heating 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args31-tune set verosc 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args26-tune set horosc 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args16-tune set night 00]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_cleaning_mode-args20-tune set dry 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args38-tune set speed 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args19-tune set lock 0]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args32-tune set swing 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args0-tune set power 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args23-tune set timer 24]",
+            "tests/test_duux_api.py::test_send_command_posts_correct_url_and_payload"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_power": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args1-tune set power 00]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args0-tune set power 01]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_temperature": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args2-tune set sp 24]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args4-tune set sp 36]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args3-tune set sp 5]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_humidity": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args7-tune set sp 80]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args6-tune set sp 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args5-tune set sp 55]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args10-tune set heating 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args8-tune set heating 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args9-tune set heating 1]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_dry_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_dry_mode-args11-tune set mode 1]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_fan": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan-args12-tune set fan 0]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_ionizer": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args13-tune set ion 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args14-tune set ion 0]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_night_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args15-tune set night 01]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args16-tune set night 00]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_sleep_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_sleep_mode-args17-tune set sleep 01]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_lock": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args18-tune set lock 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args19-tune set lock 0]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_cleaning_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_cleaning_mode-args20-tune set dry 01]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_laundry_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_laundry_mode-args21-tune set laundr 01]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_timer": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args22-tune set timer 4]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args23-tune set timer 24]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_humidifier_mode": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidifier_mode-args24-tune set mode 1]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_horosc_angle": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args26-tune set horosc 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args25-tune set horosc 2]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_horosc_bool": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args29-tune set horosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args27-tune set horosc 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args28-tune set horosc 0]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_verosc": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args31-tune set verosc 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args30-tune set verosc 1]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_swing": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args33-tune set swing 3]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args32-tune set swing 2]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_tilt": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args34-tune set tilt 1]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args35-tune set tilt 2]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_speed": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args37-tune set speed 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args36-tune set speed 15]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args38-tune set speed 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args39-tune set speed 4]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_fan_speed": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args37-tune set speed 30]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args36-tune set speed 15]"
+        ],
+        "custom_components.duux.duux_api.x\u01c1DuuxAPI\u01c1set_purifier_speed": [
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args38-tune set speed 2]",
+            "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args39-tune set speed 4]"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxWhisperFlexFan\u01c1__init__": [
+            "tests/test_fan.py::test_available_false_when_device_offline",
+            "tests/test_fan.py::test_whisper_flex_set_percentage_zero_turns_off",
+            "tests/test_fan.py::test_whisper_flex_set_preset_mode_natural",
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_fan.py::test_whisper_flex_properties",
+            "tests/test_fan.py::test_whisper_flex_turn_off",
+            "tests/test_fan.py::test_whisper_flex_turn_on_sets_power_optimistically",
+            "tests/test_fan.py::test_whisper_flex_set_percentage_calls_set_speed_with_range"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFan\u01c1__init__": [
+            "tests/test_fan.py::test_whisper_flex_set_preset_mode_natural",
+            "tests/test_fan.py::test_whisper_flex_properties",
+            "tests/test_fan.py::test_whisper_flex_ultimate_properties",
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets",
+            "tests/test_fan.py::test_air_purifier_percentage_in_manual_speed",
+            "tests/test_fan.py::test_whisper_flex_elevate_has_normal_and_natural_presets_only",
+            "tests/test_fan.py::test_air_purifier_set_percentage_to_lowest_turns_off_ionizer",
+            "tests/test_fan.py::test_air_purifier_auto_mode_high_tvoc_forces_max_speed",
+            "tests/test_fan.py::test_whisper_flex_set_percentage_calls_set_speed_with_range",
+            "tests/test_fan.py::test_air_purifier_set_percentage_ensures_power_on_first",
+            "tests/test_fan.py::test_available_false_when_device_offline",
+            "tests/test_fan.py::test_whisper_flex_elevate_100_percent_sends_speed_26",
+            "tests/test_fan.py::test_air_purifier_set_preset_mode_auto_sets_speed_zero",
+            "tests/test_fan.py::test_whisper_flex_elevate_speed_range_is_1_to_26",
+            "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_off",
+            "tests/test_fan.py::test_air_purifier_set_percentage_does_not_touch_ionizer_when_already_off",
+            "tests/test_fan.py::test_whisper_flex_turn_on_sets_power_optimistically",
+            "tests/test_fan.py::test_fan_autodiscovery_parses_traits_for_speeds_and_modes",
+            "tests/test_fan.py::test_whisper_flex_ultimate_set_preset_mode_night",
+            "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command",
+            "tests/test_fan.py::test_whisper_flex_set_percentage_zero_turns_off",
+            "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_on",
+            "tests/test_fan.py::test_whisper_flex_two_has_only_normal_and_natural_presets",
+            "tests/test_fan.py::test_whisper_flex_elevate_oscillating_reads_horosc",
+            "tests/test_fan.py::test_air_purifier_auto_mode_reported_when_speed_zero",
+            "tests/test_fan.py::test_whisper_flex_turn_off"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFan\u01c1async_turn_on": [
+            "tests/test_fan.py::test_whisper_flex_turn_on_sets_power_optimistically"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFan\u01c1async_turn_off": [
+            "tests/test_fan.py::test_whisper_flex_set_percentage_zero_turns_off",
+            "tests/test_fan.py::test_whisper_flex_turn_off"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFan\u01c1async_set_percentage": [
+            "tests/test_fan.py::test_whisper_flex_set_percentage_zero_turns_off",
+            "tests/test_fan.py::test_whisper_flex_set_percentage_calls_set_speed_with_range",
+            "tests/test_fan.py::test_whisper_flex_elevate_100_percent_sends_speed_26"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFan\u01c1async_set_preset_mode": [
+            "tests/test_fan.py::test_whisper_flex_ultimate_set_preset_mode_night",
+            "tests/test_fan.py::test_whisper_flex_set_preset_mode_natural"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxWhisperFlexElevateFan\u01c1__init__": [
+            "tests/test_fan.py::test_whisper_flex_elevate_100_percent_sends_speed_26",
+            "tests/test_fan.py::test_whisper_flex_elevate_speed_range_is_1_to_26",
+            "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_off",
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_on",
+            "tests/test_fan.py::test_whisper_flex_elevate_oscillating_reads_horosc",
+            "tests/test_fan.py::test_whisper_flex_elevate_has_normal_and_natural_presets_only"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxWhisperFlexElevateFan\u01c1async_oscillate": [
+            "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_on",
+            "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_off"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxWhisperFlexTwoFan\u01c1__init__": [
+            "tests/test_fan.py::test_whisper_flex_two_has_only_normal_and_natural_presets",
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxWhisperFlexUltimateFan\u01c1__init__": [
+            "tests/test_fan.py::test_whisper_flex_ultimate_set_preset_mode_night",
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_fan.py::test_whisper_flex_ultimate_properties"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxAirPurifierFan\u01c1__init__": [
+            "tests/test_fan.py::test_air_purifier_set_preset_mode_auto_sets_speed_zero",
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_fan.py::test_air_purifier_auto_mode_reported_when_speed_zero",
+            "tests/test_fan.py::test_air_purifier_percentage_in_manual_speed",
+            "tests/test_fan.py::test_air_purifier_set_percentage_ensures_power_on_first",
+            "tests/test_fan.py::test_air_purifier_set_percentage_does_not_touch_ionizer_when_already_off",
+            "tests/test_fan.py::test_air_purifier_set_percentage_to_lowest_turns_off_ionizer",
+            "tests/test_fan.py::test_air_purifier_auto_mode_high_tvoc_forces_max_speed"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxAirPurifierFan\u01c1async_set_percentage": [
+            "tests/test_fan.py::test_air_purifier_set_percentage_ensures_power_on_first",
+            "tests/test_fan.py::test_air_purifier_set_percentage_does_not_touch_ionizer_when_already_off",
+            "tests/test_fan.py::test_air_purifier_set_percentage_to_lowest_turns_off_ionizer"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxAirPurifierFan\u01c1async_set_preset_mode": [
+            "tests/test_fan.py::test_air_purifier_set_preset_mode_auto_sets_speed_zero"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFanAutoDiscovery\u01c1_get_traits": [
+            "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets",
+            "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command",
+            "tests/test_fan.py::test_fan_autodiscovery_parses_traits_for_speeds_and_modes"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFanAutoDiscovery\u01c1_discover_modes": [
+            "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets",
+            "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command",
+            "tests/test_fan.py::test_fan_autodiscovery_parses_traits_for_speeds_and_modes"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFanAutoDiscovery\u01c1_discover_speeds": [
+            "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets",
+            "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command",
+            "tests/test_fan.py::test_fan_autodiscovery_parses_traits_for_speeds_and_modes"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFanAutoDiscovery\u01c1__init__": [
+            "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets",
+            "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command",
+            "tests/test_fan.py::test_fan_autodiscovery_parses_traits_for_speeds_and_modes"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFanAutoDiscovery\u01c1_deep_find": [
+            "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets"
+        ],
+        "custom_components.duux.fan.x\u01c1DuuxFanAutoDiscovery\u01c1async_set_preset_mode": [
+            "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command"
+        ],
+        "custom_components.duux.fan.x_async_setup_entry": [
+            "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxDehumidifier\u01c1__init__": [
+            "tests/test_humidifier.py::test_neo_mode_normal_when_not_one",
+            "tests/test_humidifier.py::test_bora_properties",
+            "tests/test_humidifier.py::test_neo_extra_state_attributes_spray_volume",
+            "tests/test_humidifier.py::test_bora_set_humidity",
+            "tests/test_humidifier.py::test_bora_set_mode_continuous",
+            "tests/test_humidifier.py::test_neo_mode_handles_string_value_from_api",
+            "tests/test_humidifier.py::test_neo_set_mode_sends_api_value_and_skips_sleep",
+            "tests/test_humidifier.py::test_neo_action_humidifying_when_below_target",
+            "tests/test_humidifier.py::test_neo_action_idle_when_at_target",
+            "tests/test_humidifier.py::test_bora_action_off_when_power_off",
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_humidifier.py::test_bora_turn_off"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBase\u01c1__init__": [
+            "tests/test_humidifier.py::test_neo_mode_normal_when_not_one",
+            "tests/test_humidifier.py::test_bora_properties",
+            "tests/test_humidifier.py::test_neo_extra_state_attributes_spray_volume",
+            "tests/test_humidifier.py::test_bora_set_humidity",
+            "tests/test_humidifier.py::test_bora_set_mode_continuous",
+            "tests/test_humidifier.py::test_beam_mini_set_mode_auto",
+            "tests/test_humidifier.py::test_neo_mode_handles_string_value_from_api",
+            "tests/test_humidifier.py::test_neo_set_mode_sends_api_value_and_skips_sleep",
+            "tests/test_humidifier.py::test_neo_action_humidifying_when_below_target",
+            "tests/test_humidifier.py::test_neo_action_idle_when_at_target",
+            "tests/test_humidifier.py::test_bora_action_off_when_power_off",
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_humidifier.py::test_beam_mini_properties",
+            "tests/test_humidifier.py::test_bora_turn_off"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBoraDehumidifier\u01c1__init__": [
+            "tests/test_humidifier.py::test_bora_properties",
+            "tests/test_humidifier.py::test_bora_set_humidity",
+            "tests/test_humidifier.py::test_bora_set_mode_continuous",
+            "tests/test_humidifier.py::test_bora_action_off_when_power_off",
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_humidifier.py::test_bora_turn_off"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBoraDehumidifier\u01c1async_set_mode": [
+            "tests/test_humidifier.py::test_bora_set_mode_continuous"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBase\u01c1async_set_humidity": [
+            "tests/test_humidifier.py::test_bora_set_humidity"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBase\u01c1async_turn_off": [
+            "tests/test_humidifier.py::test_bora_turn_off"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxHumidifier\u01c1__init__": [
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_humidifier.py::test_beam_mini_set_mode_auto",
+            "tests/test_humidifier.py::test_beam_mini_properties"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBeamMiniDehumidifier\u01c1__init__": [
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_humidifier.py::test_beam_mini_set_mode_auto",
+            "tests/test_humidifier.py::test_beam_mini_properties"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxBeamMiniDehumidifier\u01c1async_set_mode": [
+            "tests/test_humidifier.py::test_beam_mini_set_mode_auto"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxNeoHumidifier\u01c1__init__": [
+            "tests/test_humidifier.py::test_neo_mode_normal_when_not_one",
+            "tests/test_humidifier.py::test_neo_extra_state_attributes_spray_volume",
+            "tests/test_humidifier.py::test_neo_mode_handles_string_value_from_api",
+            "tests/test_humidifier.py::test_neo_action_humidifying_when_below_target",
+            "tests/test_humidifier.py::test_neo_set_mode_sends_api_value_and_skips_sleep",
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes",
+            "tests/test_humidifier.py::test_neo_action_idle_when_at_target"
+        ],
+        "custom_components.duux.humidifier.x\u01c1DuuxNeoHumidifier\u01c1async_set_mode": [
+            "tests/test_humidifier.py::test_neo_set_mode_sends_api_value_and_skips_sleep"
+        ],
+        "custom_components.duux.humidifier.x_async_setup_entry": [
+            "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes"
+        ],
+        "custom_components.duux.x_async_setup_entry": [
+            "tests/test_init.py::test_async_setup_entry_no_devices_returns_false",
+            "tests/test_init.py::test_async_setup_entry_login_failure_returns_false",
+            "tests/test_init.py::test_async_setup_entry_warns_on_non_mqtt_device",
+            "tests/test_init.py::test_async_setup_entry_warns_on_unrecognised_device",
+            "tests/test_init.py::test_async_setup_entry_creates_coordinator_per_device"
+        ],
+        "custom_components.duux.x_async_unload_entry": [
+            "tests/test_init.py::test_async_unload_entry_removes_stored_data_on_success",
+            "tests/test_init.py::test_async_unload_entry_keeps_data_when_unload_fails"
+        ],
+        "custom_components.duux.x\u01c1DuuxDataUpdateCoordinator\u01c1_async_update_data": [
+            "tests/test_init.py::test_coordinator_update_data_returns_api_payload",
+            "tests/test_init.py::test_coordinator_update_data_wraps_errors_in_update_failed"
+        ],
+        "custom_components.duux.x\u01c1DuuxDataUpdateCoordinator\u01c1__init__": [
+            "tests/test_init.py::test_coordinator_update_data_returns_api_payload",
+            "tests/test_init.py::test_coordinator_update_data_wraps_errors_in_update_failed"
+        ],
+        "custom_components.duux.x_async_remove_config_entry_device": [
+            "tests/test_init.py::test_async_remove_config_entry_device_removes_all_matching_entities",
+            "tests/test_init.py::test_async_remove_config_entry_device_blocks_if_entities_remain",
+            "tests/test_init.py::test_async_remove_config_entry_device_no_matching_entities_is_a_noop"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxHorizontalOscillationSelect\u01c1__init__": [
+            "tests/test_select.py::test_swing_family_unknown_option_is_ignored",
+            "tests/test_select.py::test_swing_family_current_option_with_unrecognised_raw_value_returns_none",
+            "tests/test_select.py::test_horizontal_oscillation_select_option_calls_set_horosc",
+            "tests/test_select.py::test_horizontal_oscillation_current_option"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxSwingSelect\u01c1__init__": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_horizontal_oscillation_select_option_calls_set_horosc",
+            "tests/test_select.py::test_horizontal_oscillation_current_option",
+            "tests/test_select.py::test_vertical_tilt_select_option_calls_set_tilt",
+            "tests/test_select.py::test_swing_family_unknown_option_is_ignored",
+            "tests/test_select.py::test_horizontal_swing_select_option_calls_set_swing",
+            "tests/test_select.py::test_vertical_oscillation_select_option_calls_set_verosc",
+            "tests/test_select.py::test_horizontal_swing_current_option",
+            "tests/test_select.py::test_vertical_tilt_current_option",
+            "tests/test_select.py::test_vertical_oscillation_current_option",
+            "tests/test_select.py::test_swing_family_current_option_with_unrecognised_raw_value_returns_none"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxSwingSelect\u01c1async_select_option": [
+            "tests/test_select.py::test_horizontal_oscillation_select_option_calls_set_horosc",
+            "tests/test_select.py::test_swing_family_unknown_option_is_ignored",
+            "tests/test_select.py::test_horizontal_swing_select_option_calls_set_swing",
+            "tests/test_select.py::test_vertical_oscillation_select_option_calls_set_verosc",
+            "tests/test_select.py::test_vertical_tilt_select_option_calls_set_tilt"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxHorizontalOscillationSelect\u01c1_set_value": [
+            "tests/test_select.py::test_horizontal_oscillation_select_option_calls_set_horosc"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxVerticalOscillationSelect\u01c1__init__": [
+            "tests/test_select.py::test_vertical_oscillation_current_option",
+            "tests/test_select.py::test_vertical_oscillation_select_option_calls_set_verosc"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxVerticalOscillationSelect\u01c1_set_value": [
+            "tests/test_select.py::test_vertical_oscillation_select_option_calls_set_verosc"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxHorizontalSwingSelect\u01c1__init__": [
+            "tests/test_select.py::test_horizontal_swing_current_option",
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_horizontal_swing_select_option_calls_set_swing"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxHorizontalSwingSelect\u01c1_set_value": [
+            "tests/test_select.py::test_horizontal_swing_select_option_calls_set_swing"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxVerticalTiltSelect\u01c1__init__": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_vertical_tilt_select_option_calls_set_tilt",
+            "tests/test_select.py::test_vertical_tilt_current_option"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxVerticalTiltSelect\u01c1_set_value": [
+            "tests/test_select.py::test_vertical_tilt_select_option_calls_set_tilt"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxFanSpeedSelector\u01c1__init__": [
+            "tests/test_select.py::test_fan_speed_selector_current_option",
+            "tests/test_select.py::test_fan_speed_selector_select_high",
+            "tests/test_select.py::test_fan_speed_selector_current_option_defaults_when_missing",
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxSelector\u01c1__init__": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_neo_speed_selector_select_high",
+            "tests/test_select.py::test_fan_speed_selector_select_high",
+            "tests/test_select.py::test_timer_selector_current_option",
+            "tests/test_select.py::test_timer_selector_select_invalid_option_defaults_to_zero",
+            "tests/test_select.py::test_timer_selector_current_option_none_when_missing",
+            "tests/test_select.py::test_neo_speed_selector_current_option",
+            "tests/test_select.py::test_fan_speed_selector_current_option",
+            "tests/test_select.py::test_timer_selector_select_option_clamps_to_max",
+            "tests/test_select.py::test_fan_speed_selector_current_option_defaults_when_missing",
+            "tests/test_select.py::test_bright2_timer_selector_has_restricted_presets"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxFanSpeedSelector\u01c1async_select_option": [
+            "tests/test_select.py::test_fan_speed_selector_select_high"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxTimerSelector\u01c1__init__": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_timer_selector_select_invalid_option_defaults_to_zero",
+            "tests/test_select.py::test_timer_selector_current_option",
+            "tests/test_select.py::test_timer_selector_current_option_none_when_missing",
+            "tests/test_select.py::test_timer_selector_select_option_clamps_to_max",
+            "tests/test_select.py::test_bright2_timer_selector_has_restricted_presets"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxTimerSelector\u01c1async_select_option": [
+            "tests/test_select.py::test_timer_selector_select_option_clamps_to_max",
+            "tests/test_select.py::test_timer_selector_select_invalid_option_defaults_to_zero"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxBright2TimerSelector\u01c1__init__": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_bright2_timer_selector_has_restricted_presets"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxNeoSpeedSelector\u01c1__init__": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device",
+            "tests/test_select.py::test_neo_speed_selector_select_high",
+            "tests/test_select.py::test_neo_speed_selector_current_option"
+        ],
+        "custom_components.duux.select.x\u01c1DuuxNeoSpeedSelector\u01c1async_select_option": [
+            "tests/test_select.py::test_neo_speed_selector_select_high"
+        ],
+        "custom_components.duux.select.x_async_setup_entry": [
+            "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_error_sensor_missing_key_is_unavailable",
+            "tests/test_sensor.py::test_connection_type_sensor_normalises_to_lowercase",
+            "tests/test_sensor.py::test_temp_sensor_updates_on_coordinator_push",
+            "tests/test_sensor.py::test_connection_type_sensor_none_when_missing",
+            "tests/test_sensor.py::test_available_false_when_offline",
+            "tests/test_sensor.py::test_error_sensor_ok_state",
+            "tests/test_sensor.py::test_air_quality_sensor_maps_raw_value_to_label",
+            "tests/test_sensor.py::test_tvoc_sensor_unknown_raw_value_passed_through",
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite",
+            "tests/test_sensor.py::test_error_sensor_unknown_code",
+            "tests/test_sensor.py::test_error_sensor_null_api_value_is_ok",
+            "tests/test_sensor.py::test_temp_sensor_initial_value",
+            "tests/test_sensor.py::test_tvoc_sensor_maps_raw_value_to_label"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxTempSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_available_false_when_offline",
+            "tests/test_sensor.py::test_temp_sensor_initial_value",
+            "tests/test_sensor.py::test_temp_sensor_updates_on_coordinator_push",
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxTVOCSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite",
+            "tests/test_sensor.py::test_tvoc_sensor_unknown_raw_value_passed_through",
+            "tests/test_sensor.py::test_tvoc_sensor_maps_raw_value_to_label"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxAirQualitySensor\u01c1__init__": [
+            "tests/test_sensor.py::test_air_quality_sensor_maps_raw_value_to_label",
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxErrorSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_error_sensor_ok_state",
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite",
+            "tests/test_sensor.py::test_error_sensor_unknown_code",
+            "tests/test_sensor.py::test_error_sensor_null_api_value_is_ok",
+            "tests/test_sensor.py::test_error_sensor_missing_key_is_unavailable"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxConnectionTypeSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite",
+            "tests/test_sensor.py::test_connection_type_sensor_normalises_to_lowercase",
+            "tests/test_sensor.py::test_connection_type_sensor_none_when_missing"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxPM25Sensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxTimeRemainingSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x_async_setup_entry": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxFilterLifeSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxBora2024TimeRemainingSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxHumiditySensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.sensor.x\u01c1DuuxBright2TimeRemainingSensor\u01c1__init__": [
+            "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxChildLockSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxChildLockSwitch-lock-set_lock]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]",
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxChildLockSwitch-lock-set_lock]",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxSleepModeSwitch-sleep-set_sleep_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]",
+            "tests/test_switch.py::test_ionizer_turn_on_blocked_when_speed_is_one",
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxNightModeSwitch-night-set_night_mode]",
+            "tests/test_switch.py::test_ionizer_available_in_auto_mode_speed_zero",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxCleaningModeSwitch-dry-set_cleaning_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]",
+            "tests/test_switch.py::test_ionizer_turn_on_allowed_when_speed_not_one",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxLaundryModeSwitch-laundr-set_laundry_mode]",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]",
+            "tests/test_switch.py::test_ionizer_unavailable_when_bright2_speed_is_one",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxNightModeSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxNightModeSwitch-night-set_night_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]",
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxSleepModeSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxSleepModeSwitch-sleep-set_sleep_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxCleaningModeSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]",
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxCleaningModeSwitch-dry-set_cleaning_mode]",
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxLaundryModeSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxLaundryModeSwitch-laundr-set_laundry_mode]",
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]",
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device",
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxChildLockSwitch\u01c1async_turn_on": [
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxNightModeSwitch\u01c1async_turn_on": [
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxSleepModeSwitch\u01c1async_turn_on": [
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxCleaningModeSwitch\u01c1async_turn_on": [
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxLaundryModeSwitch\u01c1async_turn_on": [
+            "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxChildLockSwitch\u01c1async_turn_off": [
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxNightModeSwitch\u01c1async_turn_off": [
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxSleepModeSwitch\u01c1async_turn_off": [
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxCleaningModeSwitch\u01c1async_turn_off": [
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxLaundryModeSwitch\u01c1async_turn_off": [
+            "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxIonizerSwitch\u01c1__init__": [
+            "tests/test_switch.py::test_ionizer_available_in_auto_mode_speed_zero",
+            "tests/test_switch.py::test_ionizer_turn_on_blocked_when_speed_is_one",
+            "tests/test_switch.py::test_ionizer_unavailable_when_bright2_speed_is_one",
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device",
+            "tests/test_switch.py::test_ionizer_turn_on_allowed_when_speed_not_one"
+        ],
+        "custom_components.duux.switch.x\u01c1DuuxIonizerSwitch\u01c1async_turn_on": [
+            "tests/test_switch.py::test_ionizer_turn_on_allowed_when_speed_not_one",
+            "tests/test_switch.py::test_ionizer_turn_on_blocked_when_speed_is_one"
+        ],
+        "custom_components.duux.switch.x_async_setup_entry": [
+            "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device"
+        ]
+    },
+    "duration_by_test": {
+        "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_ok": 0.0011209170334041119,
+        "tests/test_binary_sensor.py::test_error_binary_sensor_on_when_error_present": 0.00034058187156915665,
+        "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_missing": 0.0002899160608649254,
+        "tests/test_binary_sensor.py::test_error_binary_sensor_off_when_err_is_null": 0.0018199170008301735,
+        "tests/test_binary_sensor.py::test_connectivity_sensor_reflects_device_online_flag": 0.0003032921813428402,
+        "tests/test_binary_sensor.py::test_connectivity_sensor_off_when_device_offline": 0.00027391593903303146,
+        "tests/test_binary_sensor.py::test_connectivity_sensor_off_when_online_key_missing": 0.00028566643595695496,
+        "tests/test_binary_sensor.py::test_async_setup_entry_adds_error_and_connectivity_for_every_device": 0.0019816248677670956,
+        "tests/test_climate.py::test_edge_two_climate_properties": 0.0005271644331514835,
+        "tests/test_climate.py::test_edge_two_climate_set_temperature": 0.0009179580956697464,
+        "tests/test_climate.py::test_edge_two_climate_set_hvac_mode_off_calls_set_power_false": 0.0007432908751070499,
+        "tests/test_climate.py::test_edge_two_climate_set_preset_mode_boost": 0.0008889571763575077,
+        "tests/test_climate.py::test_edge_climate_has_no_boost_preset": 0.00037829065695405006,
+        "tests/test_climate.py::test_threesixty_climate_discovers_presets_from_fixture": 0.00041937455534935,
+        "tests/test_climate.py::test_threesixty_climate_set_preset_mode_sends_discovered_command": 0.0007316665723919868,
+        "tests/test_climate.py::test_threesixty_two_climate_also_discovers_presets": 0.0004532928578555584,
+        "tests/test_climate.py::test_autodiscovery_with_no_modes_data_is_empty": 0.0003272080793976784,
+        "tests/test_climate.py::test_available_false_when_coordinator_update_failed": 0.00039962446317076683,
+        "tests/test_climate.py::test_available_false_when_device_reports_offline": 0.00036079157143831253,
+        "tests/test_climate.py::test_async_setup_entry_dispatches_correct_entity_classes": 0.0013576247729361057,
+        "tests/test_climate.py::test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid": 0.0006622076034545898,
+        "tests/test_config_flow.py::test_async_step_user_no_input_shows_form": 0.000568790826946497,
+        "tests/test_config_flow.py::test_async_step_user_valid_credentials_creates_entry": 0.0009927093051373959,
+        "tests/test_config_flow.py::test_async_step_user_invalid_credentials_shows_error": 0.0005138339474797249,
+        "tests/test_const.py::test_known_error_codes_resolve_by_value": 0.00014708330854773521,
+        "tests/test_const.py::test_unrecognised_error_code_falls_back_to_unknown_error": 0.00013412628322839737,
+        "tests/test_const.py::test_unknown_error_name_is_human_readable": 0.00012358324602246284,
+        "tests/test_diagnostics.py::test_diagnostics_redacts_sensitive_fields": 0.0009495839476585388,
+        "tests/test_diagnostics.py::test_diagnostics_wraps_api_errors": 0.0005615404807031155,
+        "tests/test_duux_api.py::test_login_success_sets_token_and_auth_header": 0.0008003325201570988,
+        "tests/test_duux_api.py::test_login_no_token_in_response_returns_false": 0.0004047495312988758,
+        "tests/test_duux_api.py::test_login_http_error_returns_false": 0.0004515000618994236,
+        "tests/test_duux_api.py::test_get_devices_returns_list": 0.0006171255372464657,
+        "tests/test_duux_api.py::test_get_devices_on_error_returns_empty_list": 0.00032008299604058266,
+        "tests/test_duux_api.py::test_get_device_status_merges_online_and_connection_type": 0.0004464592784643173,
+        "tests/test_duux_api.py::test_get_device_status_fulldata_null_returns_online_and_type_only": 0.0004294589161872864,
+        "tests/test_duux_api.py::test_get_device_status_latest_data_missing_entirely": 0.0004116669297218323,
+        "tests/test_duux_api.py::test_get_device_status_unknown_device_returns_empty_dict": 0.0006171665154397488,
+        "tests/test_duux_api.py::test_get_device_status_does_not_mutate_source_data": 0.000425542239099741,
+        "tests/test_duux_api.py::test_send_command_posts_correct_url_and_payload": 0.00041183317080140114,
+        "tests/test_duux_api.py::test_send_command_http_error_returns_false": 0.0004127081483602524,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args0-tune set power 01]": 0.0007317499257624149,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_power-args1-tune set power 00]": 0.00041716592386364937,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args2-tune set sp 24]": 0.0004460001364350319,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args3-tune set sp 5]": 0.000400458462536335,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_temperature-args4-tune set sp 36]": 0.0005955835804343224,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args5-tune set sp 55]": 0.0003882492892444134,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args6-tune set sp 30]": 0.00044408394023776054,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidity-args7-tune set sp 80]": 0.0004280419088900089,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args8-tune set heating 2]": 0.0004321257583796978,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args9-tune set heating 1]": 0.000564957968890667,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_mode-args10-tune set heating 3]": 0.0004537920467555523,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_dry_mode-args11-tune set mode 1]": 0.0003980407491326332,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan-args12-tune set fan 0]": 0.0004047490656375885,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args13-tune set ion 1]": 0.0005249162204563618,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_ionizer-args14-tune set ion 0]": 0.00042408378794789314,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args15-tune set night 01]": 0.0004008752293884754,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_night_mode-args16-tune set night 00]": 0.00041004177182912827,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_sleep_mode-args17-tune set sleep 01]": 0.0011947499588131905,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args18-tune set lock 1]": 0.00041579222306609154,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_lock-args19-tune set lock 0]": 0.0003741243854165077,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_cleaning_mode-args20-tune set dry 01]": 0.0004015425220131874,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_laundry_mode-args21-tune set laundr 01]": 0.00045666657388210297,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args22-tune set timer 4]": 0.0005714986473321915,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_timer-args23-tune set timer 24]": 0.00038529234007000923,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_humidifier_mode-args24-tune set mode 1]": 0.00048291729763150215,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args25-tune set horosc 2]": 0.00044616824015975,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_angle-args26-tune set horosc 3]": 0.000589416828006506,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args27-tune set horosc 1]": 0.0003910837695002556,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args28-tune set horosc 0]": 0.00039033452048897743,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_horosc_bool-args29-tune set horosc 1]": 0.00038908421993255615,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args30-tune set verosc 1]": 0.0005317493341863155,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_verosc-args31-tune set verosc 2]": 0.0003892076201736927,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args32-tune set swing 2]": 0.00045508425682783127,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_swing-args33-tune set swing 3]": 0.0003798319958150387,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args34-tune set tilt 1]": 0.0003986661322414875,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_tilt-args35-tune set tilt 2]": 0.0006464151665568352,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args36-tune set speed 15]": 0.00039637601003050804,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_fan_speed-args37-tune set speed 30]": 0.00039108283817768097,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args38-tune set speed 2]": 0.00038512470200657845,
+        "tests/test_duux_api.py::test_convenience_setters_build_expected_command[set_purifier_speed-args39-tune set speed 4]": 0.0005186665803194046,
+        "tests/test_fan.py::test_whisper_flex_properties": 0.00045783305540680885,
+        "tests/test_fan.py::test_whisper_flex_turn_on_sets_power_optimistically": 0.0007717483676970005,
+        "tests/test_fan.py::test_whisper_flex_turn_off": 0.0006855009123682976,
+        "tests/test_fan.py::test_whisper_flex_set_percentage_calls_set_speed_with_range": 0.0007631252519786358,
+        "tests/test_fan.py::test_whisper_flex_set_percentage_zero_turns_off": 0.0006519989110529423,
+        "tests/test_fan.py::test_whisper_flex_set_preset_mode_natural": 0.0006288760341703892,
+        "tests/test_fan.py::test_whisper_flex_elevate_speed_range_is_1_to_26": 0.000282208900898695,
+        "tests/test_fan.py::test_whisper_flex_elevate_has_normal_and_natural_presets_only": 0.000302125234156847,
+        "tests/test_fan.py::test_whisper_flex_elevate_100_percent_sends_speed_26": 0.0007325815968215466,
+        "tests/test_fan.py::test_whisper_flex_elevate_oscillating_reads_horosc": 0.0003557899035513401,
+        "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_on": 0.0005621258169412613,
+        "tests/test_fan.py::test_whisper_flex_elevate_async_oscillate_off": 0.0005712094716727734,
+        "tests/test_fan.py::test_whisper_flex_two_has_only_normal_and_natural_presets": 0.0003875000402331352,
+        "tests/test_fan.py::test_whisper_flex_ultimate_properties": 0.0005035833455622196,
+        "tests/test_fan.py::test_whisper_flex_ultimate_set_preset_mode_night": 0.0006615826860070229,
+        "tests/test_fan.py::test_air_purifier_percentage_in_manual_speed": 0.0003582495264708996,
+        "tests/test_fan.py::test_air_purifier_auto_mode_reported_when_speed_zero": 0.00033283326774835587,
+        "tests/test_fan.py::test_air_purifier_auto_mode_high_tvoc_forces_max_speed": 0.0003682090900838375,
+        "tests/test_fan.py::test_air_purifier_set_percentage_to_lowest_turns_off_ionizer": 0.0008605001494288445,
+        "tests/test_fan.py::test_air_purifier_set_percentage_does_not_touch_ionizer_when_already_off": 0.0006397087126970291,
+        "tests/test_fan.py::test_air_purifier_set_preset_mode_auto_sets_speed_zero": 0.0006670420989394188,
+        "tests/test_fan.py::test_air_purifier_set_percentage_ensures_power_on_first": 0.000868708360940218,
+        "tests/test_fan.py::test_fan_autodiscovery_with_no_traits_has_no_speeds_or_presets": 0.00038525089621543884,
+        "tests/test_fan.py::test_fan_autodiscovery_parses_traits_for_speeds_and_modes": 0.00036295875906944275,
+        "tests/test_fan.py::test_fan_autodiscovery_set_preset_mode_sends_built_command": 0.0006209984421730042,
+        "tests/test_fan.py::test_available_false_when_device_offline": 0.00032954150810837746,
+        "tests/test_fan.py::test_async_setup_entry_dispatches_correct_entity_classes": 0.001285084057599306,
+        "tests/test_humidifier.py::test_bora_properties": 0.00044400012120604515,
+        "tests/test_humidifier.py::test_bora_set_mode_continuous": 0.0006998754106462002,
+        "tests/test_humidifier.py::test_bora_set_humidity": 0.0013951673172414303,
+        "tests/test_humidifier.py::test_bora_turn_off": 0.0006200410425662994,
+        "tests/test_humidifier.py::test_bora_action_off_when_power_off": 0.000325122382491827,
+        "tests/test_humidifier.py::test_beam_mini_properties": 0.00034229084849357605,
+        "tests/test_humidifier.py::test_beam_mini_set_mode_auto": 0.0007252097129821777,
+        "tests/test_humidifier.py::test_neo_mode_handles_string_value_from_api": 0.0003871247172355652,
+        "tests/test_humidifier.py::test_neo_mode_normal_when_not_one": 0.0005378746427595615,
+        "tests/test_humidifier.py::test_neo_set_mode_sends_api_value_and_skips_sleep": 0.000628249254077673,
+        "tests/test_humidifier.py::test_neo_action_humidifying_when_below_target": 0.0003775418736040592,
+        "tests/test_humidifier.py::test_neo_action_idle_when_at_target": 0.00032841647043824196,
+        "tests/test_humidifier.py::test_neo_extra_state_attributes_spray_volume": 0.00033512525260448456,
+        "tests/test_humidifier.py::test_async_setup_entry_dispatches_correct_entity_classes": 0.001145459245890379,
+        "tests/test_init.py::test_async_setup_entry_creates_coordinator_per_device": 0.0009239576756954193,
+        "tests/test_init.py::test_async_setup_entry_login_failure_returns_false": 0.0006461250595748425,
+        "tests/test_init.py::test_async_setup_entry_no_devices_returns_false": 0.0006139171309769154,
+        "tests/test_init.py::test_async_setup_entry_warns_on_unrecognised_device": 0.0010769171640276909,
+        "tests/test_init.py::test_async_setup_entry_warns_on_non_mqtt_device": 0.0008532917127013206,
+        "tests/test_init.py::test_async_unload_entry_removes_stored_data_on_success": 0.0005320827476680279,
+        "tests/test_init.py::test_async_unload_entry_keeps_data_when_unload_fails": 0.00044083409011363983,
+        "tests/test_init.py::test_coordinator_update_data_returns_api_payload": 0.0008186250925064087,
+        "tests/test_init.py::test_coordinator_update_data_wraps_errors_in_update_failed": 0.0006893747486174107,
+        "tests/test_init.py::test_async_remove_config_entry_device_removes_all_matching_entities": 0.0009441659785807133,
+        "tests/test_init.py::test_async_remove_config_entry_device_blocks_if_entities_remain": 0.0007392503321170807,
+        "tests/test_init.py::test_async_remove_config_entry_device_no_matching_entities_is_a_noop": 0.0006360001862049103,
+        "tests/test_select.py::test_horizontal_oscillation_current_option": 0.00031299982219934464,
+        "tests/test_select.py::test_horizontal_oscillation_select_option_calls_set_horosc": 0.0007429174147546291,
+        "tests/test_select.py::test_swing_family_unknown_option_is_ignored": 0.0005364581011235714,
+        "tests/test_select.py::test_swing_family_current_option_with_unrecognised_raw_value_returns_none": 0.00023020757362246513,
+        "tests/test_select.py::test_vertical_oscillation_current_option": 0.00024058297276496887,
+        "tests/test_select.py::test_vertical_oscillation_select_option_calls_set_verosc": 0.0005179173313081264,
+        "tests/test_select.py::test_horizontal_swing_current_option": 0.0003344169817864895,
+        "tests/test_select.py::test_horizontal_swing_select_option_calls_set_swing": 0.00085079250857234,
+        "tests/test_select.py::test_vertical_tilt_current_option": 0.0003275414928793907,
+        "tests/test_select.py::test_vertical_tilt_select_option_calls_set_tilt": 0.000653041061013937,
+        "tests/test_select.py::test_fan_speed_selector_current_option": 0.0003347499296069145,
+        "tests/test_select.py::test_fan_speed_selector_current_option_defaults_when_missing": 0.00024470919743180275,
+        "tests/test_select.py::test_fan_speed_selector_select_high": 0.0009022075682878494,
+        "tests/test_select.py::test_timer_selector_current_option": 0.00033237552270293236,
+        "tests/test_select.py::test_timer_selector_current_option_none_when_missing": 0.0002521248534321785,
+        "tests/test_select.py::test_timer_selector_select_option_clamps_to_max": 0.0006292504258453846,
+        "tests/test_select.py::test_timer_selector_select_invalid_option_defaults_to_zero": 0.0006845002062618732,
+        "tests/test_select.py::test_bright2_timer_selector_has_restricted_presets": 0.0003653746098279953,
+        "tests/test_select.py::test_neo_speed_selector_current_option": 0.000513250008225441,
+        "tests/test_select.py::test_neo_speed_selector_select_high": 0.0006700432859361172,
+        "tests/test_select.py::test_async_setup_entry_dispatches_expected_selects_per_device": 0.001228582113981247,
+        "tests/test_sensor.py::test_temp_sensor_initial_value": 0.00042570754885673523,
+        "tests/test_sensor.py::test_temp_sensor_updates_on_coordinator_push": 0.00037854257971048355,
+        "tests/test_sensor.py::test_tvoc_sensor_maps_raw_value_to_label": 0.0003246660344302654,
+        "tests/test_sensor.py::test_tvoc_sensor_unknown_raw_value_passed_through": 0.00025195907801389694,
+        "tests/test_sensor.py::test_air_quality_sensor_maps_raw_value_to_label": 0.00042958371341228485,
+        "tests/test_sensor.py::test_error_sensor_ok_state": 0.00044674938544631004,
+        "tests/test_sensor.py::test_error_sensor_unknown_code": 0.0002567088231444359,
+        "tests/test_sensor.py::test_error_sensor_null_api_value_is_ok": 0.0002749166451394558,
+        "tests/test_sensor.py::test_error_sensor_missing_key_is_unavailable": 0.00029362505301833153,
+        "tests/test_sensor.py::test_connection_type_sensor_normalises_to_lowercase": 0.0005137077532708645,
+        "tests/test_sensor.py::test_connection_type_sensor_none_when_missing": 0.0002422928810119629,
+        "tests/test_sensor.py::test_available_false_when_offline": 0.00033279042690992355,
+        "tests/test_sensor.py::test_async_setup_entry_bright2_gets_air_quality_sensor_suite": 0.0024317498318850994,
+        "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxChildLockSwitch-lock-set_lock]": 0.00046300003305077553,
+        "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxNightModeSwitch-night-set_night_mode]": 0.00041545648127794266,
+        "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxSleepModeSwitch-sleep-set_sleep_mode]": 0.0005081240087747574,
+        "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxCleaningModeSwitch-dry-set_cleaning_mode]": 0.0003671245649456978,
+        "tests/test_switch.py::test_is_on_reflects_coordinator_data[DuuxLaundryModeSwitch-laundr-set_laundry_mode]": 0.0005719582550227642,
+        "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]": 0.0005815420299768448,
+        "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]": 0.000640583224594593,
+        "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]": 0.0005608322098851204,
+        "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]": 0.0007550842128694057,
+        "tests/test_switch.py::test_turn_on_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]": 0.0005844999104738235,
+        "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxChildLockSwitch-lock-set_lock]": 0.0005661663599312305,
+        "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxNightModeSwitch-night-set_night_mode]": 0.0008348333649337292,
+        "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxSleepModeSwitch-sleep-set_sleep_mode]": 0.000680210068821907,
+        "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxCleaningModeSwitch-dry-set_cleaning_mode]": 0.0005643749609589577,
+        "tests/test_switch.py::test_turn_off_calls_correct_api_method[DuuxLaundryModeSwitch-laundr-set_laundry_mode]": 0.0006692502647638321,
+        "tests/test_switch.py::test_ionizer_unavailable_when_bright2_speed_is_one": 0.000543082132935524,
+        "tests/test_switch.py::test_ionizer_available_in_auto_mode_speed_zero": 0.00032908283174037933,
+        "tests/test_switch.py::test_ionizer_turn_on_blocked_when_speed_is_one": 0.0006315414793789387,
+        "tests/test_switch.py::test_ionizer_turn_on_allowed_when_speed_not_one": 0.0007452503778040409,
+        "tests/test_switch.py::test_async_setup_entry_dispatches_expected_switches_per_device": 0.001484499778598547
+    },
+    "stats_time": 0.888370141
+}

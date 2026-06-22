@@ -1,0 +1,118 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Dieses Duux-Konto ist bereits konfiguriert."
+        },
+        "error": {
+            "invalid_auth": "Ungültige Anmeldedaten. Bitte überprüfen Sie Ihre E-Mail und Ihr Passwort."
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "email": "E-Mail-Adresse",
+                    "password": "Passwort"
+                },
+                "description": "Geben Sie Ihre Duux-Kontodaten ein.",
+                "title": "Duux Anmeldung"
+            }
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "connected": {
+                "name": "Verbunden"
+            },
+            "problem": {
+                "name": "Problem"
+            }
+        },
+        "select": {
+            "fan_speed": {
+                "name": "Lüftergeschwindigkeit"
+            },
+            "horizontal_swing": {
+                "name": "Horizontale Oszillation"
+            },
+            "spray_volume": {
+                "name": "Sprühvolumen"
+            },
+            "timer": {
+                "name": "Timer"
+            },
+            "vertical_swing": {
+                "name": "Vertikale Oszillation"
+            }
+        },
+        "sensor": {
+            "air_quality_index": {
+                "name": "Luftqualitätsindex",
+                "state": {
+                    "excellent": "Ausgezeichnet",
+                    "fair": "Mäßig",
+                    "good": "Gut",
+                    "harmful": "Schädlich",
+                    "poor": "Schlecht",
+                    "very_good": "Sehr gut"
+                }
+            },
+            "connection_type": {
+                "name": "Verbindungsart",
+                "state": {
+                    "mqtt": "MQTT",
+                    "tcp": "TCP"
+                }
+            },
+            "error_message": {
+                "name": "Fehlermeldung"
+            },
+            "filter_life": {
+                "name": "Verbleibende HEPA-Filter-Lebensdauer"
+            },
+            "pm25": {
+                "name": "PM2.5"
+            },
+            "time_remaining": {
+                "name": "Verbleibende Zeit"
+            },
+            "tvoc": {
+                "name": "TVOC",
+                "state": {
+                    "acceptable": "Akzeptabel",
+                    "harmful": "Schädlich",
+                    "healthy": "Gesund",
+                    "polluted": "Verschmutzt"
+                }
+            }
+        },
+        "switch": {
+            "child_lock": {
+                "name": "Kindersicherung"
+            },
+            "cleaning_mode": {
+                "name": "Reinigungsmodus"
+            },
+            "ionizer": {
+                "name": "Ionisator"
+            },
+            "laundry_mode": {
+                "name": "Wäschemodus"
+            },
+            "night_mode": {
+                "name": "Nachtmodus"
+            },
+            "sleep_mode": {
+                "name": "Schlafmodus"
+            }
+        }
+    },
+    "issues": {
+        "device_not_mqtt": {
+            "description": "Duux hat ein Gerät erkannt, das nicht über MQTT verbunden ist. \n\rEinige Funktionen könnten nicht funktionieren. \n\rDies kann durch 10-sekündiges Aus- und Wiedereinschalten des Geräts behoben werden. \n\rGerätename: {device_name}",
+            "title": "Gerät nicht über MQTT verbunden"
+        },
+        "device_not_recognised": {
+            "description": "Duux hat ein Gerät erkannt, das nicht offiziell unterstützt wird. \n\rBitte überprüfen Sie den Gerätetyp und melden Sie ihn dem Integrationsentwickler. \n\rBenötigte Details: \n\rGerätename: {device_name}\n\rGerätetyp-ID: {device_type_id}\n\rSensortyp-ID: {sensor_type_id}\n\rGerätetyp: {reported_type}.",
+            "title": "Gerät nicht erkannt"
+        }
+    }
+}

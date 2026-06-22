@@ -1,0 +1,3 @@
+[tool.mutmut]
+source_paths = ["custom_components/duux/", "fixtures/"]
+test_command = "python -m pytest tests/ -x -q --tb=no"

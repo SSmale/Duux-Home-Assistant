@@ -1,0 +1,12 @@
+{
+    "exit_code_by_key": {
+        "custom_components.duux.const.x\u01c1DUUX_ERRID\u01c1_missing___mutmut_1": 1
+    },
+    "type_check_error_by_key": {},
+    "durations_by_key": {
+        "custom_components.duux.const.x\u01c1DUUX_ERRID\u01c1_missing___mutmut_1": 0.212734
+    },
+    "estimated_durations_by_key": {
+        "custom_components.duux.const.x\u01c1DUUX_ERRID\u01c1_missing___mutmut_1": 0.0026327520608901978
+    }
+}
