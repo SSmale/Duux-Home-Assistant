@@ -288,9 +288,10 @@ class DuuxErrorSensor(DuuxSensor):
 
     @property
     def native_value(self):
-        return DUUX_ERRID(
-            self.coordinator.data.get(self.entity_description.key)
-        ).name.replace("_", " ")
+        data = self.coordinator.data or {}
+        key = self.entity_description.key
+        errid = DUUX_ERRID(data[key]) if key in data else DUUX_ERRID.Unavailable
+        return errid.name.replace("_", " ")
 
 
 class DuuxConnectionTypeSensor(DuuxSensor):
