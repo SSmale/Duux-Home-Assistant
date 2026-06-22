@@ -56,6 +56,15 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 ### 💨 Fans
 
+#### Duux Whisper Flex Elevate
+ 
+- ⚡ **Power**: On/Off control
+- 💨 **26-Speed Fan**: Fine-grained speed control (1–26)
+- 🌀 **Two Modes**: Normal and Natural
+- 🔄 **Oscillation**: Horizontal oscillation on/off
+- 🌙 **Night Mode**: Reduce noise and dim the display
+- ⚡ **Ionizer**: On/off control
+
 #### Duux Whisper Flex Ultimate
 
 - ⚡ **Power**: On/Off control
