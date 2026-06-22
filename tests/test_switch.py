@@ -70,6 +70,8 @@ async def test_turn_off_calls_correct_api_method(
     await entity.async_turn_off()
 
     getattr(mock_api, api_method).assert_called_once_with("AA:BB", False)
+    assert entity.is_on is False
+    assert coordinator.data[data_key] == 0
 
 
 # ---------------------------------------------------------------------------
@@ -128,6 +130,7 @@ async def test_ionizer_turn_on_allowed_when_speed_not_one(
 
     mock_api.set_ionizer.assert_called_once_with(device["deviceId"], True)
     assert entity.is_on is True
+    assert coordinator.data["ion"] == 1
 
 
 # ---------------------------------------------------------------------------

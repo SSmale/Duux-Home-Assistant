@@ -65,6 +65,21 @@ async def test_edge_two_climate_set_hvac_mode_off_calls_set_power_false(
     assert entity.hvac_mode == HVACMode.OFF
 
 
+async def test_edge_two_climate_set_hvac_mode_heat_calls_set_power_true(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(50)
+    data = dict(device["latestData"]["fullData"])
+    data["power"] = 0
+    coordinator = make_coordinator(data)
+    entity = attach_hass(DuuxEdgeTwoClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_hvac_mode(HVACMode.HEAT)
+
+    mock_api.set_power.assert_called_once_with(device["deviceId"], True)
+    assert entity.hvac_mode == HVACMode.HEAT
+
+
 async def test_edge_two_climate_set_preset_mode_boost(
     device_by_stid, make_coordinator, mock_api, make_hass
 ):
@@ -76,6 +91,33 @@ async def test_edge_two_climate_set_preset_mode_boost(
 
     mock_api.set_mode.assert_called_once_with(device["deviceId"], "3")
     assert entity.preset_mode == PRESET_BOOST
+
+
+async def test_edge_two_climate_set_preset_mode_low_sends_1(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """PRESET_LOW must map to mode string '1', not a mutated value."""
+    device = device_by_stid(50)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxEdgeTwoClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_preset_mode(entity.PRESET_LOW)
+
+    mock_api.set_mode.assert_called_once_with(device["deviceId"], "1")
+    assert entity.preset_mode == entity.PRESET_LOW
+
+
+async def test_edge_two_climate_set_preset_mode_updates_coordinator_state(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(50)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxEdgeTwoClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_preset_mode(entity.PRESET_HIGH)
+
+    assert coordinator.data["heatin"] == 2
+    assert entity.preset_mode == entity.PRESET_HIGH
 
 
 # ---------------------------------------------------------------------------

@@ -1,5 +1,7 @@
 """Unit tests for custom_components.duux.fan."""
 
+import pytest
+
 from custom_components.duux import const
 from custom_components.duux.fan import (
     DuuxAirPurifierFan,
@@ -57,6 +59,24 @@ async def test_whisper_flex_turn_off(
     await entity.async_turn_off()
 
     mock_api.set_power.assert_called_once_with(device["deviceId"], 0)
+    assert entity.is_on is False
+    assert coordinator.data["power"] is False
+
+
+async def test_whisper_flex_turn_on_with_percentage_passes_value(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(36)
+    data = dict(device["latestData"]["fullData"])
+    data["power"] = 0
+    coordinator = make_coordinator(data)
+    entity = attach_hass(DuuxWhisperFlexFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_turn_on(percentage=50)
+
+    mock_api.set_speed.assert_called_once()
+    speed_sent = mock_api.set_speed.call_args.args[1]
+    assert speed_sent is not None
 
 
 async def test_whisper_flex_set_percentage_calls_set_speed_with_range(
@@ -73,6 +93,8 @@ async def test_whisper_flex_set_percentage_calls_set_speed_with_range(
     assert call_args[0] == device["deviceId"]
     assert call_args[2] == entity._speed_range[0]
     assert call_args[3] == entity._speed_range[-1]
+    assert coordinator.data["speed"] is not None
+    assert coordinator.data["speed"] == call_args[1]
 
 
 async def test_whisper_flex_set_percentage_zero_turns_off(
@@ -98,6 +120,25 @@ async def test_whisper_flex_set_preset_mode_natural(
     await entity.async_set_preset_mode("natural")
 
     mock_api.set_mode.assert_called_once_with(device["deviceId"], 1)
+    assert entity.preset_mode == "natural"
+    assert coordinator.data["mode"] == 1
+
+
+@pytest.mark.parametrize(
+    ("preset", "expected_mode_value"),
+    [("normal", 0), ("natural", 1), ("night", 2)],
+)
+async def test_whisper_flex_set_preset_mode_updates_coordinator(
+    preset, expected_mode_value, device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(36)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxWhisperFlexFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_preset_mode(preset)
+
+    assert coordinator.data["mode"] == expected_mode_value
+    assert entity.preset_mode == preset
 
 
 # ---------------------------------------------------------------------------
@@ -312,6 +353,76 @@ async def test_air_purifier_set_preset_mode_auto_sets_speed_zero(
     await entity.async_set_preset_mode("Auto")
 
     mock_api.set_purifier_speed.assert_called_once_with(device["deviceId"], 0)
+
+
+async def test_air_purifier_set_percentage_zero_turns_off(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """Regression: percentage=0 must call turn_off, not set_purifier_speed(1)."""
+    device = device_by_stid(61)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxAirPurifierFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_percentage(0)
+
+    mock_api.set_power.assert_called_once_with(device["deviceId"], False)
+    mock_api.set_purifier_speed.assert_not_called()
+
+
+async def test_air_purifier_set_percentage_updates_coordinator_speed(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(61)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxAirPurifierFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_percentage(75)
+
+    speed_sent = mock_api.set_purifier_speed.call_args.args[1]
+    assert coordinator.data["speed"] == speed_sent
+    assert coordinator.data["speed"] is not None
+
+
+async def test_air_purifier_set_preset_mode_auto_does_not_call_set_power_when_already_on(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """if not self.is_on guard: set_power must NOT be called when already on."""
+    device = device_by_stid(61)
+    data = dict(device["latestData"]["fullData"])
+    data["power"] = 1
+    coordinator = make_coordinator(data)
+    entity = attach_hass(DuuxAirPurifierFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_preset_mode("Auto")
+
+    mock_api.set_power.assert_not_called()
+    mock_api.set_purifier_speed.assert_called_once_with(device["deviceId"], 0)
+
+
+async def test_air_purifier_set_preset_mode_auto_updates_coordinator_speed_to_zero(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(61)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxAirPurifierFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_preset_mode("Auto")
+
+    assert coordinator.data["speed"] == 0
+
+
+async def test_air_purifier_set_preset_mode_auto_calls_set_power_when_off(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(61)
+    data = dict(device["latestData"]["fullData"])
+    data["power"] = 0
+    coordinator = make_coordinator(data)
+    entity = attach_hass(DuuxAirPurifierFan(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_preset_mode("Auto")
+
+    mock_api.set_power.assert_called_once_with(device["deviceId"], True)
 
 
 async def test_air_purifier_set_percentage_ensures_power_on_first(
