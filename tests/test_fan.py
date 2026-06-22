@@ -4,6 +4,7 @@ from custom_components.duux import const
 from custom_components.duux.fan import (
     DuuxAirPurifierFan,
     DuuxFanAutoDiscovery,
+    DuuxWhisperFlexElevateFan,
     DuuxWhisperFlexFan,
     DuuxWhisperFlexTwoFan,
     DuuxWhisperFlexUltimateFan,
@@ -97,6 +98,90 @@ async def test_whisper_flex_set_preset_mode_natural(
     await entity.async_set_preset_mode("natural")
 
     mock_api.set_mode.assert_called_once_with(device["deviceId"], 1)
+
+
+# ---------------------------------------------------------------------------
+# DuuxWhisperFlexElevateFan (sensorTypeId 70, speed 1-26, oscillation)
+# ---------------------------------------------------------------------------
+
+_ELEVATE_DEVICE = {
+    "id": 100012,
+    "deviceId": "AA:00:00:00:00:12",
+    "displayName": "Whisper Flex Elevate",
+    "sensorType": {"type": 26, "name": "DUUX Whisper Flex Elevate"},
+}
+
+
+def test_whisper_flex_elevate_speed_range_is_1_to_26(make_coordinator, mock_api):
+    coordinator = make_coordinator({"power": 1, "speed": 13, "mode": 0, "horosc": 0})
+    entity = DuuxWhisperFlexElevateFan(coordinator, mock_api, _ELEVATE_DEVICE)
+
+    assert entity._speed_range == list(range(1, 27))
+    assert entity._attr_speed_count == 26
+
+
+def test_whisper_flex_elevate_has_normal_and_natural_presets_only(
+    make_coordinator, mock_api
+):
+    coordinator = make_coordinator({"power": 1, "speed": 1, "mode": 0})
+    entity = DuuxWhisperFlexElevateFan(coordinator, mock_api, _ELEVATE_DEVICE)
+
+    assert entity._attr_preset_modes == ["normal", "natural"]
+    assert "night" not in entity._attr_preset_modes
+
+
+async def test_whisper_flex_elevate_100_percent_sends_speed_26(
+    make_coordinator, mock_api, make_hass
+):
+    """Regression: speed range ends at 26; 100% must NOT send 27."""
+    coordinator = make_coordinator({"power": 1, "speed": 1, "mode": 0})
+    entity = attach_hass(
+        DuuxWhisperFlexElevateFan(coordinator, mock_api, _ELEVATE_DEVICE), make_hass()
+    )
+
+    await entity.async_set_percentage(100)
+
+    mock_api.set_speed.assert_called_once()
+    speed_sent = mock_api.set_speed.call_args.args[1]
+    assert speed_sent == 26, f"Expected 26 but got {speed_sent}"
+
+
+def test_whisper_flex_elevate_oscillating_reads_horosc(make_coordinator, mock_api):
+    coordinator = make_coordinator({"power": 1, "horosc": 1})
+    entity = DuuxWhisperFlexElevateFan(coordinator, mock_api, _ELEVATE_DEVICE)
+
+    assert entity.oscillating is True
+
+    coordinator.async_set_updated_data({"power": 1, "horosc": 0})
+    assert entity.oscillating is False
+
+
+async def test_whisper_flex_elevate_async_oscillate_on(
+    make_coordinator, mock_api, make_hass
+):
+    coordinator = make_coordinator({"power": 1, "horosc": 0})
+    entity = attach_hass(
+        DuuxWhisperFlexElevateFan(coordinator, mock_api, _ELEVATE_DEVICE), make_hass()
+    )
+
+    await entity.async_oscillate(True)
+
+    mock_api.set_horosc_bool.assert_called_once_with(_ELEVATE_DEVICE["deviceId"], 1)
+    assert coordinator.data["horosc"] == 1
+
+
+async def test_whisper_flex_elevate_async_oscillate_off(
+    make_coordinator, mock_api, make_hass
+):
+    coordinator = make_coordinator({"power": 1, "horosc": 1})
+    entity = attach_hass(
+        DuuxWhisperFlexElevateFan(coordinator, mock_api, _ELEVATE_DEVICE), make_hass()
+    )
+
+    await entity.async_oscillate(False)
+
+    mock_api.set_horosc_bool.assert_called_once_with(_ELEVATE_DEVICE["deviceId"], 0)
+    assert coordinator.data["horosc"] == 0
 
 
 # ---------------------------------------------------------------------------
@@ -394,10 +479,12 @@ async def test_async_setup_entry_dispatches_correct_entity_classes(
     assert classes_by_unique_id["duux_100009"] == "DuuxWhisperFlexTwoFan"
     assert classes_by_unique_id["duux_100010"] == "DuuxAirPurifierFan"
     assert classes_by_unique_id["duux_100011"] == "DuuxWhisperFlexUltimateFan"
+    assert classes_by_unique_id["duux_100012"] == "DuuxWhisperFlexElevateFan"
     fan_device_ids = {
         "duux_100008",
         "duux_100009",
         "duux_100010",
         "duux_100011",
+        "duux_100012",
     }
     assert set(classes_by_unique_id) == fan_device_ids

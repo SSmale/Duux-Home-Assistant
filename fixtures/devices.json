@@ -284,6 +284,29 @@
                     "tilt": 1
                 }
             }
+        },
+        {
+            "id": 100012,
+            "deviceId": "AA:00:00:00:00:12",
+            "name": "DUUX.WFLEXELV.100012",
+            "displayName": "Whisper Flex Elevate",
+            "sensorTypeId": 70,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 26,
+                "name": "DUUX Whisper Flex Elevate",
+                "googleDeviceType": "action.devices.types.FAN"
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "speed": 13,
+                    "mode": 0,
+                    "horosc": 0
+                }
+            }
         }
     ]
 }

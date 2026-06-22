@@ -42,9 +42,7 @@ def test_login_success_sets_token_and_auth_header(api):
 
     assert api.login() is True
     assert api.token == "mock-token"
-    api.session.headers.update.assert_called_once_with(
-        {"Authorization": "mock-token"}
-    )
+    api.session.headers.update.assert_called_once_with({"Authorization": "mock-token"})
     posted_url = api.session.post.call_args.args[0]
     assert posted_url == f"{const.API_BASE_URL}{const.API_LOGIN}"
     assert api.session.post.call_args.kwargs["json"] == {
@@ -214,8 +212,11 @@ def test_send_command_http_error_returns_false(api):
         ("set_timer", (4,), "tune set timer 4"),
         ("set_timer", (99,), "tune set timer 24"),  # clamps to max 24
         ("set_humidifier_mode", (1,), "tune set mode 1"),
-        ("set_horosc", (2,), "tune set horosc 2"),
-        ("set_horosc", (99,), "tune set horosc 3"),  # clamps to max 3
+        ("set_horosc_angle", (2,), "tune set horosc 2"),
+        ("set_horosc_angle", (99,), "tune set horosc 3"),  # clamps to max 3
+        ("set_horosc_bool", (1,), "tune set horosc 1"),
+        ("set_horosc_bool", (0,), "tune set horosc 0"),
+        ("set_horosc_bool", (99,), "tune set horosc 1"),  # clamps to max 3
         ("set_verosc", (1,), "tune set verosc 1"),
         ("set_verosc", (99,), "tune set verosc 2"),  # clamps to max 2
         ("set_swing", (2,), "tune set swing 2"),
@@ -228,7 +229,9 @@ def test_send_command_http_error_returns_false(api):
         ("set_purifier_speed", (999,), "tune set speed 4"),  # clamps to max 4
     ],
 )
-def test_convenience_setters_build_expected_command(api, method, args, expected_command):
+def test_convenience_setters_build_expected_command(
+    api, method, args, expected_command
+):
     api.session.post.return_value = make_response({"ok": True})
 
     result = getattr(api, method)("AA:BB:CC", *args)

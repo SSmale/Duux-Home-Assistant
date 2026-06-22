@@ -321,3 +321,7 @@ async def test_async_setup_entry_dispatches_expected_selects_per_device(
         "DuuxHorizontalSwingSelect",
         "DuuxVerticalTiltSelect",
     ]
+    # Whisper Flex Elevate (STID 70): oscillation is handled by the fan entity
+    # (FanEntityFeature.OSCILLATE), so it must NOT get a DuuxHorizontalOscillationSelect
+    # even though horosc is present in its coordinator data.
+    assert "AA:00:00:00:00:12" not in by_device
