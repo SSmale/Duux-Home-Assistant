@@ -50,6 +50,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             DUUX_STID_WHISPER_FLEX_ELIVATE,
         ]:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
+            entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
         # Bora has sleep (similar to night), cleaning, laundry & child lock..
         elif sensor_type_id == DUUX_STID_BORA_2024:
