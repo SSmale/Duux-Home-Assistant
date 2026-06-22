@@ -57,7 +57,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 ### 💨 Fans
 
 #### Duux Whisper Flex Elevate
- 
+
 - ⚡ **Power**: On/Off control
 - 💨 **26-Speed Fan**: Fine-grained speed control (1–26)
 - 🌀 **Two Modes**: Normal and Natural
@@ -363,6 +363,18 @@ logger:
     custom_components.duux: debug
 ```
 
+## Related Projects
+
+Looking for **cloud-free local control**? Check out this companion project by [@LouisR-git](https://github.com/LouisR-git):
+
+[![Duux Fan Local](https://github-readme-stats.vercel.app/api/pin/?username=LouisR-git&repo=duux-fan-local&description_lines_count=2)](https://github.com/LouisR-git/duux-fan-local)
+
+It intercepts your Duux device's MQTT traffic and routes it through a local broker — no cloud, no account required, and instant response times.
+
+Currently it supports Whisper Flex, Whisper Flex 2, and Bright 2.
+
+---
+
 ## Credits
 
 This integration is based on the reverse engineering work by [Simon Smale](https://smale.codes).
@@ -374,7 +386,7 @@ Thanks to:
 
 ## Translations
 
-A big thank you to @Anokino for the translation work.
+A big thank you to [@Anokino](https://github.com/Anokino) for the translation work.
 
 Currently the project has translations for:
 
