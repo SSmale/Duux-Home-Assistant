@@ -15,6 +15,7 @@ from custom_components.duux.const import (
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_NEO,
+    DUUX_STID_NORTH,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -66,9 +67,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
             entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
-        elif sensor_type_id == DUUX_STID_BRIGHT_2:
+        elif sensor_type_id == DUUX_STID_NORTH:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
-            entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
     async_add_entities(entities)
 
@@ -91,7 +91,7 @@ class DuuxSwitch(CoordinatorEntity, SwitchEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.last_update_success and (
-            self.coordinator.data or {}
+                self.coordinator.data or {}
         ).get("online", True)
 
     @property

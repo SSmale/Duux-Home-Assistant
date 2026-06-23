@@ -307,6 +307,33 @@
                     "horosc": 0
                 }
             }
+        },
+        {
+            "id": 100013,
+            "deviceId": "AA:00:00:00:00:13",
+            "name": "DUUX.NORTH.100013",
+            "displayName": null,
+            "sensorTypeId": 42,
+            "online": true,
+            "connectionType": "mqtt",
+            "connectionUpdateDate": "2026-01-28T07:10:00.000Z",
+            "sensorType": {
+                "type": 28,
+                "name": "DUUX North",
+                "googleDeviceType": null
+            },
+            "latestData": {
+                "fullData": {
+                    "power": 1,
+                    "sp": 22,
+                    "temp": 24,
+                    "mode": 1,
+                    "fan": 2,
+                    "tilt": 0,
+                    "night": 0,
+                    "timer": 0
+                }
+            }
         }
     ]
 }

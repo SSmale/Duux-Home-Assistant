@@ -5,11 +5,17 @@ from custom_components.duux.climate import (
     DuuxClimateAutoDiscovery,
     DuuxEdgeClimate,
     DuuxEdgeTwoClimate,
+    DuuxNorthClimate,
     DuuxThreesixtyClimate,
     DuuxThreesixtyTwoClimate,
     async_setup_entry,
 )
-from homeassistant.components.climate.const import HVACMode, PRESET_BOOST
+from homeassistant.components.climate.const import (
+    HVACMode,
+    PRESET_BOOST,
+    SWING_OFF,
+    SWING_ON,
+)
 
 
 def attach_hass(entity, hass):
@@ -210,9 +216,16 @@ async def test_async_setup_entry_dispatches_correct_entity_classes(
     assert classes_by_unique_id["duux_100002"] == "DuuxEdgeClimate"
     assert classes_by_unique_id["duux_100003"] == "DuuxThreesixtyClimate"
     assert classes_by_unique_id["duux_100004"] == "DuuxThreesixtyTwoClimate"
-    # Non-heater/thermostat devices (humidifiers, fans) must not get a
+    assert classes_by_unique_id["duux_100013"] == "DuuxNorthClimate"
+    # Non-heater/thermostat/AC devices (humidifiers, fans) must not get a
     # climate entity at all.
-    climate_device_ids = {"duux_100001", "duux_100002", "duux_100003", "duux_100004"}
+    climate_device_ids = {
+        "duux_100001",
+        "duux_100002",
+        "duux_100003",
+        "duux_100004",
+        "duux_100013",
+    }
     assert set(classes_by_unique_id) == climate_device_ids
 
 
@@ -246,3 +259,123 @@ async def test_async_setup_entry_falls_back_to_autodiscovery_for_unknown_stid(
 
     assert len(added[0]) == 1
     assert isinstance(added[0][0], DuuxClimateAutoDiscovery)
+
+
+# ---------------------------------------------------------------------------
+# DuuxNorthClimate (AC: Cool/Dry/Fan-only, fan_mode, swing_mode)
+# ---------------------------------------------------------------------------
+
+
+def test_north_climate_properties(device_by_stid, make_coordinator, mock_api):
+    device = device_by_stid(42)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = DuuxNorthClimate(coordinator, mock_api, device)
+
+    assert entity.target_temperature == 22
+    assert entity.current_temperature == 24
+    assert entity.min_temp == 16
+    assert entity.max_temp == 31
+    assert entity.hvac_mode == HVACMode.COOL  # power=1, mode=1
+    assert entity.hvac_modes == [
+        HVACMode.OFF,
+        HVACMode.COOL,
+        HVACMode.DRY,
+        HVACMode.FAN_ONLY,
+    ]
+    assert entity.fan_mode == "II"  # fan=2
+    assert entity.fan_modes == ["I", "II", "III"]
+    assert entity.swing_mode == SWING_OFF  # tilt=0
+    assert entity.swing_modes == [SWING_OFF, SWING_ON]
+    assert entity.unique_id == f"duux_{device['id']}"
+
+
+def test_north_climate_hvac_mode_off_when_powered_off(
+        device_by_stid, make_coordinator, mock_api
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator({**device["latestData"]["fullData"], "power": 0})
+    entity = DuuxNorthClimate(coordinator, mock_api, device)
+
+    assert entity.hvac_mode == HVACMode.OFF
+
+
+def test_north_climate_hvac_mode_unrecognised_code_falls_back_to_cool(
+        device_by_stid, make_coordinator, mock_api
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator(
+        {**device["latestData"]["fullData"], "power": 1, "mode": 2}
+    )
+    entity = DuuxNorthClimate(coordinator, mock_api, device)
+
+    assert entity.hvac_mode == HVACMode.COOL
+
+
+async def test_north_climate_set_hvac_mode_off_calls_set_power_false(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxNorthClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_hvac_mode(HVACMode.OFF)
+
+    mock_api.set_power.assert_called_once_with(device["deviceId"], False)
+    assert entity.hvac_mode == HVACMode.OFF
+
+
+async def test_north_climate_set_hvac_mode_turns_on_and_sets_mode(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator({**device["latestData"]["fullData"], "power": 0})
+    entity = attach_hass(DuuxNorthClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_hvac_mode(HVACMode.DRY)
+
+    mock_api.set_power.assert_called_once_with(device["deviceId"], True)
+    mock_api.send_command.assert_called_once_with(
+        device["deviceId"], "tune set mode 3"
+    )
+    assert entity.hvac_mode == HVACMode.DRY
+
+
+async def test_north_climate_set_fan_mode(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxNorthClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_fan_mode("III")
+
+    mock_api.set_north_fan_speed.assert_called_once_with(device["deviceId"], 3)
+    assert entity.fan_mode == "III"
+
+
+async def test_north_climate_set_swing_mode_on_reuses_set_tilt(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxNorthClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_swing_mode(SWING_ON)
+
+    # Reuses the existing set_tilt() (added for the Ultimate Fan), not a
+    # North-specific method.
+    mock_api.set_tilt.assert_called_once_with(device["deviceId"], 1)
+    assert entity.swing_mode == SWING_ON
+
+
+async def test_north_climate_set_temperature(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxNorthClimate(coordinator, mock_api, device), make_hass())
+
+    await entity.async_set_temperature(temperature=27)
+
+    mock_api.set_temperature.assert_called_once_with(device["deviceId"], 27)
+    assert entity.target_temperature == 27

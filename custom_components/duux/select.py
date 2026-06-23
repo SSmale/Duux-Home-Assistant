@@ -17,6 +17,7 @@ from .const import (
     DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_NEO,
+    DUUX_STID_NORTH,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
 )
 
@@ -78,6 +79,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxBright2TimerSelector(coordinator, api, device))
         elif sensor_type_id in [DUUX_STID_BEAM_MINI, DUUX_STID_EDGEHEATER_V2]:
             entities.append(DuuxTimerSelector(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_NORTH:
+            entities.append(DuuxNorthTimerSelector(coordinator, api, device))
 
         if coordinator.data.get("horosc") is not None and sensor_type_id not in [
             DUUX_STID_WHISPER_FLEX_ELIVATE
@@ -90,7 +93,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if coordinator.data.get("swing") is not None:
             entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
 
-        if coordinator.data.get("tilt") is not None:
+        if coordinator.data.get("tilt") is not None and sensor_type_id not in [
+            DUUX_STID_NORTH
+        ]:
+            # North's "tilt" is an on/off toggle (Louver Swing), not
+            # an angle level like the Ultimate Fan's
             entities.append(DuuxVerticalTiltSelect(coordinator, api, device))
     async_add_entities(entities)
 
@@ -129,7 +136,7 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.last_update_success and (
-            self.coordinator.data or {}
+                self.coordinator.data or {}
         ).get("online", True)
 
     @property
@@ -407,4 +414,34 @@ class DuuxNeoSpeedSelector(DuuxSelector):
         )
         newData = self.coordinator.data
         newData["speed"] = int(mode)
+        self.coordinator.async_set_updated_data(newData)
+
+
+class DuuxNorthTimerSelector(DuuxTimerSelector):
+    """North-specific Timer: also powers the unit on for non zero
+    values. Kept as a subclass rather than
+    changing the shared DuuxTimerSelector, since this behaviour isn't
+    confirmed for the other devices that use it (Bora/Neo/BeamMini/
+    Bright2/Edge).
+    """
+
+    async def async_select_option(self, option):
+        """Set timer amount, turning the unit on first if non-zero."""
+        try:
+            amount = max(0, min(24, int(option)))
+        except (TypeError, ValueError):
+            amount = 0
+
+        if amount > 0:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, True
+            )
+
+        await self.hass.async_add_executor_job(
+            self._api.set_timer, self._device_mac, str(amount)
+        )
+        newData = self.coordinator.data
+        newData["timer"] = amount
+        if amount > 0:
+            newData["power"] = 1
         self.coordinator.async_set_updated_data(newData)

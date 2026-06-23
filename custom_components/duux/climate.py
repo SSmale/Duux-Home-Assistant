@@ -10,6 +10,8 @@ from homeassistant.components.climate.const import (
     PRESET_BOOST,
     PRESET_COMFORT,
     PRESET_ECO,
+    SWING_OFF,
+    SWING_ON,
 )
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.config_entries import ConfigEntry
@@ -21,12 +23,14 @@ from .const import (
     DUUX_CLIMATE_TYPES,
     DUUX_DTID_THERMOSTAT,
     DUUX_DTID_HEATER,
+    DUUX_DTID_AIR_CONDITIONER,
     DOMAIN,
     DUUX_STID_THREESIXTY_2023,
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_THREESIXTY_TWO,
+    DUUX_STID_NORTH,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -61,7 +65,11 @@ async def async_setup_entry(
 
         model = sensor_type.get("name", "Unknown")
 
-        if device_type_id not in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
+        if device_type_id not in [
+            *DUUX_DTID_HEATER,
+            *DUUX_DTID_THERMOSTAT,
+            *DUUX_DTID_AIR_CONDITIONER,
+        ]:
             if last_word in DUUX_CLIMATE_TYPES:
                 _LOGGER.warning(
                     "Your device has not been officially catagorised as supporting the climate platform."
@@ -91,6 +99,10 @@ async def async_setup_entry(
             entities.append(DuuxEdgeClimate(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_THREESIXTY_TWO:
             entities.append(DuuxThreesixtyTwoClimate(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_NORTH:
+            # Reports via a "Traits" schema, not "availableModes", so it
+            # can't use the generic DuuxClimateAutoDiscovery fallback below.
+            entities.append(DuuxNorthClimate(coordinator, api, device))
         else:
             # Fallback to generic entity for unknown types
             entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
@@ -209,7 +221,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     def available(self):
         """Return if entity is available."""
         return self.coordinator.last_update_success and (
-            self.coordinator.data or {}
+                self.coordinator.data or {}
         ).get("online", True)
 
     async def async_added_to_hass(self):
@@ -221,6 +233,135 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     async def async_update(self):
         """Update the entity."""
         await self.coordinator.async_request_refresh()
+
+
+class DuuxNorthClimate(DuuxClimate):
+    """Duux North AC (device_type_id=28, sensor_type_id=42).
+
+    Mode mapping:
+      - mode 1 -> Cool
+      - mode 3 -> Dry
+      - mode 4 -> Fan-only
+
+    The app requires powering the unit on before a mode can be selected.
+
+    Fan speed (I/II/III) and Louver Swing (Off/On) are exposed as the
+    climate entity's native fan_mode/swing_mode, not separate
+    select/switch entities - raw "fan" values 1/2/3 map directly to
+    I/II/III; "tilt" (not "swing", which stays unused/null on this
+    device) is a plain on/off toggle, reusing the existing set_tilt()
+    added for the Ultimate Fan's angle control, just with its 0/1
+    values. Night-mode is still a separate switch entity.
+    """
+
+    _MODE_TO_HVAC = {
+        1: HVACMode.COOL,
+        3: HVACMode.DRY,
+        4: HVACMode.FAN_ONLY,
+    }
+    _HVAC_TO_MODE = {v: k for k, v in _MODE_TO_HVAC.items()}
+
+    FAN_I = "I"
+    FAN_II = "II"
+    FAN_III = "III"
+    _FAN_RAW_TO_MODE = {1: FAN_I, 2: FAN_II, 3: FAN_III}
+    _FAN_MODE_TO_RAW = {v: k for k, v in _FAN_RAW_TO_MODE.items()}
+
+    SWING_OFF = SWING_OFF
+    SWING_ON = SWING_ON
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the North climate device."""
+        super().__init__(coordinator, api, device)
+        # The Traits schema says 18-30; the real app shows 16-31 instead.
+        self._attr_min_temp = 16
+        self._attr_max_temp = 31
+        self._attr_target_temperature_step = 1
+        self._attr_supported_features = (
+                ClimateEntityFeature.TARGET_TEMPERATURE
+                | ClimateEntityFeature.FAN_MODE
+                | ClimateEntityFeature.SWING_MODE
+                | ClimateEntityFeature.TURN_OFF
+                | ClimateEntityFeature.TURN_ON
+        )
+        # Override base class's HEAT based modes: no heating function,
+        # use Cool/Dry/Fan-only instead.
+        self._attr_hvac_modes = [
+            HVACMode.OFF,
+            HVACMode.COOL,
+            HVACMode.DRY,
+            HVACMode.FAN_ONLY,
+        ]
+        self._attr_fan_modes = [self.FAN_I, self.FAN_II, self.FAN_III]
+        self._attr_swing_modes = [self.SWING_OFF, self.SWING_ON]
+
+    @property
+    def hvac_mode(self):
+        """Return current operation based on power + the confirmed mode mapping."""
+        data = self.coordinator.data or {}
+        if data.get("power", 0) != 1:
+            return HVACMode.OFF
+        mode = data.get("mode")
+        # Unrecognised codes fall back to Cool
+        return self._MODE_TO_HVAC.get(mode, HVACMode.COOL)
+
+    async def async_set_hvac_mode(self, hvac_mode):
+        """Turn off, or turn on + set mode together (mirrors the app's flow)."""
+        if hvac_mode == HVACMode.OFF:
+            await self.hass.async_add_executor_job(
+                self._api.set_power, self._device_mac, False
+            )
+            newData = self.coordinator.data
+            newData["power"] = 0
+            self.coordinator.async_set_updated_data(newData)
+            return
+
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, True
+        )
+        mode_value = self._HVAC_TO_MODE.get(hvac_mode)
+        if mode_value is not None:
+            await self.hass.async_add_executor_job(
+                self._api.send_command,
+                self._device_mac,
+                f"tune set mode {mode_value}",
+            )
+        newData = self.coordinator.data
+        newData["power"] = 1
+        if mode_value is not None:
+            newData["mode"] = mode_value
+        self.coordinator.async_set_updated_data(newData)
+
+    @property
+    def fan_mode(self):
+        """Return current fan speed (I/II/III)."""
+        fan = (self.coordinator.data or {}).get("fan")
+        return self._FAN_RAW_TO_MODE.get(fan)
+
+    async def async_set_fan_mode(self, fan_mode):
+        """Set fan speed."""
+        raw = self._FAN_MODE_TO_RAW.get(fan_mode, 1)
+        await self.hass.async_add_executor_job(
+            self._api.set_north_fan_speed, self._device_mac, raw
+        )
+        newData = self.coordinator.data
+        newData["fan"] = raw
+        self.coordinator.async_set_updated_data(newData)
+
+    @property
+    def swing_mode(self):
+        """Return current louver swing state."""
+        return self.SWING_ON if (self.coordinator.data or {}).get("tilt") == 1 else self.SWING_OFF
+
+    async def async_set_swing_mode(self, swing_mode):
+        """Turn louver swing on/off."""
+        value = 1 if swing_mode == self.SWING_ON else 0
+        await self.hass.async_add_executor_job(
+            self._api.set_tilt, self._device_mac, value
+        )
+        newData = self.coordinator.data
+        newData["tilt"] = value
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxClimateAutoDiscovery(DuuxClimate):
