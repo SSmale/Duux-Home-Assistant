@@ -24,12 +24,16 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
+    ATTRIBUTION,
+    CONF_MODE_MAPPING,
+    DEFAULT_MODE_MAPPING,
     DOMAIN,
+    DUUX_DTID_HEATER,
+    DUUX_DTID_THERMOSTAT,
+    DUUX_ERRID,
+    DUUX_STID_BEAM_MINI,
     DUUX_STID_BORA_2024,
     DUUX_STID_BRIGHT_2,
-    ATTRIBUTION,
-    DUUX_STID_BEAM_MINI,
-    DUUX_ERRID,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -48,12 +52,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     api = data["api"]
     coordinators = data["coordinators"]
     devices = data["devices"]
+    mode_mapping_options = config_entry.options.get(CONF_MODE_MAPPING, {})
 
     entities = []
     for device in devices:
         sensor_type_id = device.get("sensorTypeId")
         device_id = device["deviceId"]
-        coordinator = coordinator = coordinators.get(device_id)
+        coordinator = coordinators.get(device_id)
+        device_type_id = (device.get("sensorType") or {}).get("type")
 
         # Skip devices that have no coordinator (were filtered out in __init__)
         if coordinator is None:
@@ -76,6 +82,10 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         entities.append(DuuxErrorSensor(coordinator, api, device))
         entities.append(DuuxConnectionTypeSensor(coordinator, api, device))
+
+        if device_type_id in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
+            device_mode_mapping = mode_mapping_options.get(device_id, DEFAULT_MODE_MAPPING)
+            entities.append(DuuxModeMappingSensor(coordinator, api, device, device_mode_mapping))
 
     async_add_entities(entities)
 
@@ -338,3 +348,51 @@ class DuuxBright2TimeRemainingSensor(DuuxTimeRemainingSensor):
 
     def __init__(self, coordinator, api, device):
         super().__init__(coordinator, api, device, key="timerr")
+
+
+class DuuxModeMappingSensor(CoordinatorEntity, SensorEntity):
+    """Diagnostic enum sensor showing whether a heater uses a custom or default mode mapping.
+
+    Shows 'custom' or 'default' as its state; exposes the full index-to-preset
+    mapping as extra attributes so it is visible in Developer Tools and entity cards.
+    """
+
+    _attr_attribution = ATTRIBUTION
+    _attr_has_entity_name = True
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_device_class = SensorDeviceClass.ENUM
+    _attr_options = ["custom", "default"]
+    _attr_translation_key = "mode_mapping_source"
+    _attr_icon = "mdi:map"
+
+    def __init__(self, coordinator, api, device, device_mode_mapping):
+        super().__init__(coordinator)
+        self._device_mode_mapping = device_mode_mapping
+        self._device_mac = device["deviceId"]
+        self._attr_unique_id = f"duux_{device['id']}_mode_mapping"
+
+        device_name = (
+            device.get("displayName")
+            or (device.get("sensorType") or {}).get("name")
+            or device.get("name")
+        )
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, str(device["id"]))},
+            manufacturer=device.get("manufacturer", "Duux"),
+            name=device_name,
+        )
+
+    @property
+    def available(self) -> bool:
+        return self.coordinator.last_update_success and (
+            self.coordinator.data or {}
+        ).get("online", True)
+
+    @property
+    def native_value(self) -> str:
+        return "custom" if self._device_mode_mapping is not DEFAULT_MODE_MAPPING else "default"
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        mapping = {int(k): v for k, v in self._device_mode_mapping.items()}
+        return {"mapping": {f"mode_{k}": v for k, v in mapping.items()}}

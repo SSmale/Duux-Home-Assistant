@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Correspondance de mode",
+                "state": {
+                    "custom": "Personnalisé",
+                    "default": "Par défaut"
+                }
+            },
             "time_remaining": {
                 "name": "Temps restant"
             },
@@ -102,6 +109,31 @@
             },
             "sleep_mode": {
                 "name": "Mode sommeil"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "device_id": "Appareil"
+                },
+                "description": "Sélectionnez un appareil pour configurer ses correspondances de mode de chauffage, ou laissez vide pour terminer.",
+                "title": "Gérer vos appareils Duux"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Mode 0",
+                    "mode_1": "Mode 1",
+                    "mode_2": "Mode 2",
+                    "mode_3": "Mode 3 (Réservé)"
+                },
+                "description": "Associez chaque index de mode de chauffage à un préréglage pour {device_name}.",
+                "title": "Gérer les correspondances de mode de {device_name}"
+            },
+            "global_options": {
+                "description": "Aucun appareil de chauffage trouvé. Assurez-vous que vos chauffages sont connectés.",
+                "title": "Aucun appareil trouvé"
             }
         }
     },

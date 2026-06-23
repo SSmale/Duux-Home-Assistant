@@ -77,7 +77,8 @@ class DUUX_ERRID(Enum):
 # Mode mapping options
 CONF_MODE_MAPPING = "mode_mapping"
 
-# Default mode mappings (mode index -> preset name)
+# Default mode mappings (mode index -> preset name).
+# Indices 0-2 are the standard modes; index 3 is reserved for outlier devices.
 DEFAULT_MODE_MAPPING = {0: PRESET_ECO, 1: PRESET_COMFORT, 2: PRESET_BOOST}
 
 AVAILABLE_PRESETS = [None, PRESET_ECO, PRESET_COMFORT, PRESET_BOOST]

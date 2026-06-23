@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Mappatura modalità",
+                "state": {
+                    "custom": "Personalizzato",
+                    "default": "Predefinito"
+                }
+            },
             "time_remaining": {
                 "name": "Tempo rimanente"
             },
@@ -102,6 +109,31 @@
             },
             "sleep_mode": {
                 "name": "Modalità sonno"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "device_id": "Dispositivo"
+                },
+                "description": "Seleziona un dispositivo per configurare le mappature della modalità di riscaldamento, o lascia vuoto per terminare.",
+                "title": "Gestisci i tuoi dispositivi Duux"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Modalità 0",
+                    "mode_1": "Modalità 1",
+                    "mode_2": "Modalità 2",
+                    "mode_3": "Modalità 3 (Riservata)"
+                },
+                "description": "Mappa ogni indice di modalità di riscaldamento su un'impostazione predefinita per {device_name}.",
+                "title": "Gestisci le mappature della modalità di {device_name}"
+            },
+            "global_options": {
+                "description": "Nessun dispositivo di riscaldamento trovato. Assicurati che i tuoi riscaldatori siano connessi.",
+                "title": "Nessun dispositivo trovato"
             }
         }
     },

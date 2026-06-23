@@ -46,12 +46,7 @@ async def async_setup_entry(
     api = data["api"]
     coordinators = data["coordinators"]
     devices = data["devices"]
-    mode_mapping_options = entry.options[CONF_MODE_MAPPING]
-    # {
-    #     "mode_mapping": {
-    #         "c4:d8:d5:74:be:44": {"0": "boost", "1": "comfort", "2": "eco"}
-    #     }
-    # }
+    mode_mapping_options = entry.options.get(CONF_MODE_MAPPING, {})
 
     entities = []
     for device in devices:
@@ -185,67 +180,47 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         return []
 
     def _get_mode_mapping(self) -> dict:
-        """Get the mode mapping for this device."""
-        # Get device-specific mapping from options
-        device_mapping = self._device_mode_mapping
-
-        _LOGGER.info("Device mode mapping: %s", device_mapping)
-
-        # Ensure keys are integers
-        return {int(k): v for k, v in device_mapping.items()}
+        """Get the mode mapping for this device, with integer keys."""
+        return {int(k): v for k, v in self._device_mode_mapping.items()}
 
     def _get_reverse_mode_mapping(self) -> dict:
         """Get reverse mapping (preset -> mode index)."""
-        mode_mapping = self._get_mode_mapping()
-        return {v: k for k, v in mode_mapping.items()}
+        return {v: k for k, v in self._get_mode_mapping().items()}
 
     @property
     def preset_mode(self) -> str | None:
         """Return the current preset mode."""
-        current_mode_index = self.coordinator.data.get("heatin")  # This is 0, 1, or 2
-        _LOGGER.debug("Current mode index: %s", current_mode_index)
-
+        current_mode_index = (self.coordinator.data or {}).get("heatin")
         if current_mode_index is None:
             return None
-
-        # Convert mode index to preset using custom mapping
-        mode_mapping = self._get_mode_mapping()
-        _LOGGER.debug("Current mode index: %s", current_mode_index)
-        return mode_mapping.get(current_mode_index, PRESET_ECO)
+        return self._get_mode_mapping().get(current_mode_index)
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set new preset mode."""
         if preset_mode not in AVAILABLE_PRESETS:
             raise ValueError(f"Invalid preset mode: {preset_mode}")
 
-        # Convert preset to mode index using reverse mapping
-        reverse_mapping = self._get_reverse_mode_mapping()
-        mode_index = reverse_mapping.get(preset_mode)
-
+        mode_index = self._get_reverse_mode_mapping().get(preset_mode)
         if mode_index is None:
             raise ValueError(f"No mode index found for preset: {preset_mode}")
 
-        # Send the mode index to the device
         await self.hass.async_add_executor_job(
             self._api.set_mode, self._device_mac, mode_index
         )
-
-        # Request refresh to update state
-        await self.coordinator.async_request_refresh()
+        new_data = dict(self.coordinator.data)
+        new_data["heatin"] = mode_index
+        self.coordinator.async_set_updated_data(new_data)
 
     @property
     def extra_state_attributes(self) -> dict:
         """Return entity specific state attributes."""
         attrs = dict(super().extra_state_attributes or {})
-
-        # Add current mode mapping to attributes for debugging
         mode_mapping = self._get_mode_mapping()
-        attrs[CONF_MODE_MAPPING] = {f"mode_{k}": v for k, v in mode_mapping.items()}
-
-        # Add raw mode index
-        device_data = self.coordinator.data.get(self._device_id, {})
-        attrs["raw_mode_index"] = device_data.get("mode")
-
+        attrs[CONF_MODE_MAPPING] = {
+            "is_custom": self._device_mode_mapping is not DEFAULT_MODE_MAPPING,
+            "mapping": {f"mode_{k}": v for k, v in mode_mapping.items()},
+        }
+        attrs["raw_heatin_index"] = (self.coordinator.data or {}).get("heatin")
         return attrs
 
     async def async_set_temperature(self, **kwargs):
@@ -253,31 +228,22 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
         if (temperature := kwargs.get(ATTR_TEMPERATURE)) is None:
             return
 
-        if temperature is not None:
-            await self.hass.async_add_executor_job(
-                self._api.set_temperature, self._device_mac, temperature
-            )
-            newData = self.coordinator.data
-            newData["sp"] = temperature
-            self.coordinator.async_set_updated_data(newData)
+        await self.hass.async_add_executor_job(
+            self._api.set_temperature, self._device_mac, temperature
+        )
+        new_data = dict(self.coordinator.data)
+        new_data["sp"] = temperature
+        self.coordinator.async_set_updated_data(new_data)
 
     async def async_set_hvac_mode(self, hvac_mode):
         """Set new HVAC mode."""
-
-        if hvac_mode == HVACMode.HEAT:
-            await self.hass.async_add_executor_job(
-                self._api.set_power, self._device_mac, True
-            )
-        else:
-            await self.hass.async_add_executor_job(
-                self._api.set_power, self._device_mac, False
-            )
-        await self.coordinator.async_request_refresh()
-
-    # async def async_set_preset_mode(self, preset_mode):
-    #     """Set preset mode."""
-    #     # Base implementation - override in subclasses
-    #     pass
+        power_on = hvac_mode == HVACMode.HEAT
+        await self.hass.async_add_executor_job(
+            self._api.set_power, self._device_mac, power_on
+        )
+        new_data = dict(self.coordinator.data)
+        new_data["power"] = 1 if power_on else 0
+        self.coordinator.async_set_updated_data(new_data)
 
     @property
     def should_poll(self):
@@ -415,9 +381,9 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
         await self.hass.async_add_executor_job(
             self._api.send_command, self._device_mac, f"tune set {mode_command}"
         )
-        newData = self.coordinator.data
-        newData["mode"] = mode_value
-        self.coordinator.async_set_updated_data(newData)
+        new_data = dict(self.coordinator.data)
+        new_data["mode"] = mode_value
+        self.coordinator.async_set_updated_data(new_data)
 
     @staticmethod
     def _deep_find(obj: Any, key: str) -> Iterator[Any]:
@@ -485,26 +451,6 @@ class DuuxEdgeTwoClimate(DuuxClimate):
         """Return available preset modes."""
         return [self.PRESET_LOW, self.PRESET_HIGH, self.PRESET_BOOST]
 
-    @property
-    def preset_mode(self):
-        """Return current preset mode."""
-        mode = (self.coordinator.data or {}).get("heatin", self.PRESET_LOW)
-        mode_map = {1: self.PRESET_LOW, 2: self.PRESET_HIGH, 3: self.PRESET_BOOST}
-        return mode_map.get(mode)
-
-        # async def async_set_preset_mode(self, preset_mode):
-        #     """Set preset mode."""
-        #     mode_map = {self.PRESET_LOW: "1", self.PRESET_HIGH: "2", self.PRESET_BOOST: "3"}
-
-        #     mode = mode_map.get(preset_mode, 1)
-
-        # await self.hass.async_add_executor_job(
-        #     self._api.set_mode, self._device_mac, mode
-        # )
-        # newData = self.coordinator.data
-        # newData["heatin"] = int(mode)
-        # self.coordinator.async_set_updated_data(newData)
-
 
 class DuuxEdgeClimate(DuuxClimate):
     """Duux Edge heater 2023 (v1)."""
@@ -523,29 +469,3 @@ class DuuxEdgeClimate(DuuxClimate):
     def preset_modes(self):
         """Return available preset modes."""
         return [self.PRESET_LOW, self.PRESET_HIGH]
-
-    @property
-    def preset_mode(self):
-        """Return current preset mode."""
-        mode = (self.coordinator.data or {}).get("heatin", self.PRESET_LOW)
-        mode_map = {
-            1: self.PRESET_LOW,
-            2: self.PRESET_HIGH,
-        }
-        return mode_map.get(mode)
-
-    async def async_set_preset_mode(self, preset_mode):
-        """Set preset mode."""
-        mode_map = {
-            self.PRESET_LOW: "1",
-            self.PRESET_HIGH: "2",
-        }
-
-        mode = mode_map.get(preset_mode, 1)
-
-        await self.hass.async_add_executor_job(
-            self._api.set_mode, self._device_mac, mode
-        )
-        newData = self.coordinator.data
-        newData["heatin"] = int(mode)
-        self.coordinator.async_set_updated_data(newData)

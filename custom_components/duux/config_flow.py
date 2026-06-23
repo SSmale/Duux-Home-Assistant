@@ -1,7 +1,4 @@
 # custom_components/duux/config_flow.py
-import datetime
-import logging
-
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, OptionsFlowWithReload
 from homeassistant.components.climate.const import (
@@ -17,10 +14,10 @@ from .const import (
     CONF_MODE_MAPPING,
     DEFAULT_MODE_MAPPING,
     DOMAIN,
+    DUUX_DTID_HEATER,
+    DUUX_DTID_THERMOSTAT,
 )
 from .duux_api import DuuxAPI
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class DuuxConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -61,7 +58,6 @@ class DuuxConfigFlow(ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         """Get the options flow for this handler."""
-        # return MyOptionsFlow()
         return DuuxOptionsFlow()
 
 
@@ -70,12 +66,11 @@ class DuuxOptionsFlow(OptionsFlowWithReload):
 
     def __init__(self):
         """Initialize options flow."""
-        self._devices = None
+        self._devices: dict = {}
         self._selected_device = None
 
     async def async_step_init(self, user_input=None):
         """Manage the options - select device to configure."""
-        # Get devices from integration data
         if (
             DOMAIN in self.hass.data
             and self.config_entry.entry_id in self.hass.data[DOMAIN]
@@ -83,10 +78,16 @@ class DuuxOptionsFlow(OptionsFlowWithReload):
             devices = self.hass.data[DOMAIN][self.config_entry.entry_id].get("devices")
 
             for device in devices:
+                sensor_type = device.get("sensorType") or {}
+                device_type_id = sensor_type.get("type")
+                if device_type_id not in [*DUUX_DTID_HEATER, *DUUX_DTID_THERMOSTAT]:
+                    continue
                 device_id = device.get("deviceId")
-                device_name = device.get("displayName") or device.get("name")
-                if self._devices is None:
-                    self._devices = {}
+                device_name = (
+                    device.get("displayName")
+                    or sensor_type.get("name")
+                    or device.get("name")
+                )
                 self._devices[device_id] = device_name
 
         if not self._devices:
@@ -96,53 +97,33 @@ class DuuxOptionsFlow(OptionsFlowWithReload):
         if user_input is not None:
             if "device_id" in user_input:
                 self._selected_device = user_input["device_id"]
-                res = await self.async_step_device_mode_mapping()
-                _LOGGER.debug(
-                    "Navigating to device mode mapping step for device %s", res
-                )
-                return res
-            _LOGGER.debug("Saving options: %s", user_input)
-            return self.async_create_entry(
-                title="", data={"now": datetime.datetime.now()}
-            )
+                return await self.async_step_device_mode_mapping()
+            return self.async_create_entry(data=dict(self.config_entry.options))
 
-        # Build device selection schema
-        device_schema = {
-            vol.Optional("device_id"): vol.In(self._devices, "Please select a device")
-        }
+        device_schema = {vol.Optional("device_id"): vol.In(self._devices)}
 
         return self.async_show_form(
             last_step=False,
             step_id="init",
             data_schema=vol.Schema(device_schema),
-            description_placeholders={
-                "info": "Select a device to configure its heating mode mappings, or leave empty to finish."
-            },
         )
 
     async def async_step_device_mode_mapping(self, user_input=None):
         """Configure mode mapping for selected device."""
         if user_input is not None:
-            # Get existing options
-            options = dict(self.config_entry.options)
-
-            # Initialize mode_mapping dict if it doesn't exist
-            if CONF_MODE_MAPPING not in options:
-                options[CONF_MODE_MAPPING] = {}
-
-            # Store the mapping for this device
-            options[CONF_MODE_MAPPING][self._selected_device] = {
+            device_mapping = {
                 "0": user_input["mode_0"],
                 "1": user_input["mode_1"],
                 "2": user_input["mode_2"],
                 "3": user_input["mode_3"],
             }
-            _LOGGER.debug(
-                "Updated mode mapping for device %s: %s",
-                self._selected_device,
-                options[CONF_MODE_MAPPING][self._selected_device],
-            )
-            # Save and go back to device selection
+            options = {
+                **self.config_entry.options,
+                CONF_MODE_MAPPING: {
+                    **self.config_entry.options.get(CONF_MODE_MAPPING, {}),
+                    self._selected_device: device_mapping,
+                },
+            }
             return self.async_create_entry(data=options)
 
         # Get current mapping for this device or use defaults
@@ -172,26 +153,19 @@ class DuuxOptionsFlow(OptionsFlowWithReload):
                         "mode_2", default=current_mapping.get("2", PRESET_BOOST)
                     ): vol.In(AVAILABLE_PRESETS),
                     vol.Required(
-                        "mode_3", default=current_mapping.get("3", PRESET_BOOST)
+                        "mode_3", default=current_mapping.get("3")
                     ): vol.In(AVAILABLE_PRESETS),
                 }
             ),
-            description_placeholders={
-                "device_name": device_name,
-                "info": "Map each mode index (0, 1, 2, 3) to the corresponding heating preset (low, high, boost).",
-            },
+            description_placeholders={"device_name": device_name},
         )
 
     async def async_step_global_options(self, user_input=None):
         """Show global options if no devices available."""
         if user_input is not None:
-            _LOGGER.debug("Saving global options: %s", user_input)
-            return self.async_create_entry(title="", data=user_input)
+            return self.async_create_entry(data=user_input)
 
         return self.async_show_form(
             step_id="global_options",
             data_schema=vol.Schema({}),
-            description_placeholders={
-                "info": "No devices found. Make sure your heaters are connected."
-            },
         )

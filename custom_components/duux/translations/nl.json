@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Modusinstelling",
+                "state": {
+                    "custom": "Aangepast",
+                    "default": "Standaard"
+                }
+            },
             "time_remaining": {
                 "name": "Resterende tijd"
             },
@@ -102,6 +109,31 @@
             },
             "sleep_mode": {
                 "name": "Slaapstand"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "device_id": "Apparaat"
+                },
+                "description": "Selecteer een apparaat om de verwarmingsmodusinstellingen te configureren, of laat leeg om te voltooien.",
+                "title": "Uw Duux-apparaten beheren"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Modus 0",
+                    "mode_1": "Modus 1",
+                    "mode_2": "Modus 2",
+                    "mode_3": "Modus 3 (Gereserveerd)"
+                },
+                "description": "Wijs elke verwarmingsmodusindex toe aan een instelling voor {device_name}.",
+                "title": "Modusinstellingen van {device_name} beheren"
+            },
+            "global_options": {
+                "description": "Geen verwarmingsapparaten gevonden. Zorg ervoor dat uw verwarmingen zijn verbonden.",
+                "title": "Geen apparaten gevonden"
             }
         }
     },

@@ -13,7 +13,6 @@ under test), which is declared in tests/requirements.txt.
 import json
 import os
 import sys
-from types import SimpleNamespace
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -98,6 +97,30 @@ def make_coordinator():
     return FakeCoordinator
 
 
+class FakeConfigEntries:
+    """Minimal stand-in for hass.config_entries.
+
+    Supports registering fake config entries so that options-flow code can
+    call ``async_get_known_entry`` the same way real HA does.
+    """
+
+    def __init__(self):
+        self._entries = {}
+        self.async_forward_entry_setups = AsyncMock(return_value=None)
+        self.async_unload_platforms = AsyncMock(return_value=True)
+
+    def register(self, entry):
+        """Register a fake entry so async_get_known_entry can find it."""
+        self._entries[entry.entry_id] = entry
+        return entry
+
+    def async_get_known_entry(self, entry_id):
+        entry = self._entries.get(entry_id)
+        if entry is None:
+            raise KeyError(f"Config entry {entry_id!r} not registered in FakeHass")
+        return entry
+
+
 class FakeHass:
     """Minimal stand-in for homeassistant.core.HomeAssistant.
 
@@ -108,10 +131,7 @@ class FakeHass:
 
     def __init__(self):
         self.data = {}
-        self.config_entries = SimpleNamespace(
-            async_forward_entry_setups=AsyncMock(return_value=None),
-            async_unload_platforms=AsyncMock(return_value=True),
-        )
+        self.config_entries = FakeConfigEntries()
 
     async def async_add_executor_job(self, func, *args):
         return func(*args)

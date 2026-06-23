@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Mode Mapping",
+                "state": {
+                    "custom": "Custom",
+                    "default": "Default"
+                }
+            },
             "time_remaining": {
                 "name": "Time Remaining"
             },
@@ -116,23 +123,27 @@
         }
     },
     "options": {
-        "error": {
-            "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name` and should be a valid github repository."
-        },
         "step": {
-            "device_mode_mapping": {
-                "data": {
-                    "device_id": "Device Name:"
-                },
-                "description": "{info}",
-                "title": "Manage {device_name} Mode Mappings"
-            },
             "init": {
                 "data": {
-                    "device_id": "Device Name:"
+                    "device_id": "Device"
                 },
-                "description": "{info}",
+                "description": "Select a device to configure its heating mode mappings, or leave blank to finish.",
                 "title": "Manage your Duux Devices"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Mode 0",
+                    "mode_1": "Mode 1",
+                    "mode_2": "Mode 2",
+                    "mode_3": "Mode 3 (Reserved)"
+                },
+                "description": "Map each heating mode index to a preset for {device_name}.",
+                "title": "Manage {device_name} Mode Mappings"
+            },
+            "global_options": {
+                "description": "No heating devices found. Make sure your heaters are connected.",
+                "title": "No Devices Found"
             }
         }
     }
