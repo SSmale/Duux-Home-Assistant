@@ -17,6 +17,7 @@ from .const import (
     DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_NEO,
+    DUUX_STID_WHISPER_FLEX_ELIVATE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -78,11 +79,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         elif sensor_type_id in [DUUX_STID_BEAM_MINI, DUUX_STID_EDGEHEATER_V2]:
             entities.append(DuuxTimerSelector(coordinator, api, device))
 
-        if coordinator.data.get("horosc") is not None:
+        if coordinator.data.get("horosc") is not None and sensor_type_id not in [
+            DUUX_STID_WHISPER_FLEX_ELIVATE
+        ]:
             entities.append(DuuxHorizontalOscillationSelect(coordinator, api, device))
 
         if coordinator.data.get("verosc") is not None:
             entities.append(DuuxVerticalOscillationSelect(coordinator, api, device))
+
         if coordinator.data.get("swing") is not None:
             entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
 

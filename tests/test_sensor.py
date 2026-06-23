@@ -99,6 +99,24 @@ def test_error_sensor_unknown_code(make_coordinator, mock_api):
     assert entity.native_value == "Unknown Error"
 
 
+def test_error_sensor_null_api_value_is_ok(make_coordinator, mock_api):
+    """JSON null (Python None) on the err key means no error."""
+    device = {"id": 1, "deviceId": "AA:BB", "displayName": "Heater"}
+    coordinator = make_coordinator({"err": None})
+    entity = DuuxErrorSensor(coordinator, mock_api, device)
+
+    assert entity.native_value == "OK"
+
+
+def test_error_sensor_missing_key_is_unavailable(make_coordinator, mock_api):
+    """Key absent entirely means the device hasn't reported an error state yet."""
+    device = {"id": 1, "deviceId": "AA:BB", "displayName": "Heater"}
+    coordinator = make_coordinator({})
+    entity = DuuxErrorSensor(coordinator, mock_api, device)
+
+    assert entity.native_value == "Unavailable"
+
+
 # ---------------------------------------------------------------------------
 # DuuxConnectionTypeSensor
 # ---------------------------------------------------------------------------

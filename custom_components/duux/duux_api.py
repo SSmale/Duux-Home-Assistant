@@ -179,9 +179,14 @@ class DuuxAPI:
         mode_val = max(0, min(1, int(mode)))
         return self.send_command(device_mac, f"tune set mode {mode_val}")
 
-    def set_horosc(self, device_mac, value):
+    def set_horosc_angle(self, device_mac, value):
         """Set horizontal oscillation (0=off, 1=30°, 2=60°, 3=90°)."""
         value = max(0, min(3, int(value)))
+        return self.send_command(device_mac, f"tune set horosc {value}")
+
+    def set_horosc_bool(self, device_mac, value):
+        """Set horizontal oscillation (0=off, 1=on)."""
+        value = max(0, min(1, int(value)))
         return self.send_command(device_mac, f"tune set horosc {value}")
 
     def set_verosc(self, device_mac, value):

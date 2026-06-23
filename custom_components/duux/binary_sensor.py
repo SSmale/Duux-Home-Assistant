@@ -105,10 +105,9 @@ class DuuxErrorSensor(DuuxBinarySensor):
     def is_on(self) -> bool:
         """True when the device reports a non-OK error code."""
         data = self.coordinator.data or {}
-        err = data.get(self.entity_description.key)
-        if err is None:
-            return False
-        return DUUX_ERRID(err) != DUUX_ERRID.OK
+        key = self.entity_description.key
+        errid = DUUX_ERRID(data[key]) if key in data else DUUX_ERRID.Unavailable
+        return errid not in (DUUX_ERRID.OK, DUUX_ERRID.Unavailable)
 
 
 class DuuxConnectivitySensor(DuuxBinarySensor):

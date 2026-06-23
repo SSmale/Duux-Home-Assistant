@@ -2,51 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## 1.0.0 (2026-06-20)
+## [2.16.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.15.0...v2.16.0) (2026-06-22)
 
 ### Added
 
-* add Duux Bright 2 air purifier support ([#71](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/71)) ([#72](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/72)) ([ca7efef](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/ca7efef01cd42661eff3389faecb34081e07ca8a))
-* Add Duux Neo Humidifier support ([#55](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/55)) ([#58](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/58)) ([9562173](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/95621732a4505c65aa42493ebc073f05d59044ce))
-* add Greek translations ([#97](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/97)) ([#98](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/98)) ([f3fce19](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/f3fce198f8719f605d09c99edd24aaf1566006d2))
-* adds auto discovery and the ThreeSixty Two heater ([6627928](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/6627928f621a6642cd74b92167e298d0955b1107))
-* adds device diagnostics and fixes humidifier  ([6541b03](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/6541b03968dead77dc29435cd91a93e479e6c316))
-* adds support for other heater types ([929632c](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/929632cbda00c5cb95c9761680e5e041d264e4a5))
-* adds support for reporting unknown devices. ([772eba0](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/772eba0a7b26462c1be3b0febb0b56ff680930e2))
-* adds support for the beam mini ([#37](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/37)) ([1dcaa20](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/1dcaa2029daeb41b12ec813e0ca8c0fcaa38c305))
-* adds support for the Duux edge 2000 ([#47](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/47)) ([bd8c070](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/bd8c0707bba6850e671672b8efe90dfe75a462ff))
-* adds swing for fans, connection type and translations ([#82](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/82)) ([4f248a2](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/4f248a2706577f743a3f92860fbdfc2125b9f47e))
-* adds tests for the project ([#109](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/109)) ([53d0968](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/53d0968070a1f061b9dab0756325a4fee5561584))
-* adds the switches and different heaters ([c04c441](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/c04c441f93a9f19f1e88f9a563f88ea4b587fc31))
-* adds the Whisper Fans ([#51](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/51)) ([78395c8](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/78395c8ec493975446fd8111403ed26e7d1eb885)), closes [#69](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/69) [#70](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/70)
-* allows users to delete devices ([#85](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/85)) ([9503930](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/9503930ff4390ae4865b69a1a26321fa1b2f15c1))
-* better icons ([a95b608](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/a95b60865733714c94790c1346962fa277337986))
-* release trigger ([9e6718e](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/9e6718e4d905986011cb85721cabcdf5033a3e69))
-* Updated loglevel for authentication ([#74](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/74)) ([6251e73](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/6251e732d27169d04efbdf63ddbafc3d5abcb7e8)), closes [#59](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/59)
-* Updated loglevel for authentication ([#74](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/74)) ([#75](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/75)) ([4c482af](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/4c482af64c0481fe9830957ed912c714bac11eb7)), closes [#59](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/59)
-
-### Fixed
-
-* adds in swing and tilt for ultimate fan ([#95](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/95)) ([8a6d288](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/8a6d2883f1f9b5f76b647e0ec7bb13e5b7267975))
-* adds in the other currently know type ids for heaters ([d7dcf94](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/d7dcf944023ca8988e77c337080b274594f71e42))
-* again with the fix ([42c6c0d](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/42c6c0d6931c02e93b842b7a9e156c192ee1c04f))
-* button order ([97c3e53](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/97c3e532cf4966dc7dae4c2dac8191ac7332abbc))
-* **climate, humidifier:** mark entity unavailable when coordinator data is None ([#63](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/63)) ([#65](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/65)) ([#67](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/67)) ([2bd3907](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/2bd39071f9ffe8a4b36b4be063b228d4d1b3d360))
-* correct default value handling in current_option ([#102](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/102)) ([#108](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/108)) ([f3deaff](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/f3deaff9656b1e13cecf32495757a75a9945f099))
-* fixes a renamed import that got missed in a refactor ([a90881f](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/a90881f8b02241aa7d265c522c58b38ec65cdd4f))
-* fixes the fan speed settings and updates the docs ([8eae757](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/8eae7576e313bb5c9f7d509c3d978582e9325757))
-* fixes the flashing of the cards ([#84](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/84)) ([#103](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/103)) ([4461577](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/446157781287dd70b6efe3a6265eda1c84722747))
-* fixes the preset modes and adds badge to the readme ([5b85eb9](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/5b85eb93836bbf35ff4199618112c41f445c1009))
-* getting device ID ([597bf52](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/597bf5296c87bf137787080d5e29f4cdcec29e19))
-* handle null googleDeviceType during device discovery ([#96](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/96)) ([#99](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/99)) ([f77b0bc](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/f77b0bc9e01424aebde3c22acce2e001fce894ac))
-* moves the v1 heater to the THERMOSTAT type array ([36b55fc](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/36b55fc284c059dfde31cf31573760d7a7a30583)), closes [#27](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/27)
-* reduce logging level for api sync ([822bcd2](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/822bcd24d8cad9c3be7709f3154184aad0a90595))
-* rename min/max params in set_speed to avoid shadowing builtins ([#101](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/101)) ([a39bea8](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/a39bea8592a25a976fc6bc8fb47f14d538c04e1c)), closes [#100](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/100)
-* restore translated states for TVOC and AQ sensors; add missing translations (DE/IT + new entities) ([#80](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/80)) ([3ba9cba](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/3ba9cbacd3b7a1f2956582a374f6dd04e087c329))
-* sets the speed properly ([18f66b4](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/18f66b46e9a3336d37134f29645f4ca14041b719))
-* Threesixty heat modes ([#14](https://github.com/IoannisArmamentos/Duux-Home-Assistant/issues/14)) ([3e9eac1](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/3e9eac1d41fe54e6d5a4e64205780bd18d48fa3c))
-* token is already prefixed ([4b895b3](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/4b895b3790b59e438362d23965d6e36bda5ae73b))
-* uses the yaml forms for auto population ([2b9b652](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/2b9b652499b8dc38394d2978bee54ea8a1a2eebe))
+* adds in the custom block for the elevate fan ([7127f4e](https://github.com/SSmale/Duux-Home-Assistant/commit/7127f4eb403d5d6d917aee8098606d0b885f60a3))
+* adds the ionzer switch ([e890db2](https://github.com/SSmale/Duux-Home-Assistant/commit/e890db2b2bd1f76d97b0c07c00a36162c054b3e1))
 
 ## [2.15.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.14.3...v2.15.0) (2026-06-20)
 

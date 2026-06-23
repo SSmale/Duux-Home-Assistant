@@ -38,6 +38,15 @@ def test_error_binary_sensor_off_when_err_missing(make_coordinator, mock_api):
     assert entity.is_on is False
 
 
+def test_error_binary_sensor_off_when_err_is_null(make_coordinator, mock_api):
+    """JSON null on the err key means no error — sensor must be off."""
+    device = {"id": 1, "deviceId": "AA:BB", "displayName": "Heater"}
+    coordinator = make_coordinator({"err": None})
+    entity = DuuxErrorSensor(coordinator, mock_api, device)
+
+    assert entity.is_on is False
+
+
 # ---------------------------------------------------------------------------
 # DuuxConnectivitySensor -- reads from the device envelope, not coordinator.data
 # ---------------------------------------------------------------------------

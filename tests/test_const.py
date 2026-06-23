@@ -7,7 +7,8 @@ def test_known_error_codes_resolve_by_value():
     assert DUUX_ERRID(0) is DUUX_ERRID.OK
     assert DUUX_ERRID(4) is DUUX_ERRID.Ice_Detected
     assert DUUX_ERRID(8) is DUUX_ERRID.Water_Tank_Full
-    assert DUUX_ERRID(None) is DUUX_ERRID.Unavailable
+    assert DUUX_ERRID(DUUX_ERRID.Unavailable) is DUUX_ERRID.Unavailable
+    assert DUUX_ERRID(None) is DUUX_ERRID.OK
 
 
 def test_unrecognised_error_code_falls_back_to_unknown_error():
