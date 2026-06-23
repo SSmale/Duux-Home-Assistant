@@ -236,7 +236,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     @property
     def extra_state_attributes(self) -> dict:
         """Return entity specific state attributes."""
-        attrs = super().extra_state_attributes or {}
+        attrs = dict(super().extra_state_attributes or {})
 
         # Add current mode mapping to attributes for debugging
         mode_mapping = self._get_mode_mapping()
@@ -274,10 +274,10 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
             )
         await self.coordinator.async_request_refresh()
 
-    async def async_set_preset_mode(self, preset_mode):
-        """Set preset mode."""
-        # Base implementation - override in subclasses
-        pass
+    # async def async_set_preset_mode(self, preset_mode):
+    #     """Set preset mode."""
+    #     # Base implementation - override in subclasses
+    #     pass
 
     @property
     def should_poll(self):
@@ -498,12 +498,12 @@ class DuuxEdgeTwoClimate(DuuxClimate):
 
         #     mode = mode_map.get(preset_mode, 1)
 
-        await self.hass.async_add_executor_job(
-            self._api.set_mode, self._device_mac, mode
-        )
-        newData = self.coordinator.data
-        newData["heatin"] = int(mode)
-        self.coordinator.async_set_updated_data(newData)
+        # await self.hass.async_add_executor_job(
+        #     self._api.set_mode, self._device_mac, mode
+        # )
+        # newData = self.coordinator.data
+        # newData["heatin"] = int(mode)
+        # self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxEdgeClimate(DuuxClimate):

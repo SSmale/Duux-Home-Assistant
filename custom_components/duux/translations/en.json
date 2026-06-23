@@ -114,32 +114,6 @@
             "description": "Duux has detected a device that is not officially supported. \n\rPlease check the device type and report it to the integration developer. \n\rDetails needed are: \n\rDevice Name: {device_name}\n\rDevice Type ID: {device_type_id}\n\rSensor Type ID: {sensor_type_id}\n\rDevice Type: {reported_type}.",
             "title": "Device not recognised"
         }
-    }
-}{
-    "config": {
-        "error": {
-            "auth": "The auth token provided is not valid.",
-            "invalid_path": "The path provided is not valid. Should be in the format `user/repo-name`."
-        },
-        "step": {
-            "repo": {
-                "data": {
-                    "add_another": "Add another repo?",
-                    "name": "Name of the sensor.",
-                    "path": "Path to the repository e.g. home-assistant/core"
-                },
-                "description": "Add a GitHub repo, check the box to add another.",
-                "title": "Add GitHub Repository"
-            },
-            "user": {
-                "data": {
-                    "access_token": "GitHub Access Token",
-                    "url": "GitHub Enterprise server URL"
-                },
-                "description": "Enter your GitHub credentials.",
-                "title": "Authentication"
-            }
-        }
     },
     "options": {
         "error": {
