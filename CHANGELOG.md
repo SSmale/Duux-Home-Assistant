@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/IoannisArmamentos/Duux-Home-Assistant/compare/v1.0.0...v1.1.0) (2026-06-23)
+
+### Added
+
+* adds in the custom block for the elevate fan ([7127f4e](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/7127f4eb403d5d6d917aee8098606d0b885f60a3))
+* adds the ionzer switch ([e890db2](https://github.com/IoannisArmamentos/Duux-Home-Assistant/commit/e890db2b2bd1f76d97b0c07c00a36162c054b3e1))
+
 ## [2.16.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.15.0...v2.16.0) (2026-06-22)
 
 ### Added
@@ -360,6 +367,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
