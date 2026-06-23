@@ -1,0 +1,6 @@
+# Human-edited source. Run `make compile-deps` to regenerate tests/requirements.txt.
+homeassistant>=2025.2.0
+pytest>=8.0,<10
+pytest-asyncio>=0.24,<2
+pytest-cov>=5.0
+requests>=2.31.0

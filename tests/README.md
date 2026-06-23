@@ -45,13 +45,38 @@ dispatch tests (`test_*_async_setup_entry_dispatches_*`) double as a
 regression check that each device type still routes to the correct entity
 classes.
 
-## Version pin
+## Dependency management
 
-`tests/requirements.txt` pins `homeassistant==2025.1.4`, and the CI workflow
-runs on Python 3.12. This was the newest combination installable and verified
-in the environment this suite was built in — `homeassistant` releases from
-`2025.2.0` onward require Python `>=3.13`. The repo's root `requirements.txt`
-(used for local dev/linting) already pins a newer `homeassistant` release that
-needs Python 3.13+; once that's available in CI, both pins can be bumped to
-match. Nothing in the integration itself requires a specific HA version —
-`manifest.json` doesn't declare a minimum.
+`tests/requirements.txt` is **generated** — do not edit it directly.
+
+The source of truth is `tests/requirements.in`, which lists loose constraints.
+To regenerate the locked file after changing `.in` or to pull in a newer HA
+release:
+
+```bash
+make compile-deps
+```
+
+CI installs from `tests/requirements.txt` and runs on Python 3.13 (required by
+`homeassistant >= 2025.2.0`).
+
+## Minimum HA version
+
+Three files must always agree on the minimum Home Assistant version the
+integration requires:
+
+| File | Field |
+| --- | --- |
+| `hacs.json` | `"homeassistant"` |
+| `custom_components/duux/manifest.json` | `"homeassistant"` |
+| `tests/requirements.in` | `homeassistant>=` lower bound |
+
+When you use a new HA API, find the release it was introduced in and, if it is
+higher than the current minimum, run:
+
+```bash
+make bump-min-ha VERSION=2025.3.0
+```
+
+This updates all three files and regenerates `tests/requirements.txt` in one
+step. Commit all four files together.
