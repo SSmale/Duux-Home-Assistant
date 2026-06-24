@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Modus-Zuordnung",
+                "state": {
+                    "custom": "Benutzerdefiniert",
+                    "default": "Standard"
+                }
+            },
             "time_remaining": {
                 "name": "Verbleibende Zeit"
             },
@@ -102,6 +109,31 @@
             },
             "sleep_mode": {
                 "name": "Schlafmodus"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "device_id": "Gerät"
+                },
+                "description": "Wählen Sie ein Gerät aus, um seine Heizmodus-Zuordnungen zu konfigurieren, oder lassen Sie das Feld leer, um zu beenden.",
+                "title": "Ihre Duux-Geräte verwalten"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Modus 0",
+                    "mode_1": "Modus 1",
+                    "mode_2": "Modus 2",
+                    "mode_3": "Modus 3 (Reserviert)"
+                },
+                "description": "Ordnen Sie jeden Heizmodusindex einem Voreinstellung für {device_name} zu.",
+                "title": "{device_name} Moduszuordnungen verwalten"
+            },
+            "global_options": {
+                "description": "Keine Heizgeräte gefunden. Stellen Sie sicher, dass Ihre Heizgeräte verbunden sind.",
+                "title": "Keine Geräte gefunden"
             }
         }
     },

@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Asignación de modo",
+                "state": {
+                    "custom": "Personalizado",
+                    "default": "Predeterminado"
+                }
+            },
             "time_remaining": {
                 "name": "Tiempo restante"
             },
@@ -102,6 +109,31 @@
             },
             "sleep_mode": {
                 "name": "Modo sueño"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "device_id": "Dispositivo"
+                },
+                "description": "Seleccione un dispositivo para configurar sus asignaciones de modo de calefacción, o déjelo en blanco para terminar.",
+                "title": "Administrar sus dispositivos Duux"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Modo 0",
+                    "mode_1": "Modo 1",
+                    "mode_2": "Modo 2",
+                    "mode_3": "Modo 3 (Reservado)"
+                },
+                "description": "Asigne cada índice de modo de calefacción a un ajuste predeterminado para {device_name}.",
+                "title": "Administrar asignaciones de modo de {device_name}"
+            },
+            "global_options": {
+                "description": "No se encontraron dispositivos de calefacción. Asegúrese de que sus calentadores estén conectados.",
+                "title": "No se encontraron dispositivos"
             }
         }
     },

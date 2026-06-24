@@ -1,10 +1,12 @@
 """Unit tests for custom_components.duux.sensor."""
 
 from custom_components.duux import const
+from custom_components.duux.const import DEFAULT_MODE_MAPPING
 from custom_components.duux.sensor import (
     DuuxAirQualitySensor,
     DuuxConnectionTypeSensor,
     DuuxErrorSensor,
+    DuuxModeMappingSensor,
     DuuxTVOCSensor,
     DuuxTempSensor,
     async_setup_entry,
@@ -169,7 +171,7 @@ async def test_async_setup_entry_bright2_gets_air_quality_sensor_suite(
         d["deviceId"]: make_coordinator(d["latestData"]["fullData"])
         for d in devices_fixture
     }
-    entry = type("Entry", (), {"entry_id": "entry_1"})()
+    entry = type("Entry", (), {"entry_id": "entry_1", "options": {}})()
     fake_hass.data[const.DOMAIN] = {
         "entry_1": {
             "api": object(),
@@ -199,10 +201,10 @@ async def test_async_setup_entry_bright2_gets_air_quality_sensor_suite(
         ]
     )
 
-    # A plain heater (Edge V2) just gets the generic temp + error + connection sensors.
+    # A plain heater (Edge V2) gets temp + error + connection + mode mapping sensors.
     edge_sensors = sorted(by_device["AA:00:00:00:00:01"])
     assert edge_sensors == sorted(
-        ["DuuxTempSensor", "DuuxErrorSensor", "DuuxConnectionTypeSensor"]
+        ["DuuxTempSensor", "DuuxErrorSensor", "DuuxConnectionTypeSensor", "DuuxModeMappingSensor"]
     )
 
     # Bora 2024 gets humidity + time-remaining + error + connection.
@@ -226,3 +228,41 @@ async def test_async_setup_entry_bright2_gets_air_quality_sensor_suite(
             "DuuxConnectionTypeSensor",
         ]
     )
+
+    # Non-heater devices must NOT get a mode mapping sensor.
+    assert "DuuxModeMappingSensor" not in by_device["AA:00:00:00:00:10"]  # Bright 2
+    assert "DuuxModeMappingSensor" not in by_device["AA:00:00:00:00:05"]  # Bora 2024
+
+
+# ---------------------------------------------------------------------------
+# DuuxModeMappingSensor
+# ---------------------------------------------------------------------------
+
+
+def test_mode_mapping_sensor_default_state(device_by_stid, make_coordinator, mock_api):
+    device = device_by_stid(50)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = DuuxModeMappingSensor(coordinator, mock_api, device, DEFAULT_MODE_MAPPING)
+
+    assert entity.native_value == "default"
+    assert entity.extra_state_attributes["mapping"] == {
+        "mode_0": "eco",
+        "mode_1": "comfort",
+        "mode_2": "boost",
+    }
+
+
+def test_mode_mapping_sensor_custom_state(device_by_stid, make_coordinator, mock_api):
+    from homeassistant.components.climate.const import PRESET_BOOST, PRESET_COMFORT, PRESET_ECO
+
+    device = device_by_stid(50)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    custom = {"1": PRESET_BOOST, "2": PRESET_ECO, "3": PRESET_COMFORT}
+    entity = DuuxModeMappingSensor(coordinator, mock_api, device, custom)
+
+    assert entity.native_value == "custom"
+    assert entity.extra_state_attributes["mapping"] == {
+        "mode_1": PRESET_BOOST,
+        "mode_2": PRESET_ECO,
+        "mode_3": PRESET_COMFORT,
+    }

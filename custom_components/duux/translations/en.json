@@ -71,6 +71,13 @@
             "pm25": {
                 "name": "PM2.5"
             },
+            "mode_mapping_source": {
+                "name": "Mode Mapping",
+                "state": {
+                    "custom": "Custom",
+                    "default": "Default"
+                }
+            },
             "time_remaining": {
                 "name": "Time Remaining"
             },
@@ -113,6 +120,31 @@
         "device_not_recognised": {
             "description": "Duux has detected a device that is not officially supported. \n\rPlease check the device type and report it to the integration developer. \n\rDetails needed are: \n\rDevice Name: {device_name}\n\rDevice Type ID: {device_type_id}\n\rSensor Type ID: {sensor_type_id}\n\rDevice Type: {reported_type}.",
             "title": "Device not recognised"
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "device_id": "Device"
+                },
+                "description": "Select a device to configure its heating mode mappings, or leave blank to finish.",
+                "title": "Manage your Duux Devices"
+            },
+            "device_mode_mapping": {
+                "data": {
+                    "mode_0": "Mode 0",
+                    "mode_1": "Mode 1",
+                    "mode_2": "Mode 2",
+                    "mode_3": "Mode 3 (Reserved)"
+                },
+                "description": "Map each heating mode index to a preset for {device_name}.",
+                "title": "Manage {device_name} Mode Mappings"
+            },
+            "global_options": {
+                "description": "No heating devices found. Make sure your heaters are connected.",
+                "title": "No Devices Found"
+            }
         }
     }
 }
