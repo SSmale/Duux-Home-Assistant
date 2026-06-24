@@ -181,3 +181,5 @@ async def test_async_setup_entry_dispatches_expected_switches_per_device(
     # Beam Mini and Whisper Flex (plain) get no switches at all.
     assert "AA:00:00:00:00:06" not in by_device
     assert "AA:00:00:00:00:08" not in by_device
+    # North (STID 42): night mode
+    assert by_device["AA:00:00:00:00:13"] == ["DuuxNightModeSwitch"]

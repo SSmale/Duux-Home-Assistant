@@ -7,6 +7,7 @@ from custom_components.duux.select import (
     DuuxHorizontalOscillationSelect,
     DuuxHorizontalSwingSelect,
     DuuxNeoSpeedSelector,
+    DuuxNorthTimerSelector,
     DuuxTimerSelector,
     DuuxVerticalOscillationSelect,
     DuuxVerticalTiltSelect,
@@ -325,3 +326,41 @@ async def test_async_setup_entry_dispatches_expected_selects_per_device(
     # (FanEntityFeature.OSCILLATE), so it must NOT get a DuuxHorizontalOscillationSelect
     # even though horosc is present in its coordinator data.
     assert "AA:00:00:00:00:12" not in by_device
+    # North (STID 42): timer selector
+    assert by_device["AA:00:00:00:00:13"] == ["DuuxNorthTimerSelector"]
+
+
+# ---------------------------------------------------------------------------
+# DuuxNorthTimerSelector (also powers the unit on for non zero values)
+# ---------------------------------------------------------------------------
+
+
+async def test_north_timer_selector_nonzero_also_powers_on(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator({**device["latestData"]["fullData"], "power": 0})
+    entity = attach_hass(
+        DuuxNorthTimerSelector(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_select_option("2")
+
+    mock_api.set_power.assert_called_once_with(device["deviceId"], True)
+    mock_api.set_timer.assert_called_once_with(device["deviceId"], "2")
+    assert entity.current_option == "2"
+
+
+async def test_north_timer_selector_zero_does_not_power_on(
+        device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(42)
+    coordinator = make_coordinator({**device["latestData"]["fullData"], "power": 0})
+    entity = attach_hass(
+        DuuxNorthTimerSelector(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_select_option("0")
+
+    mock_api.set_power.assert_not_called()
+    mock_api.set_timer.assert_called_once_with(device["deviceId"], "0")
