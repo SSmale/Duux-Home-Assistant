@@ -48,51 +48,19 @@ DUUX_SUPPORTED_TYPES = (
     + DUUX_AIR_PURIFIER_TYPES
 )
 
-# {
-#     "data": [
-#         {
-#             "typeName": "DUUX Threesixty 2023",
-#             "typeId": 49,
-#             "typeNumber": 50,
-#         },
-#         {
-#             "typeName": "DUUX Edge heater 2023",
-#             "typeId": 51,
-#             "typeNumber": 52,
-#         },
-#         {
-#             "typeName": "DUUX Threesixty 2",
-#             "typeId": 31,
-#             "typeNumber": 21,
-#         },
-#         {
-#             "typeName": "DUUX Edge heater",
-#             "typeId": 33,
-#             "typeNumber": 23,
-#         },
-#         {
-#             "typeName": "DUUX Edge heater v2",
-#             "typeId": 50,
-#             "typeNumber": 51,
-#         },
-#         {
-#             "typeName": "DUUX Bora 2024",
-#             "typeId": 62,
-#             "typeNumber": 56,
-#         },
-#     ],
-# }
 
+_ERRID_UNAVAILABLE = object()
 
 # Error codes
 class DUUX_ERRID(Enum):
-    Unavailable = None
+    Unavailable = _ERRID_UNAVAILABLE
     OK = 0
     Ice_Detected = 4
     Water_Tank_Full = 8
-
     Unknown_Error = 9999999
 
     @classmethod
     def _missing_(cls, value):
+        if value is None:
+            return cls.OK
         return cls.Unknown_Error

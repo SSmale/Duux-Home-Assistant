@@ -28,6 +28,7 @@ from .const import (
     DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_BRIGHT_2,
+    DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_WHISPER_FLEX_ULTIMATE,
 )
 
@@ -92,6 +93,8 @@ async def async_setup_entry(
             entities.append(DuuxAirPurifierFan(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_WHISPER_FLEX_ULTIMATE:
             entities.append(DuuxWhisperFlexUltimateFan(coordinator, api, device))
+        elif sensor_type_id == DUUX_STID_WHISPER_FLEX_ELIVATE:
+            entities.append(DuuxWhisperFlexElevateFan(coordinator, api, device))
         else:
             entities.append(DuuxFanAutoDiscovery(coordinator, api, device))
             _LOGGER.warning(
@@ -261,6 +264,44 @@ class DuuxWhisperFlexTwoFan(DuuxFan):
         self._speed_range = SPEED_RANGE_WHISPER_FLEX_2
         self._attr_preset_modes = [PRESET_MODE_NORMAL, PRESET_MODE_NATURAL]
         self._attr_speed_count = len(self._speed_range)
+
+
+class DuuxWhisperFlexElevateFan(DuuxFan):
+    """Representation of a DUUX Whisper Flex Elevatefan."""
+
+    def __init__(
+        self,
+        coordinator,
+        api,
+        device,
+    ) -> None:
+        """Initialize the fan."""
+        super().__init__(coordinator, api, device)
+        SPEED_RANGE_WHISPER_FLEX_ELEVATE = list(range(1, 27))
+        self._speed_range = SPEED_RANGE_WHISPER_FLEX_ELEVATE
+        self._attr_preset_modes = [PRESET_MODE_NORMAL, PRESET_MODE_NATURAL]
+        self._attr_speed_count = len(self._speed_range)
+        self._attr_supported_features = (
+            FanEntityFeature.SET_SPEED
+            | FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_ON
+            | FanEntityFeature.TURN_OFF
+            | FanEntityFeature.OSCILLATE
+        )
+
+    @property
+    def oscillating(self) -> bool:
+        """Is the fan oscillating."""
+        return (self.coordinator.data or {}).get("horosc") == 1
+
+    async def async_oscillate(self, oscillating: bool) -> None:
+        """Oscillate the fan."""
+        await self.hass.async_add_executor_job(
+            self._api.set_horosc_bool, self._device_mac, 1 if oscillating else 0
+        )
+        newData = self.coordinator.data
+        newData["horosc"] = 1 if oscillating else 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxWhisperFlexUltimateFan(DuuxFan):
