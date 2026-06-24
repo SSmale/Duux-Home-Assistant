@@ -10,12 +10,15 @@ Thank you for your interest in contributing!
 
 ## Development Setup
 
-1. Install Home Assistant in development mode
-2. Link your custom component:
-   ```bash
-   ln -s /path/to/Duux-Home-Assistant/custom_components/duux /path/to/homeassistant/config/custom_components/duux
-   ```
-3. Restart Home Assistant
+The fastest way to get started is with the provided devcontainer (VS Code Dev Containers or GitHub Codespaces). It installs all dependencies and wires up the pre-commit hooks automatically on container creation.
+
+If you prefer a local setup, run the setup script instead:
+
+```bash
+scripts/setup
+```
+
+This installs all Python dependencies (including ruff and pre-commit) and registers the git hooks.
 
 ## Testing
 
@@ -28,9 +31,18 @@ Before submitting a PR:
 
 ## Code Style
 
-- Follow PEP 8
+This project uses [ruff](https://docs.astral.sh/ruff/) for linting and formatting. It is configured in `pyproject.toml` and runs automatically as a pre-commit hook on every commit.
+
+To run it manually:
+
+```bash
+ruff check --fix .   # lint and auto-fix
+ruff format .        # format
+```
+
+Beyond what ruff enforces automatically:
+
 - Use type hints where possible
-- Add docstrings to all functions
 - Keep functions focused and small
 
 ## Pull Request Process

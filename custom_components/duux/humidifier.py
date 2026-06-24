@@ -4,11 +4,11 @@ import logging
 
 from homeassistant.components.humidifier import HumidifierDeviceClass, HumidifierEntity
 from homeassistant.components.humidifier.const import (
-    MODE_NORMAL,
-    HumidifierEntityFeature,
-    HumidifierAction,
     MODE_AUTO,
     MODE_BOOST,
+    MODE_NORMAL,
+    HumidifierAction,
+    HumidifierEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -60,7 +60,7 @@ async def async_setup_entry(
         elif sensor_type_id == DUUX_STID_BEAM_MINI:
             entities.append(DuuxBeamMiniDehumidifier(coordinator, api, device))
         else:
-            _LOGGER.warning(f"Unknown de/humidifier type {sensor_type_id}, skipping.")
+            _LOGGER.warning("Unknown de/humidifier type %s, skipping.", sensor_type_id)
 
     async_add_entities(entities)
 
@@ -100,7 +100,7 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
     def mode(self):
         """Return current preset mode."""
         # Base implementation - override in subclasses
-        return str()
+        return ""
 
     @property
     def available_modes(self):
@@ -111,7 +111,6 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
     async def async_set_mode(self, mode):
         """Set preset mode."""
         # Base implementation - override in subclasses
-        pass
 
     async def async_turn_on(self, **kwargs):
         await self.hass.async_add_executor_job(
@@ -138,7 +137,6 @@ class DuuxBase(CoordinatorEntity, HumidifierEntity):
     def action(self):
         """Return current action."""
         # Base implementation - override in subclasses
-        pass
 
     @property
     def current_humidity(self):

@@ -12,9 +12,9 @@ from custom_components.duux.const import (
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_NEO,
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
-    DUUX_STID_NEO,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -61,10 +61,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         # Neo humidifier
         elif sensor_type_id == DUUX_STID_NEO:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
-
-        elif sensor_type_id == DUUX_STID_BRIGHT_2:
-            entities.append(DuuxNightModeSwitch(coordinator, api, device))
-            entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
         elif sensor_type_id == DUUX_STID_BRIGHT_2:
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
@@ -302,10 +298,7 @@ class DuuxIonizerSwitch(DuuxSwitch):
         speed = data.get("speed")
         sensor_type_id = self._device.get("sensorTypeId")
 
-        if sensor_type_id == DUUX_STID_BRIGHT_2 and speed == 1:
-            return False
-
-        return True
+        return not (sensor_type_id == DUUX_STID_BRIGHT_2 and speed == 1)
 
     async def async_turn_on(self, **kwargs):
         """Turn on ionizer."""

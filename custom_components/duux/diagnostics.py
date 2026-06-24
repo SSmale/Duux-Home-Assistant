@@ -1,6 +1,7 @@
 """Support for Duux diagnostics."""
 
 from typing import Any
+
 from homeassistant.components.diagnostics.util import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -19,6 +20,7 @@ async def async_get_config_entry_diagnostics(
 
     try:
         data = await hass.async_add_executor_job(api.get_devices)
-        return async_redact_data(data, TO_REDACT)
     except Exception as err:
-        raise UpdateFailed(f"Error communicating with API: {err}")
+        raise UpdateFailed(f"Error communicating with API: {err}") from err
+    else:
+        return async_redact_data(data, TO_REDACT)

@@ -13,10 +13,10 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import (
     DOMAIN,
+    DUUX_DTID_AIR_PURIFIER,
     DUUX_DTID_FAN,
     DUUX_DTID_HEATER,
     DUUX_DTID_HUMIDIFIER,
-    DUUX_DTID_AIR_PURIFIER,
     DUUX_DTID_OTHER_HEATER,
     DUUX_DTID_THERMOSTAT,
     DUUX_SUPPORTED_TYPES,
@@ -66,7 +66,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         if device.get("connectionType") != "mqtt":
             _LOGGER.warning(
-                f"Device {device_name} (ID: {device.get('deviceId')}) is not connected via MQTT. Some features may not work.",
+                "Device %s (ID: %s) is not connected via MQTT. Some features may not work.",
+                device_name,
+                device.get("deviceId"),
             )
             ir.async_create_issue(
                 hass,
@@ -104,17 +106,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             )
             _LOGGER.warning("Your device has not been recognised.")
             _LOGGER.warning(
-                f"It is classified as type {last_word}, so maybe loaded as such.",
+                "It is classified as type %s, so maybe loaded as such.",
+                last_word,
             )
             _LOGGER.warning(
                 "Please report this to the integration developer so they can update the supported device list.",
             )
             _LOGGER.warning(
-                f"Required details: Device Name: {model}, Device Type ID: {device_type_id}, Sensor Type ID: {sensor_type_id}, Google Device Type: {google_type}",
+                "Required details: Device Name: %s, Device Type ID: %s, Sensor Type ID: %s, Google Device Type: %s",
+                model,
+                device_type_id,
+                sensor_type_id,
+                google_type,
             )
             if last_word in DUUX_SUPPORTED_TYPES:
                 _LOGGER.warning(
-                    f"Attempting to load device as type {last_word}.",
+                    "Attempting to load device as type %s.",
+                    last_word,
                 )
 
             else:
@@ -169,7 +177,9 @@ async def async_remove_config_entry_device(
 
     for entity in device_entities:
         _LOGGER.debug(
-            f"Removing entity {entity.entity_id} for device {device_entry.id}"
+            "Removing entity %s for device %s",
+            entity.entity_id,
+            device_entry.id,
         )
         entity_registry.async_remove(entity.entity_id)
 
@@ -206,6 +216,7 @@ class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
             data = await self.hass.async_add_executor_job(
                 self.api.get_device_status, self.device_id
             )
-            return data
         except Exception as err:
-            raise UpdateFailed(f"Error communicating with API: {err}")
+            raise UpdateFailed(f"Error communicating with API: {err}") from err
+        else:
+            return data

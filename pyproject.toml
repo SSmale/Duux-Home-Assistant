@@ -1,0 +1,10 @@
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "G", "I", "PIE", "RUF", "SIM", "TRY", "UP", "W"]
+ignore = [
+    "E501",    # line too long — let ruff-format own line length
+    "TRY003",  # long exception messages — too noisy, ignored by HA core
+    "TRY400",  # use logging.exception — ignored by HA core
+]
