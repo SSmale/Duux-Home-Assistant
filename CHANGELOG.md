@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.17.0-pre-115.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.16.0...v2.17.0-pre-115.1) (2026-06-24)
+## [2.16.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.16.0...v2.16.1) (2026-06-24)
 
-### Added
+### Fixed
 
-* add support for Duux North AC ([#115](https://github.com/SSmale/Duux-Home-Assistant/issues/115)) ([8230340](https://github.com/SSmale/Duux-Home-Assistant/commit/823034070106efa3aed11b6d1721e8339963308d))
+* prevent UnboundLocalError in async_set_preset_mode ([#110](https://github.com/SSmale/Duux-Home-Assistant/issues/110)) ([#114](https://github.com/SSmale/Duux-Home-Assistant/issues/114)) ([67d451f](https://github.com/SSmale/Duux-Home-Assistant/commit/67d451f7013c78374445c53ec4174e4dcbcd24ef))
+
+## [2.16.1-pre-110.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.16.0...v2.16.1-pre-110.1) (2026-06-24)
+
+### Fixed
+
+* prevent UnboundLocalError in async_set_preset_mode ([#110](https://github.com/SSmale/Duux-Home-Assistant/issues/110)) ([acf6dd8](https://github.com/SSmale/Duux-Home-Assistant/commit/acf6dd874b695cd7c176a02f3d2a75ed81b780d4))
 
 ## [2.16.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.15.0...v2.16.0) (2026-06-22)
 
@@ -366,10 +372,5 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
-
-
-
-
-
 
 
