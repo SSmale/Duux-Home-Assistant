@@ -271,6 +271,75 @@ async def test_neo_speed_selector_select_high(
     assert entity.current_option == entity.SPEED_HIGH
 
 
+async def test_fan_speed_selector_low_sends_speed_1(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """FAN_LOW must map to speed string '1', not a mutated value."""
+    device = device_by_stid(62)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxFanSpeedSelector(coordinator, mock_api, device), make_hass())
+
+    await entity.async_select_option(entity.FAN_LOW)
+
+    mock_api.set_fan.assert_called_once_with(device["deviceId"], "1")
+
+
+async def test_fan_speed_selector_unknown_option_defaults_to_low(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """Unknown option must fall back to '1', not None."""
+    device = device_by_stid(62)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxFanSpeedSelector(coordinator, mock_api, device), make_hass())
+
+    await entity.async_select_option("not-a-real-option")
+
+    mock_api.set_fan.assert_called_once_with(device["deviceId"], "1")
+
+
+async def test_neo_speed_selector_low_sends_speed_0(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """SPEED_LOW must map to '0', not a mutated value."""
+    device = device_by_stid(47)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxNeoSpeedSelector(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_select_option(entity.SPEED_LOW)
+
+    mock_api.set_speed.assert_called_once_with(device["deviceId"], "0", 0, 2)
+
+
+async def test_neo_speed_selector_unknown_option_defaults_to_low_speed(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """Unknown option must fall back to '0', not None."""
+    device = device_by_stid(47)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxNeoSpeedSelector(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_select_option("not-a-real-option")
+
+    mock_api.set_speed.assert_called_once_with(device["deviceId"], "0", 0, 2)
+
+
+async def test_timer_selector_zero_is_valid_and_not_clamped(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """Timer 0 (off) must not be clamped to 1."""
+    device = device_by_stid(62)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(DuuxTimerSelector(coordinator, mock_api, device), make_hass())
+
+    await entity.async_select_option("0")
+
+    mock_api.set_timer.assert_called_once_with(device["deviceId"], "0")
+
+
 # ---------------------------------------------------------------------------
 # Platform dispatch
 # ---------------------------------------------------------------------------

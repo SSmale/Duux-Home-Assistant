@@ -400,6 +400,45 @@ Currently the project has translations for:
 
 If you spot an issue with the translations, or want to create one for another language please open an issue!
 
+## Development
+
+### Running tests
+
+```bash
+make test          # run the full suite
+make test-cov      # run with coverage report
+```
+
+Tests live in `tests/` and use small explicit fakes for `hass` and the data coordinator — no real Home Assistant instance is needed. Install dependencies with:
+
+```bash
+pip install -r tests/requirements.txt
+```
+
+### Mutation testing
+
+[mutmut](https://github.com/boxed/mutmut) is used to verify that the tests actually catch regressions rather than just executing code. Configuration is in `pyproject.toml`.
+
+```bash
+make mutmut              # mutate all source files (slow — ~minutes)
+make mutmut-file FILE=custom_components/duux/const.py   # mutate one file
+make mutmut-results      # list surviving mutants (gaps in test coverage)
+make mutmut-show         # browse surviving mutants interactively
+```
+
+To inspect or reproduce a specific surviving mutant by ID:
+
+```bash
+mutmut show 42           # show the diff
+mutmut apply 42          # apply it to disk
+python -m pytest tests/  # confirm your tests don't catch it
+mutmut apply 42 --revert # undo
+```
+
+A surviving mutant means the mutation wasn't caught — add a test that fails on that change, then re-run `make mutmut` to confirm it is now killed.
+
+Results are cached in `.mutmut-cache/`; add that directory to `.gitignore` if it isn't already.
+
 ## Contributing
 
 Contributions are welcome! Please:
