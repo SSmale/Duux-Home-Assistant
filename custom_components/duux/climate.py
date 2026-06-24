@@ -371,19 +371,21 @@ class DuuxClimateAutoDiscovery(DuuxClimate):
 
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
-        mode_value = None
-        for preset in self._presets:
-            if preset["name"] == preset_mode:
-                mode_command = preset["command"]
-                mode_value = preset["value"]
-                break
+        preset = next(
+            (p for p in self._presets if p["name"] == preset_mode), None
+        )
+        if preset is None:
+            _LOGGER.warning(
+                "%s: unknown preset mode '%s'", self._attr_name, preset_mode
+            )
+            return
 
         await self.hass.async_add_executor_job(
-            self._api.send_command, self._device_mac, f"tune set {mode_command}"
+            self._api.send_command, self._device_mac, f"tune set {preset['command']}"
         )
-        new_data = dict(self.coordinator.data)
-        new_data["mode"] = mode_value
-        self.coordinator.async_set_updated_data(new_data)
+        newData = dict(self.coordinator.data)
+        newData["mode"] = preset["value"]
+        self.coordinator.async_set_updated_data(newData)
 
     @staticmethod
     def _deep_find(obj: Any, key: str) -> Iterator[Any]:
