@@ -96,8 +96,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if coordinator.data.get("tilt") is not None and sensor_type_id not in [
             DUUX_STID_NORTH
         ]:
-            # North's "tilt" is an on/off toggle (Louver Swing), not
-            # an angle level like the Ultimate Fan's
             entities.append(DuuxVerticalTiltSelect(coordinator, api, device))
     async_add_entities(entities)
 

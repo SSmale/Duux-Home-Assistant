@@ -34,9 +34,6 @@ DUUX_DTID_HEATER = [51, 52, 21, 23]
 DUUX_DTID_HUMIDIFIER = [56, 25]
 DUUX_DTID_FAN = [26, 58, 27, 59]
 DUUX_DTID_AIR_PURIFIER = [55, 32]
-
-# North AC reports googleDeviceType: null inconsistently, so it's matched
-# directly on device_type_id rather than via the last_word fallback.
 DUUX_DTID_AIR_CONDITIONER = [28]
 
 DUUX_DTID_OTHER_HEATER = []
