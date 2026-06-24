@@ -1,31 +1,32 @@
 """Support for Duux climate devices."""
 
 import logging
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate.const import (
-    ClimateEntityFeature,
-    HVACMode,
     PRESET_BOOST,
     PRESET_COMFORT,
     PRESET_ECO,
+    ClimateEntityFeature,
+    HVACMode,
 )
-from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
-    DUUX_CLIMATE_TYPES,
-    DUUX_DTID_THERMOSTAT,
-    DUUX_DTID_HEATER,
     DOMAIN,
-    DUUX_STID_THREESIXTY_2023,
-    DUUX_STID_EDGEHEATER_V2,
+    DUUX_CLIMATE_TYPES,
+    DUUX_DTID_HEATER,
+    DUUX_DTID_THERMOSTAT,
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
+    DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_THREESIXTY_2023,
     DUUX_STID_THREESIXTY_TWO,
 )
 
@@ -67,13 +68,18 @@ async def async_setup_entry(
                     "Your device has not been officially catagorised as supporting the climate platform."
                 )
                 _LOGGER.warning(
-                    f"It is classified as type {last_word}, so attempting to set up as a climate device.",
+                    "It is classified as type %s, so attempting to set up as a climate device.",
+                    last_word,
                 )
                 _LOGGER.warning(
                     "Please report this to the integration developer so they can update the supported device list.",
                 )
                 _LOGGER.warning(
-                    f"Required details: Device Name: {model}, Device Type ID: {device_type_id}, Sensor Type ID: {sensor_type_id}, Google Device Type: {google_type}",
+                    "Required details: Device Name: %s, Device Type ID: %s, Sensor Type ID: %s, Google Device Type: %s",
+                    model,
+                    device_type_id,
+                    sensor_type_id,
+                    google_type,
                 )
 
             else:
@@ -95,7 +101,8 @@ async def async_setup_entry(
             # Fallback to generic entity for unknown types
             entities.append(DuuxClimateAutoDiscovery(coordinator, api, device))
             _LOGGER.warning(
-                f"Unknown heater type {sensor_type_id}, using generic entity"
+                "Unknown heater type %s, using generic entity",
+                sensor_type_id,
             )
 
     async_add_entities(entities)
@@ -159,7 +166,7 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     def preset_mode(self):
         """Return current preset mode."""
         # Base implementation - override in subclasses
-        return str()
+        return ""
 
     @property
     def preset_modes(self):
@@ -198,7 +205,6 @@ class DuuxClimate(CoordinatorEntity, ClimateEntity):
     async def async_set_preset_mode(self, preset_mode):
         """Set preset mode."""
         # Base implementation - override in subclasses
-        pass
 
     @property
     def should_poll(self):

@@ -1,10 +1,12 @@
 """Support for Duux sensors."""
 
 from __future__ import annotations
+
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
+
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
@@ -14,7 +16,7 @@ from homeassistant.core import callback
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, ATTRIBUTION, DUUX_ERRID
+from .const import ATTRIBUTION, DOMAIN, DUUX_ERRID
 
 _LOGGER = logging.getLogger(__name__)
 

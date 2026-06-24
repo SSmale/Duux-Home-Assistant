@@ -29,16 +29,15 @@ class DuuxAPI:
             response.raise_for_status()
             data = response.json()
             self.token = data.get("token")
+        except Exception as e:
+            _LOGGER.error("Login failed: %s", e)
+            return False
+        else:
             if self.token:
                 self.session.headers.update({"Authorization": f"{self.token}"})
                 _LOGGER.info("Successfully logged in to Duux API")
                 return True
-
             _LOGGER.error("No token received from Duux API")
-            return False
-
-        except Exception as e:
-            _LOGGER.error(f"Login failed: {e}")
             return False
 
     def get_devices(self):
@@ -47,12 +46,13 @@ class DuuxAPI:
             response = self.session.get(f"{API_BASE_URL}{API_SENSORS}")
             response.raise_for_status()
             devices = response.json().get("data")
-            _LOGGER.debug(f"Found {len(devices)} Duux device(s)")
-            return devices
         except Exception as e:
             # todo: refresh the login session and try again.
-            _LOGGER.error(f"Failed to get devices: {e}")
+            _LOGGER.error("Failed to get devices: %s", e)
             return []
+        else:
+            _LOGGER.debug("Found %s Duux device(s)", len(devices))
+            return devices
 
     def get_device_status(self, device_id):
         """Get status of a specific device."""
@@ -86,11 +86,12 @@ class DuuxAPI:
             url = f"{API_BASE_URL}{API_COMMANDS}".replace("{deviceMac}", device_mac)
             response = self.session.post(url, json={"command": command})
             response.raise_for_status()
-            _LOGGER.info(f"Command sent: {command}")
-            return True
         except Exception as e:
-            _LOGGER.error(f"Failed to send command: {e}")
+            _LOGGER.error("Failed to send command: %s", e)
             return False
+        else:
+            _LOGGER.info("Command sent: %s", command)
+            return True
 
     def set_power(self, device_mac, power_on):
         """Turn device on or off."""

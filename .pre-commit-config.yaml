@@ -1,0 +1,16 @@
+repos:
+  - repo: local
+    hooks:
+      - id: sort-manifest
+        name: Sort manifest.json keys
+        entry: python scripts/sort_manifest.py
+        language: python
+        files: ^custom_components/duux/manifest\.json$
+        pass_filenames: false
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.13
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format

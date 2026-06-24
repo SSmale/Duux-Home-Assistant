@@ -1,11 +1,11 @@
 """Support for Duux sensors."""
 
 from __future__ import annotations
-import logging
 
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, ClassVar
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -14,8 +14,8 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.const import (
-    EntityCategory,
     PERCENTAGE,
+    EntityCategory,
     UnitOfTemperature,
     UnitOfTime,
 )
@@ -24,12 +24,12 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
+    ATTRIBUTION,
     DOMAIN,
+    DUUX_ERRID,
+    DUUX_STID_BEAM_MINI,
     DUUX_STID_BORA_2024,
     DUUX_STID_BRIGHT_2,
-    ATTRIBUTION,
-    DUUX_STID_BEAM_MINI,
-    DUUX_ERRID,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -169,7 +169,7 @@ class DuuxTVOCSensor(DuuxSensor):
             ),
         )
 
-    _TVOC_MAP = {
+    _TVOC_MAP: ClassVar[dict[int, str]] = {
         0: "healthy",
         1: "acceptable",
         2: "polluted",
@@ -216,7 +216,7 @@ class DuuxAirQualitySensor(DuuxSensor):
             ),
         )
 
-    _AQ_MAP = {
+    _AQ_MAP: ClassVar[dict[int, str]] = {
         0: "excellent",
         1: "very_good",
         2: "good",

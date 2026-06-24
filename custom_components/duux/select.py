@@ -1,19 +1,19 @@
 """Support for Duux selectors."""
 
 import logging
+from typing import ClassVar
 
 from homeassistant.components.select import SelectEntity
-from homeassistant.helpers.update_coordinator import CoordinatorEntity
-
 from homeassistant.const import (
     EntityCategory,
     UnitOfTime,
 )
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     DOMAIN,
-    DUUX_STID_BORA_2024,
     DUUX_STID_BEAM_MINI,
+    DUUX_STID_BORA_2024,
     DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_NEO,
@@ -107,7 +107,7 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
     fan.py.
     """
 
-    _options_map: dict[str, int] = {}
+    _options_map: ClassVar[dict[str, int]] = {}
     _data_key: str = ""
 
     def _set_value(self, device_mac: str, value: int):
@@ -334,7 +334,7 @@ class DuuxTimerSelector(DuuxSelector):
         self._attr_translation_key = "timer"
         self._attr_icon = "mdi:timer"
         self._attr_unit_of_measurement = UnitOfTime.HOURS
-        self._attr_options = list(map(str, range(0, 24 + 1)))
+        self._attr_options = list(map(str, range(24 + 1)))
 
     @property
     def current_option(self):

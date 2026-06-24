@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from homeassistant.components.fan import (
     FanEntity,
@@ -23,15 +24,14 @@ from homeassistant.util.percentage import (
 from .const import (
     DOMAIN,
     DUUX_DTID_AIR_PURIFIER,
-    DUUX_FAN_TYPES,
     DUUX_DTID_FAN,
+    DUUX_FAN_TYPES,
+    DUUX_STID_BRIGHT_2,
     DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_2,
-    DUUX_STID_BRIGHT_2,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_WHISPER_FLEX_ULTIMATE,
 )
-
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -172,14 +172,7 @@ class DuuxFan(CoordinatorEntity, FanEntity):
         """Return the current preset mode."""
         mode = (self.coordinator.data or {}).get("mode")
 
-        if mode == 0:
-            return PRESET_MODE_NORMAL
-        elif mode == 1:
-            return PRESET_MODE_NATURAL
-        elif mode == 2:
-            return PRESET_MODE_NIGHT
-
-        return None
+        return {0: PRESET_MODE_NORMAL, 1: PRESET_MODE_NATURAL, 2: PRESET_MODE_NIGHT}.get(mode)
 
     async def async_turn_on(
         self,
@@ -443,7 +436,6 @@ class DuuxFanAutoDiscovery(DuuxFan):
 
             commands: list = trait.get("commands") or []
             cmd_template: str = commands[0] if commands else ""
-            config: dict = trait.get("config") or {}
             settings: dict = trait.get("settings") or {}
 
             for mode_group in settings.get("availableModes") or []:
