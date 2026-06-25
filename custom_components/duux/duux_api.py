@@ -203,3 +203,16 @@ class DuuxAPI:
         """Set vertical tilt (0=off, 1=45°, 2=100°)."""
         value = max(0, min(2, int(value)))
         return self.send_command(device_mac, f"tune set tilt {value}")
+
+    def set_north_fan_speed(self, device_mac, speed):
+        """Set the North AC's fan speed (1=Low, 2=Medium, 3=High). Same
+        "tune set fan" command as the heater's set_fan(), but with a
+        3-level range instead of binary. Can't reuse that method directly.
+        """
+        speed = max(1, min(3, int(speed)))
+        return self.send_command(device_mac, f"tune set fan {speed}")
+
+    def set_north_mode(self, device_mac, mode):
+        """Set the North AC's mode (1=Cool, 3=Dry, 4=Fan-only)."""
+        mode = max(1, min(4, int(mode)))
+        return self.send_command(device_mac, f"tune set mode {mode}")

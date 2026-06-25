@@ -85,6 +85,20 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 ---
 
+### ❄️ Air Conditioners
+
+#### Duux North
+
+- ⚡ **Power**: On/Off control
+- 🌡️ **Temperature Control**: Set target temperature (16–31°C)
+- ❄️ **Three Modes**: Cool, Dry and Fan-only
+- 💨 **Three Fan Speeds**: I, II and III
+- 🔄 **Louver Swing**: On/off control
+- 🌙 **Night Mode**: Dim the display
+- ⏲️ **Timer**: Set a shutdown timer (0–24 hours)
+
+---
+
 ### 🌿 Air Purifiers
 
 #### Duux Bright 2
@@ -192,6 +206,22 @@ climate.office_heater
 - `temperature`: Target temperature
 - `hvac_mode`: `heat` or `off`
 - `preset_mode`: `eco`, `comfort`, or `boost` (varies by model)
+
+### Climate Entity (Air Conditioner)
+
+The Duux North also gets a climate entity:
+
+```yaml
+climate.duux_north
+```
+
+**Attributes:**
+
+- `current_temperature`: Current room temperature
+- `temperature`: Target temperature
+- `hvac_mode`: `cool`, `dry`, `fan_only`, or `off`
+- `fan_mode`: `I`, `II`, or `III`
+- `swing_mode`: `on` or `off` (louver swing)
 
 ### Fan Entity
 

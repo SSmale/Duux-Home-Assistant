@@ -18,6 +18,10 @@ Control your Duux devices directly from Home Assistant!
 - **Whisper Flex** — 25-speed fan, Normal/Natural/Night modes
 - **Whisper Flex 2** — 29-speed fan, Normal/Natural modes
 
+### ❄️ Air Conditioners
+
+- **North** — Temperature control, Cool/Dry/Fan-only modes, 3-speed fan, Louver swing, Night mode, Timer
+
 ### 🌿 Air Purifiers
 
 - **Bright 2** — 4-speed fan + Auto mode, PM2.5/TVOC/AQ sensors, HEPA filter life, Timer, Night mode, Ionizer
