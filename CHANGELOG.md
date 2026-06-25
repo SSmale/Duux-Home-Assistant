@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.17.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.16.1...v2.17.0) (2026-06-25)
+
+### Added
+
+* adds support for Duux North AC ([#116](https://github.com/SSmale/Duux-Home-Assistant/issues/116)) ([94789f0](https://github.com/SSmale/Duux-Home-Assistant/commit/94789f02328a9c04f425c1f9c34fcb979a167023)), closes [#115](https://github.com/SSmale/Duux-Home-Assistant/issues/115)
+
 ## [2.17.0-pre-115.2](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.17.0-pre-115.1...v2.17.0-pre-115.2) (2026-06-24)
 
 ### Fixed
@@ -378,6 +384,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
