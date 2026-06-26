@@ -131,5 +131,12 @@ def fake_hass():
 
 @pytest.fixture
 def mock_api():
-    """A MagicMock standing in for DuuxAPI, safe to assert call args on."""
-    return MagicMock()
+    """A MagicMock standing in for DuuxAPI, spec'd to catch undefined methods.
+
+    Uses spec=DuuxAPI to ensure only real API methods can be mocked. This
+    catches bugs where code calls non-existent methods at test time rather
+    than at runtime.
+    """
+    from custom_components.duux.duux_api import DuuxAPI
+
+    return MagicMock(spec=DuuxAPI)
