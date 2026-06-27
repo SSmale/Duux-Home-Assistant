@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.17.1-pre-121.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.17.0...v2.17.1-pre-121.1) (2026-06-26)
+
+### Fixed
+
+* use set_horosc_angle() instead of non-existent set_horosc() ([168f5a8](https://github.com/SSmale/Duux-Home-Assistant/commit/168f5a85ebcff55fa10528ac14fad737cfbdad2f))
+
 ## [2.17.0](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.16.1...v2.17.0) (2026-06-25)
 
 ### Added
@@ -384,6 +390,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 

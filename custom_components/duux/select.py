@@ -191,7 +191,7 @@ class DuuxHorizontalOscillationSelect(DuuxSwingSelect):
     _data_key = "horosc"
 
     def _set_value(self, device_mac: str, value: int):
-        return self._api.set_horosc(device_mac, value)
+        return self._api.set_horosc_angle(device_mac, value)
 
     def __init__(self, coordinator, api, device) -> None:
         """Initialize the horizontal swing select."""

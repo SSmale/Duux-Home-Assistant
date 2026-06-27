@@ -34,7 +34,7 @@ def test_horizontal_oscillation_current_option(make_coordinator, mock_api):
     assert entity.options == ["Off", "30°", "60°", "90°"]
 
 
-async def test_horizontal_oscillation_select_option_calls_set_horosc(
+async def test_horizontal_oscillation_select_option_calls_set_horosc_angle(
     make_coordinator, mock_api, make_hass
 ):
     device = {"id": 1, "deviceId": "AA:BB", "displayName": "Fan"}
@@ -45,7 +45,7 @@ async def test_horizontal_oscillation_select_option_calls_set_horosc(
 
     await entity.async_select_option("90°")
 
-    mock_api.set_horosc.assert_called_once_with("AA:BB", 3)
+    mock_api.set_horosc_angle.assert_called_once_with("AA:BB", 3)
     assert entity.current_option == "90°"
 
 
@@ -60,7 +60,7 @@ async def test_swing_family_unknown_option_is_ignored(
 
     await entity.async_select_option("not-a-real-option")
 
-    mock_api.set_horosc.assert_not_called()
+    mock_api.set_horosc_angle.assert_not_called()
 
 
 def test_swing_family_current_option_with_unrecognised_raw_value_returns_none(
