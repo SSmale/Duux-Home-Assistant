@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.17.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.17.0...v2.17.1) (2026-06-27)
+
 ## [2.17.1-pre-121.1](https://github.com/SSmale/Duux-Home-Assistant/compare/v2.17.0...v2.17.1-pre-121.1) (2026-06-26)
 
 ### Fixed
@@ -390,6 +392,7 @@ All notable changes to this project will be documented in this file.
 * [ ] Add sensor entities for power consumption
 * [ ] Local API support (if available)
 * [ ] Energy dashboard integration
+
 
 
 
