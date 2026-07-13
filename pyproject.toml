@@ -1,0 +1,4 @@
+[tool.mutmut]
+source_paths = ["custom_components/duux/"]
+test_command = "python -m pytest tests/ -x -q --tb=no"
+also_copy = ["fixtures/"]

@@ -7,9 +7,10 @@
 # from a plain `homeassistant` install and exercise them with small, explicit
 # fakes for `hass`/`coordinator` (see tests/conftest.py). This keeps the
 # suite fast and far less prone to breaking on unrelated HA core changes.
-homeassistant==2025.1.4
+homeassistant==2026.2.3
 pytest>=8.0,<10
 pytest-asyncio>=0.24,<2
 pytest-cov>=5.0
 requests>=2.31.0
+mutmut>=3.6,<4
 

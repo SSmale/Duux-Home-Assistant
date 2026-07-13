@@ -69,6 +69,53 @@ async def test_bora_turn_off(device_by_stid, make_coordinator, mock_api, make_ha
     await entity.async_turn_off()
 
     mock_api.set_power.assert_called_once_with(device["deviceId"], False)
+    assert entity.is_on is False
+    assert coordinator.data["power"] == 0
+
+
+async def test_bora_set_humidity_updates_coordinator_state(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(62)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxBoraDehumidifier(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_set_humidity(65)
+
+    mock_api.set_humidity.assert_called_once_with(device["deviceId"], 65)
+    assert coordinator.data["sp"] == 65
+
+
+async def test_bora_set_mode_auto_sends_0(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """PRESET_AUTO must map to mode string '0', not a mutated value."""
+    device = device_by_stid(62)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxBoraDehumidifier(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_set_mode(entity.PRESET_AUTO)
+
+    mock_api.set_dry_mode.assert_called_once_with(device["deviceId"], "0")
+
+
+async def test_bora_set_mode_unknown_defaults_to_0(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """Unknown mode must fall back to '0', not raise or send None."""
+    device = device_by_stid(62)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxBoraDehumidifier(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_set_mode("not-a-real-mode")
+
+    mock_api.set_dry_mode.assert_called_once_with(device["deviceId"], "0")
 
 
 def test_bora_action_off_when_power_off(device_by_stid, make_coordinator, mock_api):
@@ -109,6 +156,21 @@ async def test_beam_mini_set_mode_auto(
     await entity.async_set_mode(entity.PRESET_AUTO)
 
     mock_api.set_dry_mode.assert_called_once_with(device["deviceId"], "0")
+
+
+async def test_beam_mini_set_mode_manual_sends_1(
+    device_by_stid, make_coordinator, mock_api, make_hass
+):
+    """PRESET_MANUAL must map to mode string '1', not a mutated value."""
+    device = device_by_stid(35)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxBeamMiniDehumidifier(coordinator, mock_api, device), make_hass()
+    )
+
+    await entity.async_set_mode(entity.PRESET_MANUAL)
+
+    mock_api.set_dry_mode.assert_called_once_with(device["deviceId"], "1")
 
 
 # ---------------------------------------------------------------------------
