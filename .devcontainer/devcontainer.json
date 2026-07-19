@@ -37,9 +37,9 @@
 		}
 	},
 	"remoteUser": "vscode",
-	"features": {
-		"ghcr.io/devcontainers-extra/features/apt-packages:1": {
-			"packages": "ffmpeg,libturbojpeg0,libpcap-dev"
-		}
-	}
+	// "features": {
+	// 	"ghcr.io/devcontainers-extra/features/apt-packages:1": {
+	// 		"packages": "ffmpeg,libturbojpeg0,libpcap-dev"
+	// 	}
+	// }
 }
