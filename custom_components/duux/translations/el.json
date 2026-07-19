@@ -91,6 +91,9 @@
             "cleaning_mode": {
                 "name": "Λειτουργία καθαρισμού"
             },
+            "horizontal_swing": {
+                "name": "Οριζόντια κίνηση"
+            },
             "ionizer": {
                 "name": "Ιονιστής"
             },
@@ -102,6 +105,9 @@
             },
             "sleep_mode": {
                 "name": "Λειτουργία ύπνου"
+            },
+            "vertical_swing": {
+                "name": "Κάθετη κίνηση"
             }
         }
     },

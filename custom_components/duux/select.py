@@ -18,6 +18,7 @@ from .const import (
     DUUX_STID_EDGEHEATER_V2,
     DUUX_STID_NEO,
     DUUX_STID_NORTH,
+    DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
 )
 
@@ -90,11 +91,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if coordinator.data.get("verosc") is not None:
             entities.append(DuuxVerticalOscillationSelect(coordinator, api, device))
 
-        if coordinator.data.get("swing") is not None:
+        if coordinator.data.get("swing") is not None and sensor_type_id not in [
+            DUUX_STID_WHISPER_FLEX
+        ]:
             entities.append(DuuxHorizontalSwingSelect(coordinator, api, device))
 
         if coordinator.data.get("tilt") is not None and sensor_type_id not in [
-            DUUX_STID_NORTH
+            DUUX_STID_NORTH,
+            DUUX_STID_WHISPER_FLEX,
         ]:
             entities.append(DuuxVerticalTiltSelect(coordinator, api, device))
     async_add_entities(entities)
@@ -134,7 +138,7 @@ class DuuxSwingSelect(CoordinatorEntity, SelectEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.last_update_success and (
-                self.coordinator.data or {}
+            self.coordinator.data or {}
         ).get("online", True)
 
     @property

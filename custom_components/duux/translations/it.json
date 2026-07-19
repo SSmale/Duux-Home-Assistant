@@ -91,6 +91,9 @@
             "cleaning_mode": {
                 "name": "Modalità pulizia"
             },
+            "horizontal_swing": {
+                "name": "Oscillazione orizzontale"
+            },
             "ionizer": {
                 "name": "Ionizzatore"
             },
@@ -102,6 +105,9 @@
             },
             "sleep_mode": {
                 "name": "Modalità sonno"
+            },
+            "vertical_swing": {
+                "name": "Oscillazione verticale"
             }
         }
     },
