@@ -91,6 +91,9 @@
             "cleaning_mode": {
                 "name": "Reinigingsstand"
             },
+            "horizontal_swing": {
+                "name": "Horizontale zwenking"
+            },
             "ionizer": {
                 "name": "Ionisator"
             },
@@ -102,6 +105,9 @@
             },
             "sleep_mode": {
                 "name": "Slaapstand"
+            },
+            "vertical_swing": {
+                "name": "Verticale zwenking"
             }
         }
     },

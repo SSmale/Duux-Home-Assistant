@@ -12,6 +12,7 @@ from custom_components.duux.const import (
     DUUX_STID_EDGEHEATER_2000,
     DUUX_STID_EDGEHEATER_2023_V1,
     DUUX_STID_EDGEHEATER_V2,
+    DUUX_STID_WHISPER_FLEX,
     DUUX_STID_WHISPER_FLEX_2,
     DUUX_STID_WHISPER_FLEX_ELIVATE,
     DUUX_STID_NEO,
@@ -47,6 +48,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         ]:
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxNightModeSwitch(coordinator, api, device))
+
+        if sensor_type_id in [
+            DUUX_STID_WHISPER_FLEX,
+        ]:
+            entities.append(DuuxFlexSwingSwitch(coordinator, api, device))
+            entities.append(DuuxFlexTiltSwitch(coordinator, api, device))
         if sensor_type_id in [
             DUUX_STID_WHISPER_FLEX_ELIVATE,
         ]:
@@ -91,7 +98,7 @@ class DuuxSwitch(CoordinatorEntity, SwitchEntity):
     def available(self) -> bool:
         """Return True if entity is available."""
         return self.coordinator.last_update_success and (
-                self.coordinator.data or {}
+            self.coordinator.data or {}
         ).get("online", True)
 
     @property
@@ -103,6 +110,66 @@ class DuuxSwitch(CoordinatorEntity, SwitchEntity):
             "manufacturer": self._device.get("manufacturer", "Duux"),
             "model": self._device.get("sensorType", {}).get("name", "Unknown"),
         }
+
+
+class DuuxFlexSwingSwitch(DuuxSwitch):
+    """Representation of a Duux swing switch."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the swing switch."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_horizontal_swing"
+        self._attr_translation_key = "horizontal_swing"
+        self._attr_icon = "mdi:arrow-left-right"
+
+    @property
+    def is_on(self):
+        """Return true if swing is on."""
+        return (self.coordinator.data or {}).get("swing") == 1
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on swing swing."""
+        await self.hass.async_add_executor_job(self._api.set_swing, self._device_mac, 1)
+        newData = self.coordinator.data
+        newData["swing"] = 1
+        self.coordinator.async_set_updated_data(newData)
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off swing swing."""
+        await self.hass.async_add_executor_job(self._api.set_swing, self._device_mac, 0)
+        newData = self.coordinator.data
+        newData["swing"] = 0
+        self.coordinator.async_set_updated_data(newData)
+
+
+class DuuxFlexTiltSwitch(DuuxSwitch):
+    """Representation of a Duux tilt switch."""
+
+    def __init__(self, coordinator, api, device):
+        """Initialize the tilt switch."""
+        super().__init__(coordinator, api, device)
+        self._attr_unique_id = f"duux_{self._device_id}_vertical_swing"
+        self._attr_translation_key = "vertical_swing"
+        self._attr_icon = "mdi:arrow-up-down"
+
+    @property
+    def is_on(self):
+        """Return true if tilt is on."""
+        return (self.coordinator.data or {}).get("tilt") == 1
+
+    async def async_turn_on(self, **kwargs):
+        """Turn on tilt tilt."""
+        await self.hass.async_add_executor_job(self._api.set_tilt, self._device_mac, 1)
+        newData = self.coordinator.data
+        newData["tilt"] = 1
+        self.coordinator.async_set_updated_data(newData)
+
+    async def async_turn_off(self, **kwargs):
+        """Turn off tilt tilt."""
+        await self.hass.async_add_executor_job(self._api.set_tilt, self._device_mac, 0)
+        newData = self.coordinator.data
+        newData["tilt"] = 0
+        self.coordinator.async_set_updated_data(newData)
 
 
 class DuuxChildLockSwitch(DuuxSwitch):
