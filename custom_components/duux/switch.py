@@ -7,6 +7,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from custom_components.duux.const import (
     DOMAIN,
+    DUUX_STID_BORA,
     DUUX_STID_BORA_2024,
     DUUX_STID_BRIGHT_2,
     DUUX_STID_EDGEHEATER_2000,
@@ -54,7 +55,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             entities.append(DuuxIonizerSwitch(coordinator, api, device))
 
         # Bora has sleep (similar to night), cleaning, laundry & child lock..
-        elif sensor_type_id == DUUX_STID_BORA_2024:
+        elif sensor_type_id in (DUUX_STID_BORA_2024, DUUX_STID_BORA):
             entities.append(DuuxChildLockSwitch(coordinator, api, device))
             entities.append(DuuxSleepModeSwitch(coordinator, api, device))
             entities.append(DuuxCleaningModeSwitch(coordinator, api, device))

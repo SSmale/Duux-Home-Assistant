@@ -12,6 +12,7 @@ from homeassistant.const import (
 
 from .const import (
     DOMAIN,
+    DUUX_STID_BORA,
     DUUX_STID_BORA_2024,
     DUUX_STID_BEAM_MINI,
     DUUX_STID_BRIGHT_2,
@@ -67,7 +68,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
             continue
 
         # Bora has two fan speeds..
-        if sensor_type_id == DUUX_STID_BORA_2024:
+        if sensor_type_id in (DUUX_STID_BORA_2024, DUUX_STID_BORA):
             entities.append(DuuxFanSpeedSelector(coordinator, api, device))
             entities.append(DuuxTimerSelector(coordinator, api, device))
         # Route the Neo to its selectors

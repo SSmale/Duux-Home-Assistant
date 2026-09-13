@@ -19,6 +19,7 @@ from .const import (
     DOMAIN,
     DUUX_DTID_HUMIDIFIER,
     DUUX_STID_BEAM_MINI,
+    DUUX_STID_BORA,
     DUUX_STID_BORA_2024,
     DUUX_STID_NEO,
 )
@@ -52,7 +53,7 @@ async def async_setup_entry(
             continue
 
         # Create the appropriate de/humidifier entity based on sensor_type_id
-        if sensor_type_id == DUUX_STID_BORA_2024:
+        if sensor_type_id in (DUUX_STID_BORA_2024, DUUX_STID_BORA):
             entities.append(DuuxBoraDehumidifier(coordinator, api, device))
         # Add the Neo to the setup loop
         elif sensor_type_id == DUUX_STID_NEO:

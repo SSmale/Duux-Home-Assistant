@@ -25,6 +25,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     DOMAIN,
+    DUUX_STID_BORA,
     DUUX_STID_BORA_2024,
     DUUX_STID_BRIGHT_2,
     ATTRIBUTION,
@@ -59,7 +60,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         if coordinator is None:
             continue
 
-        if sensor_type_id == DUUX_STID_BORA_2024:
+        if sensor_type_id in (DUUX_STID_BORA_2024, DUUX_STID_BORA):
             entities.append(DuuxHumiditySensor(coordinator, api, device))
             entities.append(DuuxBora2024TimeRemainingSensor(coordinator, api, device))
         elif sensor_type_id == DUUX_STID_BRIGHT_2:
