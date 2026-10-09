@@ -6,12 +6,16 @@ from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
+    AUTH_PASSWORDLESS,
+    CONF_AUTH_METHOD,
+    CONF_TOKEN,
     DOMAIN,
     DUUX_DTID_FAN,
     DUUX_DTID_HEATER,
@@ -21,6 +25,12 @@ from .const import (
     DUUX_DTID_OTHER_HEATER,
     DUUX_DTID_THERMOSTAT,
     DUUX_SUPPORTED_TYPES,
+)
+from .auth import (
+    DuuxAuthenticationError,
+    DuuxConnectionError,
+    DuuxRateLimitError,
+    DuuxResponseError,
 )
 from .duux_api import DuuxAPI
 
@@ -39,17 +49,31 @@ PLATFORMS = [
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Duux from a config entry."""
-    api = DuuxAPI(email=entry.data["email"], password=entry.data["password"])
+    passwordless = entry.data.get(CONF_AUTH_METHOD) == AUTH_PASSWORDLESS
+    token = entry.data.get(CONF_TOKEN)
+    if passwordless and (not isinstance(token, str) or not token.strip()):
+        raise ConfigEntryAuthFailed("Missing saved Duux token")
+    api = DuuxAPI(
+        email=entry.data["email"],
+        password=entry.data.get("password"),
+        token=token if passwordless else None,
+    )
 
-    # Authenticate
-    if not await hass.async_add_executor_job(api.login):
-        _LOGGER.error("Failed to authenticate with Duux API")
-        return False
-
-    # Get devices
-    devices = await hass.async_add_executor_job(api.get_devices)
+    try:
+        if not passwordless and not await hass.async_add_executor_job(api.login):
+            _LOGGER.error("Failed to authenticate with Duux API")
+            await hass.async_add_executor_job(api.close)
+            return False
+        devices = await hass.async_add_executor_job(api.get_devices)
+    except DuuxAuthenticationError:
+        await hass.async_add_executor_job(api.close)
+        raise ConfigEntryAuthFailed("Duux token expired or was revoked") from None
+    except (DuuxConnectionError, DuuxRateLimitError, DuuxResponseError) as err:
+        await hass.async_add_executor_job(api.close)
+        raise ConfigEntryNotReady(str(err)) from None
     if not devices:
         _LOGGER.error("No Duux devices found")
+        await hass.async_add_executor_job(api.close)
         return False
 
     # Create coordinator for each device
@@ -130,7 +154,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             config_entry=entry,
         )
 
-        await coordinator.async_config_entry_first_refresh()
+        try:
+            await coordinator.async_config_entry_first_refresh()
+        except (ConfigEntryAuthFailed, ConfigEntryNotReady):
+            await hass.async_add_executor_job(api.close)
+            raise
         coordinators[device["deviceId"]] = coordinator
 
     hass.data.setdefault(DOMAIN, {})
@@ -149,7 +177,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     if unload_ok:
-        hass.data[DOMAIN].pop(entry.entry_id)
+        data = hass.data[DOMAIN].pop(entry.entry_id)
+        await hass.async_add_executor_job(data["api"].close)
 
     return unload_ok
 
@@ -209,5 +238,7 @@ class DuuxDataUpdateCoordinator(DataUpdateCoordinator):
                 self.api.get_device_status, self.device_id
             )
             return data
+        except DuuxAuthenticationError:
+            raise ConfigEntryAuthFailed("Duux token expired or was revoked") from None
         except Exception as err:
             raise UpdateFailed(f"Error communicating with API: {err}")

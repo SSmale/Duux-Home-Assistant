@@ -109,6 +109,10 @@ class FakeHass:
     def __init__(self):
         self.data = {}
         self.config_entries = SimpleNamespace(
+            async_entries=MagicMock(return_value=[]),
+            flow=SimpleNamespace(
+                async_progress_by_handler=MagicMock(return_value=[]),
+            ),
             async_forward_entry_setups=AsyncMock(return_value=None),
             async_unload_platforms=AsyncMock(return_value=True),
         )

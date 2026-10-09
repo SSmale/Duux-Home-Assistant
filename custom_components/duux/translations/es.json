@@ -1,13 +1,52 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Esta cuenta Duux ya está configurada."
+            "already_configured": "Esta cuenta Duux ya está configurada.",
+            "login_cancelled": "Se canceló el inicio de sesión.",
+            "reauth_successful": "Se ha vuelto a iniciar sesión en su cuenta Duux.",
+            "reconfigure_successful": "Se han actualizado los ajustes de inicio de sesión de Duux."
         },
         "error": {
-            "invalid_auth": "Credenciales incorrectas. Verifique su correo y contraseña."
+            "invalid_auth": "No se pudo iniciar sesión. Verifique los datos de su cuenta.",
+            "invalid_code": "Código incorrecto o caducado. Inténtelo de nuevo o solicite otro código.",
+            "cannot_connect": "No se pudo conectar con Duux. Inténtelo de nuevo.",
+            "rate_limited": "Demasiadas solicitudes. Espere antes de volver a intentarlo.",
+            "invalid_response": "Duux devolvió una respuesta inesperada. Inténtelo de nuevo.",
+            "wrong_account": "Use el correo electrónico de la cuenta ya configurada."
         },
         "step": {
             "user": {
+                "menu_options": {
+                    "passwordless": "Iniciar sesión con un código por correo",
+                    "password": "Iniciar sesión con contraseña"
+                },
+                "description": "Elija cómo iniciar sesión en su cuenta Duux.",
+                "title": "Inicio de sesión Duux"
+            },
+            "reauth_confirm": {
+                "menu_options": {
+                    "passwordless": "Iniciar sesión con un código por correo",
+                    "password": "Iniciar sesión con contraseña"
+                },
+                "description": "Inicie sesión de nuevo para renovar el acceso a {email}.",
+                "title": "Inicio de sesión Duux"
+            },
+            "passwordless": {
+                "data": {
+                    "email": "Correo electrónico"
+                },
+                "description": "Introduzca el correo de su cuenta Duux para recibir un código.",
+                "title": "Inicio de sesión por correo"
+            },
+            "verify_code": {
+                "data": {
+                    "code": "Código de inicio de sesión",
+                    "resend": "Enviar un nuevo código"
+                },
+                "description": "Introduzca el código enviado a {email}. Para reenviarlo, seleccione Enviar un nuevo código y envíe sin código. Use el correo más reciente, mantenga abierta esta configuración y no inicie sesión desde la aplicación.",
+                "title": "Verificar código"
+            },
+            "password": {
                 "data": {
                     "email": "Correo electrónico",
                     "password": "Contraseña"

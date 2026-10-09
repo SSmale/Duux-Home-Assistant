@@ -106,6 +106,83 @@ async def test_async_setup_entry_no_devices_returns_false(fake_hass):
     assert result is False
 
 
+async def test_passwordless_setup_restores_token_without_login(
+    fake_hass, devices_fixture
+):
+    entry = FakeConfigEntry(data={
+        "email": "user@example.com",
+        "auth_method": "passwordless",
+        "token": "saved-token",
+    })
+    with (
+        patch("custom_components.duux.DuuxAPI.login") as login,
+        patch(
+            "custom_components.duux.DuuxAPI.get_devices",
+            return_value=devices_fixture,
+        ),
+        patch(
+            "custom_components.duux.DuuxDataUpdateCoordinator",
+            FakeCoordinatorForSetup,
+        ),
+    ):
+        assert await async_setup_entry(fake_hass, entry) is True
+    login.assert_not_called()
+    api = fake_hass.data[const.DOMAIN][entry.entry_id]["api"]
+    assert api.token == "saved-token"
+    assert api.session.headers["Authorization"] == "Bearer saved-token"
+
+
+async def test_passwordless_setup_invalid_token_triggers_reauth(fake_hass):
+    from homeassistant.exceptions import ConfigEntryAuthFailed
+    from custom_components.duux.auth import DuuxAuthenticationError
+
+    entry = FakeConfigEntry(data={
+        "email": "user@example.com", "auth_method": "passwordless",
+        "token": "expired-token",
+    })
+    with (
+        patch(
+            "custom_components.duux.DuuxAPI.get_devices",
+            side_effect=DuuxAuthenticationError("Token rejected"),
+        ),
+        patch("custom_components.duux.DuuxAPI.close") as close,
+    ):
+        with pytest.raises(ConfigEntryAuthFailed):
+            await async_setup_entry(fake_hass, entry)
+    close.assert_called_once()
+
+
+@pytest.mark.parametrize("token", [None, "", 123])
+async def test_passwordless_setup_missing_token_triggers_reauth(fake_hass, token):
+    from homeassistant.exceptions import ConfigEntryAuthFailed
+
+    entry = FakeConfigEntry(data={
+        "email": "user@example.com", "auth_method": "passwordless", "token": token,
+    })
+    with pytest.raises(ConfigEntryAuthFailed):
+        await async_setup_entry(fake_hass, entry)
+
+
+async def test_passwordless_setup_connection_failure_is_retried(fake_hass):
+    from homeassistant.exceptions import ConfigEntryNotReady
+    from custom_components.duux.auth import DuuxConnectionError
+
+    entry = FakeConfigEntry(data={
+        "email": "user@example.com", "auth_method": "passwordless",
+        "token": "saved-token",
+    })
+    with (
+        patch(
+            "custom_components.duux.DuuxAPI.get_devices",
+            side_effect=DuuxConnectionError("Unable to contact Duux"),
+        ),
+        patch("custom_components.duux.DuuxAPI.close") as close,
+    ):
+        with pytest.raises(ConfigEntryNotReady):
+            await async_setup_entry(fake_hass, entry)
+    close.assert_called_once()
+
+
 async def test_async_setup_entry_warns_on_unrecognised_device(fake_hass):
     """A device with an unknown device_type_id and an unmatched google type
     should be skipped, but still allow setup to succeed with the recognised
@@ -178,13 +255,15 @@ async def test_async_setup_entry_warns_on_non_mqtt_device(fake_hass, device_by_s
 
 async def test_async_unload_entry_removes_stored_data_on_success(fake_hass):
     entry = FakeConfigEntry(data={}, entry_id="entry_1")
-    fake_hass.data[const.DOMAIN] = {"entry_1": {"api": MagicMock()}}
+    api = MagicMock()
+    fake_hass.data[const.DOMAIN] = {"entry_1": {"api": api}}
     fake_hass.config_entries.async_unload_platforms = AsyncMock(return_value=True)
 
     result = await async_unload_entry(fake_hass, entry)
 
     assert result is True
     assert "entry_1" not in fake_hass.data[const.DOMAIN]
+    api.close.assert_called_once()
 
 
 async def test_async_unload_entry_keeps_data_when_unload_fails(fake_hass):
@@ -230,6 +309,19 @@ async def test_coordinator_update_data_wraps_errors_in_update_failed(fake_hass):
     )
 
     with pytest.raises(UpdateFailed):
+        await coordinator._async_update_data()
+
+
+async def test_coordinator_rejected_token_requests_reauth(fake_hass):
+    from homeassistant.exceptions import ConfigEntryAuthFailed
+    from custom_components.duux.auth import DuuxAuthenticationError
+
+    api = MagicMock()
+    api.get_device_status.side_effect = DuuxAuthenticationError("Token rejected")
+    coordinator = DuuxDataUpdateCoordinator(
+        fake_hass, api, "AA:BB", "Test Device", config_entry=MagicMock()
+    )
+    with pytest.raises(ConfigEntryAuthFailed):
         await coordinator._async_update_data()
 
 

@@ -1,13 +1,52 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Dit Duux-account is al geconfigureerd."
+            "already_configured": "Dit Duux-account is al geconfigureerd.",
+            "login_cancelled": "Inloggen is geannuleerd.",
+            "reauth_successful": "Uw Duux-account is opnieuw aangemeld.",
+            "reconfigure_successful": "Uw Duux-inloginstellingen zijn bijgewerkt."
         },
         "error": {
-            "invalid_auth": "Ongeldige inloggegevens. Controleer uw e-mail en wachtwoord."
+            "invalid_auth": "Inloggen mislukt. Controleer uw accountgegevens.",
+            "invalid_code": "Ongeldige of verlopen code. Probeer opnieuw of vraag een nieuwe code aan.",
+            "cannot_connect": "Kan geen verbinding maken met Duux. Probeer opnieuw.",
+            "rate_limited": "Te veel verzoeken. Wacht voordat u opnieuw probeert.",
+            "invalid_response": "Duux gaf een onverwacht antwoord. Probeer opnieuw.",
+            "wrong_account": "Gebruik het e-mailadres van het al geconfigureerde account."
         },
         "step": {
             "user": {
+                "menu_options": {
+                    "passwordless": "Inloggen met een e-mailcode",
+                    "password": "Inloggen met een wachtwoord"
+                },
+                "description": "Kies hoe u wilt inloggen op uw Duux-account.",
+                "title": "Duux inloggen"
+            },
+            "reauth_confirm": {
+                "menu_options": {
+                    "passwordless": "Inloggen met een e-mailcode",
+                    "password": "Inloggen met een wachtwoord"
+                },
+                "description": "Log opnieuw in om toegang tot {email} te vernieuwen.",
+                "title": "Duux inloggen"
+            },
+            "passwordless": {
+                "data": {
+                    "email": "E-mailadres"
+                },
+                "description": "Voer uw Duux-e-mailadres in om een inlogcode te ontvangen.",
+                "title": "Inloggen via e-mail"
+            },
+            "verify_code": {
+                "data": {
+                    "code": "Inlogcode",
+                    "resend": "Nieuwe code verzenden"
+                },
+                "description": "Voer de code in die naar {email} is gestuurd. Selecteer Nieuwe code verzenden en dien in zonder code om opnieuw te verzenden. Gebruik de nieuwste e-mail, houd deze configuratie open en log niet in via de app.",
+                "title": "E-mailcode bevestigen"
+            },
+            "password": {
                 "data": {
                     "email": "E-mailadres",
                     "password": "Wachtwoord"

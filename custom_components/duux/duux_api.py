@@ -4,6 +4,13 @@ import logging
 
 import requests
 
+from .auth import (
+    REQUEST_TIMEOUT,
+    DuuxAuthenticationError,
+    DuuxConnectionError,
+    DuuxRateLimitError,
+    DuuxResponseError,
+)
 from .const import API_BASE_URL, API_COMMANDS, API_LOGIN, API_SENSORS
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,12 +19,35 @@ _LOGGER = logging.getLogger(__name__)
 class DuuxAPI:
     """Class to communicate with Duux API."""
 
-    def __init__(self, email, password):
+    def __init__(self, email, password=None, *, token=None):
         """Initialize the API."""
         self.email = email
         self.password = password
-        self.token = None
+        self.token = token
+        self._passwordless = token is not None
         self.session = requests.Session()
+        if self._passwordless:
+            if not isinstance(token, str) or not token.strip():
+                self.session.close()
+                raise DuuxAuthenticationError("Missing saved token")
+            self.session.headers.update({"Authorization": f"Bearer {token}"})
+
+    def close(self):
+        """Release the HTTP session."""
+        self.session.close()
+
+    def _token_request(self, method, url, **kwargs):
+        """Do not hide rejected tokens behind empty data or command success."""
+        try:
+            response = method(url, timeout=REQUEST_TIMEOUT, **kwargs)
+            if response.status_code in (401, 403):
+                raise DuuxAuthenticationError("The saved token was rejected")
+            if response.status_code == 429:
+                raise DuuxRateLimitError("Too many requests")
+            response.raise_for_status()
+        except requests.RequestException:
+            raise DuuxConnectionError("Unable to contact Duux") from None
+        return response
 
     def login(self):
         """Login to Duux API."""
@@ -43,6 +73,22 @@ class DuuxAPI:
 
     def get_devices(self):
         """Get all Duux devices."""
+        if self._passwordless:
+            response = self._token_request(
+                self.session.get, f"{API_BASE_URL}{API_SENSORS}"
+            )
+            try:
+                body = response.json()
+            except ValueError:
+                raise DuuxResponseError("Invalid device response") from None
+            if (
+                not isinstance(body, dict)
+                or body.get("errorMessage")
+                or not isinstance(body.get("data"), list)
+                or any(not isinstance(device, dict) for device in body["data"])
+            ):
+                raise DuuxResponseError("Invalid device response")
+            return body["data"]
         try:
             response = self.session.get(f"{API_BASE_URL}{API_SENSORS}")
             response.raise_for_status()
@@ -82,6 +128,10 @@ class DuuxAPI:
 
     def send_command(self, device_mac, command):
         """Send command to device."""
+        if self._passwordless:
+            url = f"{API_BASE_URL}{API_COMMANDS}".replace("{deviceMac}", device_mac)
+            self._token_request(self.session.post, url, json={"command": command})
+            return True
         try:
             url = f"{API_BASE_URL}{API_COMMANDS}".replace("{deviceMac}", device_mac)
             response = self.session.post(url, json={"command": command})
