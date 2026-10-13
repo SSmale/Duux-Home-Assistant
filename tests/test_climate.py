@@ -1,5 +1,7 @@
 """Unit tests for custom_components.duux.climate."""
 
+import pytest
+
 from custom_components.duux import const
 from custom_components.duux.climate import (
     DuuxClimateAutoDiscovery,
@@ -102,6 +104,36 @@ def test_edge_climate_has_no_boost_preset(device_by_stid, make_coordinator, mock
 # ---------------------------------------------------------------------------
 # Threesixty climates -- presets discovered from "availableModes" trait data
 # ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("setpoint", [5, 21, 30])
+async def test_threesixty_2023_temperature_range(
+    setpoint, device_by_stid, make_coordinator, mock_api, make_hass
+):
+    device = device_by_stid(49)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = attach_hass(
+        DuuxThreesixtyClimate(coordinator, mock_api, device), make_hass()
+    )
+
+    assert entity.min_temp == 5
+    assert entity.max_temp == 30
+    await entity.async_set_temperature(temperature=setpoint)
+    mock_api.set_temperature.assert_called_once_with(device["deviceId"], setpoint)
+    assert entity.target_temperature == setpoint
+    assert entity.min_temp == 5
+    assert entity.max_temp == 30
+
+
+def test_threesixty_two_temperature_range_is_unchanged(
+    device_by_stid, make_coordinator, mock_api
+):
+    device = device_by_stid(31)
+    coordinator = make_coordinator(device["latestData"]["fullData"])
+    entity = DuuxThreesixtyTwoClimate(coordinator, mock_api, device)
+
+    assert entity.min_temp == 18
+    assert entity.max_temp == 30
 
 
 def test_threesixty_climate_discovers_presets_from_fixture(
