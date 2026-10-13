@@ -1,13 +1,52 @@
 {
     "config": {
         "abort": {
-            "already_configured": "This Duux account is already configured."
+            "already_configured": "This Duux account is already configured.",
+            "login_cancelled": "Login was cancelled.",
+            "reauth_successful": "Your Duux account has been reauthenticated.",
+            "reconfigure_successful": "Your Duux sign-in settings have been updated."
         },
         "error": {
-            "invalid_auth": "Invalid credentials. Please check your email and password."
+            "invalid_auth": "Unable to sign in. Please check your account details.",
+            "invalid_code": "Invalid or expired code. Try again or request a new code.",
+            "cannot_connect": "Unable to connect to Duux. Please try again.",
+            "rate_limited": "Too many requests. Wait before trying again.",
+            "invalid_response": "Duux returned an unexpected response. Please try again.",
+            "wrong_account": "Use the email address of the account already configured."
         },
         "step": {
             "user": {
+                "menu_options": {
+                    "passwordless": "Sign in with an email code",
+                    "password": "Sign in with a password"
+                },
+                "description": "Choose how to sign in to your Duux account.",
+                "title": "Duux Login"
+            },
+            "reauth_confirm": {
+                "menu_options": {
+                    "passwordless": "Sign in with an email code",
+                    "password": "Sign in with a password"
+                },
+                "description": "Sign in again to renew access to {email}.",
+                "title": "Duux Login"
+            },
+            "passwordless": {
+                "data": {
+                    "email": "Email address"
+                },
+                "description": "Enter your Duux account email address to receive a login code.",
+                "title": "Email Login"
+            },
+            "verify_code": {
+                "data": {
+                    "code": "Login code",
+                    "resend": "Send a new code"
+                },
+                "description": "Enter the code sent to {email}. To resend, select Send a new code and submit without a code. Use the newest email; keep this setup open and do not sign in through the app instead.",
+                "title": "Verify Email Code"
+            },
+            "password": {
                 "data": {
                     "email": "Email address",
                     "password": "Password"

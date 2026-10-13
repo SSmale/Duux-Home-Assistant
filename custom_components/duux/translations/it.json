@@ -1,13 +1,52 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Questo account Duux è già configurato."
+            "already_configured": "Questo account Duux è già configurato.",
+            "login_cancelled": "L'accesso è stato annullato.",
+            "reauth_successful": "L'accesso al tuo account Duux è stato rinnovato.",
+            "reconfigure_successful": "Le impostazioni di accesso Duux sono state aggiornate."
         },
         "error": {
-            "invalid_auth": "Credenziali non valide. Verifica la tua email e la password."
+            "invalid_auth": "Accesso non riuscito. Verifica i dati del tuo account.",
+            "invalid_code": "Codice non valido o scaduto. Riprova o richiedi un nuovo codice.",
+            "cannot_connect": "Impossibile connettersi a Duux. Riprova.",
+            "rate_limited": "Troppe richieste. Attendi prima di riprovare.",
+            "invalid_response": "Duux ha restituito una risposta inattesa. Riprova.",
+            "wrong_account": "Usa l'indirizzo email dell'account già configurato."
         },
         "step": {
             "user": {
+                "menu_options": {
+                    "passwordless": "Accedi con un codice via email",
+                    "password": "Accedi con una password"
+                },
+                "description": "Scegli come accedere al tuo account Duux.",
+                "title": "Accesso Duux"
+            },
+            "reauth_confirm": {
+                "menu_options": {
+                    "passwordless": "Accedi con un codice via email",
+                    "password": "Accedi con una password"
+                },
+                "description": "Accedi di nuovo per rinnovare l'accesso a {email}.",
+                "title": "Accesso Duux"
+            },
+            "passwordless": {
+                "data": {
+                    "email": "Indirizzo email"
+                },
+                "description": "Inserisci l'indirizzo email del tuo account Duux per ricevere un codice.",
+                "title": "Accesso via email"
+            },
+            "verify_code": {
+                "data": {
+                    "code": "Codice di accesso",
+                    "resend": "Invia un nuovo codice"
+                },
+                "description": "Inserisci il codice inviato a {email}. Per inviarlo di nuovo, seleziona Invia un nuovo codice e conferma senza codice. Usa l'email più recente, mantieni aperta questa configurazione e non accedere tramite l'app.",
+                "title": "Verifica codice email"
+            },
+            "password": {
                 "data": {
                     "email": "Indirizzo email",
                     "password": "Password"

@@ -49,7 +49,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 #### Duux Threesixty 2023
 
-- 🌡️ **Temperature Control**: Set target temperature (18–30°C)
+- 🌡️ **Temperature Control**: Set target temperature (5–30°C)
 - 🔥 **Three Heating Modes**: Eco, Comfort and Boost
 
 ---
@@ -180,15 +180,29 @@ Every supported device also gets:
 1. Go to **Settings → Devices & Services**
 2. Click **+ Add Integration**
 3. Search for "Duux"
-4. Enter your credentials:
-   - **Email**: Your Duux account email
-   - **Password**: Your Duux account password
+4. Choose **Sign in with an email code** (no account password required)
+5. Enter your Duux account email address
+6. Keep the setup open and enter the login code from the email in Home Assistant.
+   Use the newest code if you requested another one. Do not complete the login
+   in the Duux app instead: the code is bound to this Home Assistant setup.
 
-**Note**: If you only use the mobile app with OTP login, you'll need to set a password first:
+To request a replacement code, select **Send a new code** on the verification
+form and submit without a code.
 
-1. Go to `https://app.cloudgarden.nl`
-2. Click "Forgot Password"
-3. Enter your email and set a new password
+**Sign in with a password** remains available, and existing password-based
+installations continue to work without reconfiguration.
+
+To switch an existing installation to email-code login, open its integration
+menu under **Settings → Devices & Services** and choose **Reconfigure**. Sign in
+with the same account email address; your devices and entities are kept.
+
+For email-code login, the integration stores the returned access token in the
+Home Assistant config entry, not your login code or PKCE verifier. It requests a
+long-lived token and restores it after a restart. If Duux expires or revokes the
+token, Home Assistant prompts you to sign in again for the same account, keeping
+your devices and entities. Automatic token refresh is not supported because the
+observed Duux response does not supply a refresh token. Protect your Home
+Assistant configuration and backups as they contain account credentials.
 
 ## Usage
 
@@ -361,8 +375,10 @@ entities:
 
 If you can't log in:
 
-1. Verify your credentials at `https://app.cloudgarden.nl`
-2. Make sure you've set a password (not just using OTP)
+1. For email-code login, check your spam folder and use the newest code in the
+   still-open Home Assistant setup. Select **Send a new code** if needed.
+2. For password login, verify your credentials at `https://app.cloudgarden.nl`.
+   A password is only needed if you choose this sign-in method.
 3. Check Home Assistant logs for detailed error messages
 
 ### Device Not Found

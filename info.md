@@ -39,15 +39,17 @@ Every device also includes a **connectivity sensor** and a **problem/error senso
 1. Install via HACS
 2. Restart Home Assistant
 3. Go to **Settings → Devices & Services → Add Integration**
-4. Search for **Duux** and enter your credentials
+4. Search for **Duux** and choose **Sign in with an email code**
+5. Enter your email address, then enter the emailed login code in Home Assistant
 
-## Need a Password?
+## Passwordless Login
 
-If you only use the mobile app with OTP login:
+No account password is required. Keep the setup open and use the newest emailed
+code. The integration saves a long-lived access token and asks you to sign in
+again if it expires or is revoked, without replacing your devices and entities.
 
-1. Visit `https://app.cloudgarden.nl`
-2. Click "Forgot Password"
-3. Set a password for your account
+Password login remains available, and existing password-based configurations
+continue working unchanged.
 
 ## My Device Isn't Listed?
 

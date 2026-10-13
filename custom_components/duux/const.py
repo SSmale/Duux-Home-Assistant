@@ -4,6 +4,9 @@ from enum import Enum
 DOMAIN = "duux"
 CONF_EMAIL = "email"
 CONF_PASSWORD = "password"
+CONF_AUTH_METHOD = "auth_method"
+CONF_TOKEN = "token"
+AUTH_PASSWORDLESS = "passwordless"
 ATTRIBUTION = "Data provided by Duux"
 
 # API URLs

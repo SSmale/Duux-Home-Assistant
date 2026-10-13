@@ -1,13 +1,52 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Ce compte Duux est déjà configuré."
+            "already_configured": "Ce compte Duux est déjà configuré.",
+            "login_cancelled": "La connexion a été annulée.",
+            "reauth_successful": "Votre compte Duux a été reconnecté.",
+            "reconfigure_successful": "Vos paramètres de connexion Duux ont été mis à jour."
         },
         "error": {
-            "invalid_auth": "Identifiants incorrects. Vérifiez votre email et mot de passe."
+            "invalid_auth": "Connexion impossible. Vérifiez les informations de votre compte.",
+            "invalid_code": "Code incorrect ou expiré. Réessayez ou demandez un nouveau code.",
+            "cannot_connect": "Impossible de contacter Duux. Veuillez réessayer.",
+            "rate_limited": "Trop de demandes. Attendez avant de réessayer.",
+            "invalid_response": "Duux a renvoyé une réponse inattendue. Veuillez réessayer.",
+            "wrong_account": "Utilisez l'adresse email du compte déjà configuré."
         },
         "step": {
             "user": {
+                "menu_options": {
+                    "passwordless": "Se connecter avec un code par email",
+                    "password": "Se connecter avec un mot de passe"
+                },
+                "description": "Choisissez comment vous connecter à votre compte Duux.",
+                "title": "Connexion Duux"
+            },
+            "reauth_confirm": {
+                "menu_options": {
+                    "passwordless": "Se connecter avec un code par email",
+                    "password": "Se connecter avec un mot de passe"
+                },
+                "description": "Reconnectez-vous pour renouveler l'accès à {email}.",
+                "title": "Connexion Duux"
+            },
+            "passwordless": {
+                "data": {
+                    "email": "Adresse email"
+                },
+                "description": "Saisissez votre adresse email Duux pour recevoir un code de connexion.",
+                "title": "Connexion par email"
+            },
+            "verify_code": {
+                "data": {
+                    "code": "Code de connexion",
+                    "resend": "Envoyer un nouveau code"
+                },
+                "description": "Saisissez le code envoyé à {email}. Pour le renvoyer, sélectionnez Envoyer un nouveau code et validez sans code. Utilisez le dernier email, gardez cette configuration ouverte et ne vous connectez pas via l'application.",
+                "title": "Vérifier le code email"
+            },
+            "password": {
                 "data": {
                     "email": "Adresse email",
                     "password": "Mot de passe"

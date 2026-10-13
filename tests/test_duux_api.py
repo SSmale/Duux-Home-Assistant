@@ -5,7 +5,7 @@ MagicMock, so every test asserts on the *shape* of the HTTP call (URL,
 method, JSON body) rather than performing one.
 """
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -177,6 +177,71 @@ def test_send_command_http_error_returns_false(api):
     )
 
     assert api.send_command("AA:BB:CC", "tune set sp 24") is False
+
+
+def test_saved_passwordless_token_uses_bearer_header():
+    with patch("custom_components.duux.duux_api.requests.Session") as session:
+        api = DuuxAPI(email="user@example.com", token="saved-token")
+    assert api.token == "saved-token"
+    session.return_value.headers.update.assert_called_once_with(
+        {"Authorization": "Bearer saved-token"}
+    )
+    assert api.password is None
+
+
+@pytest.mark.parametrize("status", [401, 403])
+@pytest.mark.parametrize("operation", ["get_devices", "send_command"])
+def test_passwordless_auth_errors_are_not_swallowed(status, operation):
+    from custom_components.duux.auth import DuuxAuthenticationError
+
+    api = DuuxAPI(email="user@example.com", token="saved-token")
+    api.session = MagicMock()
+    response = make_response(status_code=status)
+    api.session.get.return_value = response
+    api.session.post.return_value = response
+
+    with pytest.raises(DuuxAuthenticationError):
+        if operation == "get_devices":
+            api.get_devices()
+        else:
+            api.send_command("AA:BB:CC", "tune set power 00")
+
+
+def test_passwordless_network_error_is_not_reported_as_no_devices():
+    import requests
+    from custom_components.duux.auth import DuuxConnectionError
+
+    api = DuuxAPI(email="user@example.com", token="saved-token")
+    api.session = MagicMock()
+    api.session.get.side_effect = requests.Timeout("private-url")
+    with pytest.raises(DuuxConnectionError) as exc:
+        api.get_devices()
+    assert "private-url" not in str(exc.value)
+
+
+def test_passwordless_devices_preserve_existing_response_shape(devices_fixture):
+    api = DuuxAPI(email="user@example.com", token="saved-token")
+    api.session = MagicMock()
+    api.session.get.return_value = make_response({"data": devices_fixture})
+    assert api.get_devices() == devices_fixture
+    api.session.get.assert_called_once_with(
+        f"{const.API_BASE_URL}{const.API_SENSORS}", timeout=30
+    )
+
+
+def test_passwordless_missing_device_data_is_not_success():
+    from custom_components.duux.auth import DuuxResponseError
+
+    api = DuuxAPI(email="user@example.com", token="saved-token")
+    api.session = MagicMock()
+    api.session.get.return_value = make_response({"data": None})
+    with pytest.raises(DuuxResponseError):
+        api.get_devices()
+
+
+def test_close_releases_api_session(api):
+    api.close()
+    api.session.close.assert_called_once()
 
 
 # ---------------------------------------------------------------------------

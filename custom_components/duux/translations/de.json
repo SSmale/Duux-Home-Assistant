@@ -1,13 +1,52 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Dieses Duux-Konto ist bereits konfiguriert."
+            "already_configured": "Dieses Duux-Konto ist bereits konfiguriert.",
+            "login_cancelled": "Die Anmeldung wurde abgebrochen.",
+            "reauth_successful": "Ihr Duux-Konto wurde erneut angemeldet.",
+            "reconfigure_successful": "Ihre Duux-Anmeldeeinstellungen wurden aktualisiert."
         },
         "error": {
-            "invalid_auth": "Ungültige Anmeldedaten. Bitte überprüfen Sie Ihre E-Mail und Ihr Passwort."
+            "invalid_auth": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Kontodaten.",
+            "invalid_code": "Ungültiger oder abgelaufener Code. Versuchen Sie es erneut oder fordern Sie einen neuen Code an.",
+            "cannot_connect": "Verbindung zu Duux nicht möglich. Bitte erneut versuchen.",
+            "rate_limited": "Zu viele Anfragen. Warten Sie vor einem erneuten Versuch.",
+            "invalid_response": "Duux hat eine unerwartete Antwort zurückgegeben. Bitte erneut versuchen.",
+            "wrong_account": "Verwenden Sie die E-Mail-Adresse des bereits konfigurierten Kontos."
         },
         "step": {
             "user": {
+                "menu_options": {
+                    "passwordless": "Mit E-Mail-Code anmelden",
+                    "password": "Mit Passwort anmelden"
+                },
+                "description": "Wählen Sie die Anmeldemethode für Ihr Duux-Konto.",
+                "title": "Duux Anmeldung"
+            },
+            "reauth_confirm": {
+                "menu_options": {
+                    "passwordless": "Mit E-Mail-Code anmelden",
+                    "password": "Mit Passwort anmelden"
+                },
+                "description": "Melden Sie sich erneut an, um den Zugriff auf {email} zu erneuern.",
+                "title": "Duux Anmeldung"
+            },
+            "passwordless": {
+                "data": {
+                    "email": "E-Mail-Adresse"
+                },
+                "description": "Geben Sie Ihre Duux-E-Mail-Adresse ein, um einen Anmeldecode zu erhalten.",
+                "title": "E-Mail-Anmeldung"
+            },
+            "verify_code": {
+                "data": {
+                    "code": "Anmeldecode",
+                    "resend": "Neuen Code senden"
+                },
+                "description": "Geben Sie den an {email} gesendeten Code ein. Wählen Sie Neuen Code senden und senden Sie das Formular ohne Code ab, um ihn erneut anzufordern. Nutzen Sie die neueste E-Mail, lassen Sie diese Einrichtung offen und melden Sie sich nicht über die App an.",
+                "title": "E-Mail-Code bestätigen"
+            },
+            "password": {
                 "data": {
                     "email": "E-Mail-Adresse",
                     "password": "Passwort"
