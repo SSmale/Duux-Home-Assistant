@@ -49,7 +49,7 @@ A Home Assistant integration for Duux products, allowing you to control your dev
 
 #### Duux Threesixty 2023
 
-- 🌡️ **Temperature Control**: Set target temperature (18–30°C)
+- 🌡️ **Temperature Control**: Set target temperature (5–30°C)
 - 🔥 **Three Heating Modes**: Eco, Comfort and Boost
 
 ---

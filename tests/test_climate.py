@@ -114,6 +114,8 @@ def test_threesixty_climate_discovers_presets_from_fixture(
     # _normalize_mode_name maps value "2"->ECO, "1"->COMFORT, "0"->BOOST
     assert set(entity.preset_modes) == {"eco", "comfort", "boost"}
     assert entity.preset_mode == "eco"  # mode == "2" in fixture
+    assert entity.min_temp == 5
+    assert entity.max_temp == 30
 
 
 async def test_threesixty_climate_set_preset_mode_sends_discovered_command(
@@ -141,6 +143,8 @@ def test_threesixty_two_climate_also_discovers_presets(
     entity = DuuxThreesixtyTwoClimate(coordinator, mock_api, device)
 
     assert entity.preset_mode == "comfort"  # mode == "1" in fixture
+    assert entity.min_temp == 18
+    assert entity.max_temp == 30
 
 
 # ---------------------------------------------------------------------------

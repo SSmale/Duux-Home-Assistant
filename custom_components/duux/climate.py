@@ -524,6 +524,12 @@ class DuuxThreesixtyBase(DuuxClimateAutoDiscovery):
 class DuuxThreesixtyClimate(DuuxThreesixtyBase):
     """Duux Threesixty 2023 heater."""
 
+    def __init__(self, coordinator, api, device):
+        """Initialize the Threesixty 2023 climate device."""
+        super().__init__(coordinator, api, device)
+        self._attr_min_temp = 5
+        self._attr_max_temp = 30
+
 
 class DuuxThreesixtyTwoClimate(DuuxThreesixtyBase):
     """Duux Threesixty Two 2022 heater."""
